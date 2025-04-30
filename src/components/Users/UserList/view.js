@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 import { Container, Row, Col } from 'react-bootstrap';
 import { autorun } from 'mobx';
 
-const UserList = () => {
+const UserList = observer(() => {
   const searchSchema = Yup.object().shape({
     searchString: Yup.string(),
     fromDate: Yup.date().typeError('Invalid date'),
@@ -39,15 +39,15 @@ const UserList = () => {
   }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate]);
 
   useEffect(() => {
-    const dispose = autorun(() => {
+    // const dispose = autorun(() => {
       if (userStore.isReloadUsers) {
-        userStore.getUsers(); // 👈 gọi lại API
-        userStore.isReloadUsers = false; // 👈 reset lại
+        userStore.getUsers();
+        userStore.isReloadUsers = false;
       }
-    });
+    // });
   
-    return () => dispose();
-  }, []);
+    // return () => dispose();
+  }, [userStore.isReloadUsers]);
 
   const navigate = useNavigate();
 
@@ -278,6 +278,6 @@ const UserList = () => {
       <div className={classes['pagination']}>{pagination()}</div>
     </div>
   );
-};
+});
 
-export default observer(UserList);
+export default UserList;

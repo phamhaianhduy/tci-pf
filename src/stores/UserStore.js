@@ -12,7 +12,6 @@ class UserStore {
   userDetailByMe = null;
   page = 1;
   totalPages = 1;
-  isReloadUsers = false;
   constructor() {
     makeAutoObservable(this);
   }
@@ -160,11 +159,13 @@ class UserStore {
 
       const updatedUser = res.data.user;
       runInAction(() => {
-        this.isReloadUsers = true;
+        const index = this.users.findIndex((u) => u.id === updatedUser.id);
+        if (index !== -1) {
+          this.users.splice(index, 1, updatedUser);
+        }
       });
-      
 
-      navigate(`/users`);
+      // navigate(`/users`);
       toast.success('Updated Successfully!');
 
     } catch (error) {

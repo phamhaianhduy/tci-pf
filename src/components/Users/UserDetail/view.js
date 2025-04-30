@@ -9,7 +9,7 @@ import Button from "react-bootstrap/esm/Button";
 import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const UserDetail = ({ isMe = false }) => {
+const UserDetail = observer(({ isMe = false }) => {
   const userSchema = Yup.object().shape({
     fullName: Yup.string().required("Fullname is required").max(100),
     email: Yup.string().email("Email is invalid").required("Email is required"),
@@ -344,6 +344,6 @@ const UserDetail = ({ isMe = false }) => {
       )}
     </div>
   );
-};
+});
 
-export default observer(UserDetail);
+export default UserDetail;
