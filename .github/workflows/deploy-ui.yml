@@ -3,7 +3,7 @@ name: Deploy React UI to S3
 on:
   push:
     branches:
-      - main  # hoặc branch bạn dùng để deploy
+      - master
 
 jobs:
   build-and-deploy:
