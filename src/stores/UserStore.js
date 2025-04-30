@@ -1,4 +1,4 @@
-import { makeAutoObservable, observable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import verifyTokenExpiry from '../utils/verifyTokenExpiry';

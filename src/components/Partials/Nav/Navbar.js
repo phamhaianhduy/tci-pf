@@ -31,7 +31,7 @@ const Navbar = () => {
             <a href='/logs'>Logs</a>
           </li>
           {!token && (<li><a href='/login'>Login</a></li>)}
-          {token && (<li><a href='' onClick={handleLogout}>Logout</a></li>)}
+          {token && (<li><button onClick={handleLogout}>Logout</button></li>)}
         </ul>
       </nav>
       {/* <nav>
