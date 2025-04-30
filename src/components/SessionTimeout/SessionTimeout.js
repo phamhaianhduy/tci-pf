@@ -24,7 +24,8 @@ const SessionTimeout = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (tokenExpiryTime && Date.now() > tokenExpiryTime) {
-        logout();
+        localStorage.removeItem("token");
+        navigate("/login");
       }
     }, 5000);
 

@@ -58,7 +58,7 @@ class LogStore {
   createLog = async (data, navigate) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.post(
+      await axios.post(
         'https://t78tx3ksfj.execute-api.ap-southeast-1.amazonaws.com/dev/logs/create',
         data,
         {

@@ -117,7 +117,7 @@ class UserStore {
     verifyTokenExpiry(token);
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${endpoint}/users/create`,
         data,
         {
@@ -190,7 +190,7 @@ class UserStore {
     verifyTokenExpiry(token);
   
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `${endpoint}/users/delete/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -251,7 +251,7 @@ class UserStore {
     verifyTokenExpiry(token);
 
     try {
-      const res = await axios.put(
+      await axios.put(
         `${endpoint}/users/change-password`,
         data,
         {

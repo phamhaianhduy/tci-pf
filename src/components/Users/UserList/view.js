@@ -9,7 +9,6 @@ import Button from 'react-bootstrap/esm/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Container, Row, Col } from 'react-bootstrap';
-import { autorun } from 'mobx';
 
 const UserList = observer(() => {
   const searchSchema = Yup.object().shape({
@@ -47,7 +46,7 @@ const UserList = observer(() => {
     // });
   
     // return () => dispose();
-  }, [userStore.isReloadUsers]);
+  }, []);
 
   const navigate = useNavigate();
 
