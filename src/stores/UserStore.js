@@ -165,7 +165,7 @@ class UserStore {
         }
       });
 
-      // navigate(`/users`);
+      navigate(`/users`);
       toast.success('Updated Successfully!');
 
     } catch (error) {
