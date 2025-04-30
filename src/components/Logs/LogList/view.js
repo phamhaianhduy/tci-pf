@@ -59,6 +59,7 @@ const LogList = () => {
     setSearchKeyword('');
     setSortColumn('timestamp');
     setSortOrder('desc');
+    setCurrentPage(1);
   }
 
   const handlePageChange = (page) => setCurrentPage(page);

@@ -1,5 +1,6 @@
 import classes from './Navbar.module.css';
 import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/esm/Button';
 
 const Navbar = () => {
   const token = localStorage.getItem('token');
@@ -31,7 +32,7 @@ const Navbar = () => {
             <a href='/logs'>Logs</a>
           </li>
           {!token && (<li><a href='/login'>Login</a></li>)}
-          {token && (<li><button onClick={handleLogout}>Logout</button></li>)}
+          {token && (<li><Button onClick={handleLogout} variant='warning'>Logout</Button></li>)}
         </ul>
       </nav>
       {/* <nav>
