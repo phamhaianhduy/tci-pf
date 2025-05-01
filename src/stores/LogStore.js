@@ -37,9 +37,9 @@ class LogStore {
       );
 
       runInAction(() => {
-        this.logs = res.data.listLogs;
-        this.currentPage = res.data.currentPage;
-        this.totalPages = res.data.totalPages;
+        this.logs = res.data.data.listLogs;
+        this.currentPage = res.data.data.currentPage;
+        this.totalPages = res.data.data.totalPages;
       });
     } catch (error) {
       console.error('Fetch failed', error);

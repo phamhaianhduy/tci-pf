@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/esm/Button";
 import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const UserDetail = observer(({ isMe = false }) => {
   const userSchema = Yup.object().shape({
@@ -141,7 +142,7 @@ const UserDetail = observer(({ isMe = false }) => {
   // Submit form.
   const handleSubmit = async (
     values,
-    { setSubmitting, setFieldValue, setErrors }
+    { setSubmitting, setFieldValue }
   ) => {
     try {
       // Handle form dât.
@@ -168,7 +169,7 @@ const UserDetail = observer(({ isMe = false }) => {
 
       setFieldValue("isChangePassword", false);
     } catch (error) {
-      setErrors({ email: error.response.data.message });
+      toast.warn(error.response.data.error.message);
     } finally {
       setSubmitting(false);
     }

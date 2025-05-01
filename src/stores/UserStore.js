@@ -37,9 +37,9 @@ class UserStore {
       );
 
       runInAction(() => {
-        this.users = [...res.data.listUsers];
-        this.currentPage = res.data.currentPage;
-        this.totalPages = res.data.totalPages;
+        this.users = [...res.data.data.listUsers];
+        this.currentPage = res.data.data.currentPage;
+        this.totalPages = res.data.data.totalPages;
       });
     } catch (error) {
       toast.warn('Fetch failed');
@@ -69,8 +69,7 @@ class UserStore {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      const data = res.data.userData;
-
+      const data = res.data.data;
       runInAction(() => {
         this.userDetail = data;
       });
@@ -96,7 +95,7 @@ class UserStore {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      const data = res.data.userData;
+      const data = res.data.data;
       runInAction(() => {
         this.userDetailByMe = data;
       });
@@ -157,7 +156,7 @@ class UserStore {
         }
       );
 
-      const updatedUser = res.data.user;
+      const updatedUser = res.data.data;
       runInAction(() => {
         const index = this.users.findIndex((u) => u.id === updatedUser.id);
         if (index !== -1) {
@@ -169,7 +168,6 @@ class UserStore {
       toast.success('Updated Successfully!');
 
     } catch (error) {
-      toast.warn('Updated Failed!');
       throw error;
     } finally {
       runInAction(() => {

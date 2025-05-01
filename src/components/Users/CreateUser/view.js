@@ -88,11 +88,13 @@ const CreateUser = () => {
       }
       await userStore.createUser(formData, navigate);
     } catch (error) {
-      if ("userName" === error.response.data.field) {
-        setErrors({ userName: error.response.data.message });
+      console.log(error);
+      const res = error.response.data;
+      if ("USERNAME_EXIST" === res.error.code) {
+        setErrors({ userName: res.error.message });
       }
-      if ("email" === error.response.data.field) {
-        setErrors({ email: error.response.data.message });
+      if ("EMAIL_EXIST" === res.error.code) {
+        setErrors({ email: res.error.message });
       }
     } finally {
       setSubmitting(false);
