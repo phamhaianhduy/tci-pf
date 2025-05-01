@@ -150,8 +150,8 @@ const UserDetail = observer(({ isMe = false }) => {
       formData.append("fullName", values.fullName);
       formData.append("email", values.email);
       formData.append("id", userData.id);
-
-      if (values.changePassword) {
+      console.log(values.change)
+      if (values.isChangePassword) {
         formData.append("password", values.password);
       }
 
