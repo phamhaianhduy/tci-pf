@@ -1,15 +1,15 @@
 import { useIdleTimer } from "react-idle-timer";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SessionTimeout = () => {
   const navigate = useNavigate();
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("expiryToken");
     navigate("/login");
-  };
+  }, [navigate]);
 
   useIdleTimer({
     timeout: 15 * 60 * 1000,
