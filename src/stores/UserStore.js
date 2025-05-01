@@ -227,7 +227,7 @@ class UserStore {
   resetPasswordUser = async (password, token, navigate) => {
     this.isLoading = true;
     try {
-      const res = await axios.put(
+      await axios.put(
         `${endpoint}/users/reset-password`,
         { password, token }
       );
