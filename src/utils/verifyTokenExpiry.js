@@ -3,7 +3,6 @@ const verifyTokenExpiry = (token) => {
     console.warn('Invalid token format');
     localStorage.removeItem('token');
     window.location.href = '/login';
-    return;
   }
 
   try {
