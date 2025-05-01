@@ -233,7 +233,7 @@ class UserStore {
         `${endpoint}/users/reset-password`,
         { password, token }
       );
-      alert(res.data.message);
+      toast.success("Reset password successfully!");
       navigate(`/login`);
     } catch (error) {
       throw error;

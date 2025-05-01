@@ -5,6 +5,8 @@ import axios from 'axios';
 import Button from 'react-bootstrap/esm/Button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import duyphaPublicKey from '../../keys/duyphaPublicKey';
+import encryptPassword from '../../utils/encryptPassword';
 
 const endpoint = process.env.REACT_APP_RDS_END_POINT;
 
@@ -18,6 +20,10 @@ const LoginForm = () => {
 
   const handleSubmit = async (values, { setFieldError }) => {
     try {
+      // Encrypt password.
+      const encryptedPassword = encryptPassword(values.password);
+      values = {...values, password: encryptedPassword};
+      console.log(values);
       const res = await axios.post(
         `${endpoint}/login`,
         values,
