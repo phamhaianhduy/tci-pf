@@ -26,7 +26,7 @@ const SessionTimeout = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [navigate]);
+  }, [logout]);
 
   return null;
 };
