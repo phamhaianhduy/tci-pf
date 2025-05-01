@@ -1,17 +1,13 @@
 import { useIdleTimer } from "react-idle-timer";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SessionTimeout = () => {
   const navigate = useNavigate();
-  const [tokenExpiryTime, setTokenExpiryTime] = useState(null);
-  useEffect(() => {
-    const tokenExpiry = 15 * 60 * 1000;
-    setTokenExpiryTime(Date.now() + tokenExpiry);
-  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("expiryToken");
     navigate("/login");
   };
 
@@ -23,14 +19,14 @@ const SessionTimeout = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (tokenExpiryTime && Date.now() > tokenExpiryTime) {
-        localStorage.removeItem("token");
-        navigate("/login");
+      const expiryToken = localStorage.getItem('expiryToken');
+      if (expiryToken && Date.now() > parseInt(expiryToken)) {
+        logout();
       }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [tokenExpiryTime, navigate]);
+  }, [navigate]);
 
   return null;
 };
