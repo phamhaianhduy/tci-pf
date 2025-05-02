@@ -1,14 +1,34 @@
 import classes from './Navbar.module.css';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/esm/Button';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+const endpoint = process.env.REACT_APP_RDS_END_POINT;
 
 const Navbar = () => {
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expiryToken');
-    navigate('/login');
+  const token = localStorage.getItem('token');
+
+  const handleLogout = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    try {
+      const res = await axios.post(
+        `${endpoint}/logout`,
+        { refreshToken },
+      );
+
+      toast.success(res.data.message);
+
+      localStorage.removeItem('token');
+      localStorage.removeItem('expiryToken');
+      localStorage.removeItem('refreshToken');
+
+      navigate('/login');
+    } catch (error) {
+      toast.error(error.response.data.error.message);
+    }
+
   }
   
   return (
@@ -36,12 +56,6 @@ const Navbar = () => {
           {token && (<li><Button onClick={handleLogout} variant='warning'>Logout</Button></li>)}
         </ul>
       </nav>
-      {/* <nav>
-        <ul>
-          <li>Xin chào</li>
-          <li>Logout</li>
-        </ul>
-      </nav> */}
     </div>
   );
 };

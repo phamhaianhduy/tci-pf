@@ -8,14 +8,14 @@ servers:
   - url: https://6om4hopl8a.execute-api.ap-southeast-1.amazonaws.com/dev
     variables:
       apiId:
-        default: abc123xyz  # ← thay bằng real API ID của bạn sau khi deploy
+        default: abc123xyz
 
 tags:
   - name: Auth
-    description: Các API liên quan đến xác thực
+    description: Authenticate management
 
   - name: User
-    description: Quản lý người dùng
+    description: User management
 
 paths:
   /users/create:
