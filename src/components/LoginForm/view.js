@@ -29,7 +29,7 @@ const LoginForm = () => {
       );
 
       // Set token and expiry token.
-      const minutes = 5;
+      const minutes = 15;
       const expiryToken = Date.now() + minutes * 60 * 1000;
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('expiryToken', expiryToken);
