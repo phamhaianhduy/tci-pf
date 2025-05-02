@@ -1,0 +1,29 @@
+import axios from "axios";
+import { toast } from "react-toastify";
+import logout from "./logout";
+
+const endpoint = process.env.REACT_APP_RDS_END_POINT;
+
+const refreshToken = async () => {
+  const token = localStorage.getItem("refreshToken");
+  if (token) {
+    try {
+      const res = await axios.post(`${endpoint}/refresh-token`, {
+        refreshToken: token,
+      });
+
+      if (res.data.token) {
+        toast.success(res.data.message);
+        // Set expiry token
+        const minutes = 5;
+        const expiryToken = Date.now() + minutes * 60 * 1000;
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("expiryToken", expiryToken);
+      }
+    } catch (errorRefreshToken) {
+      logout();
+    }
+  }
+};
+
+export default refreshToken;

@@ -59,6 +59,7 @@ paths:
                 - fullName
                 - email
                 - password
+                - contactEmail
       responses:
         '201':
           description: Created
@@ -79,16 +80,61 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Failed validation
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: password
-                        message:
-                          type: string
-                          example: Password is required
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePassword:
+                  summary: Validate password
+                  value:
+                    message: Failed validation
+                    error:
+                      code: password
+                      message: Password is required / Password greater than or equal 8 character length.
+
+                validateUsername:
+                  summary: Validate username
+                  value:
+                    message: Failed validation
+                    error:
+                      code: userName
+                      message: Username is required / Username is exceed maxlengh.
+
+                validateEmail:
+                  summary: Validate email
+                  value:
+                    message: Failed validation
+                    error:
+                      code: email
+                      message: Email is required / Email is invalid.
+
+                validateIsRealEmail:
+                  summary: Validate isRealEmail
+                  value:
+                    message: Failed validation
+                    error:
+                      code: isRealEmail
+                      message: isRealEmail is boolean type.
+
+                validateContactEmail:
+                  summary: Validate contactEmail
+                  value:
+                    message: Failed validation
+                    error:
+                      code: contactEmail
+                      message: Contact email is required / Email is invalid.
+
+                validateAvatar:
+                  summary: Validate avatar
+                  value:
+                    message: Failed validation
+                    error:
+                      code: avatar
+                      message: Size limit 5MB / The type is not allow.
         '401':
           description: Unauthorized
           content:
@@ -98,16 +144,16 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Login failed
+                    example: Token is required
                   error:
                       type: object
                       properties: 
                         code:
                           type: string
-                          example: USERNAME_IS_NOT_EXIST
+                          example: REQUIRED_TOKEN
                         message:
                           type: string
-                          example: Username is not exist
+                          example: Token is required         
         '409':
           description: Conflict
           content:
@@ -123,12 +169,256 @@ paths:
                     properties: 
                       code:
                         type: string
-                        example: USERNAME_EXIST
                       message:
                         type: string
-                        example: Username is existed
+
+              examples:
+                userNameIsExisting:
+                  summary: Username is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: USERNAME_EXIST
+                      message: Username is existed.
+                emailIsExisting:
+                  summary: Email is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: EMAIL_EXIST
+                      message: Email is existed.
         '500':
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: {error}
+                        message:
+                          type: string
+                          example: Internal server error 
+
+  /users/update:
+    put:
+      tags:
+        - User
+      summary: Update user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                fullName:
+                  type: string
+                  example: Pham Hai Anh Duy
+                email:
+                  type: string
+                  example: duy.pha@trans-tech.vn
+                password:
+                  type: string
+                  example: b0z85O/KyueZmSMbZjqdRsww8rcISTLgSJSLTtg/7HOTEq8DhCzE+ZfghIUb1cjsxDB96YmoyNRI3QnqEDeBUN3mQ+j6YKS9SkQOPBTJTtcWRNbDnWVPDi1XDz7l3yUA6SATg8l8W6LkidL8T9wr6JjUF2UckX3d0hMW7qR/9jRnz2gitSwB9jpwFY9JAX6RvEGLs36qSogERH98fesZfvxtmVph5jgowX9t4ItWOxxYR8sWRW5mAAqJN6zUPQT3C5I2KEvmfA6Ckt3pL2gTQpsDh732YeiD5673JrbGW+AMT4uUL6rHwR1Ohnm6qV7S7cULfp40VGWEsdPaVCmtuw==
+                isRealEmail:
+                  type: boolean
+                  example: false
+                contactEmail:
+                  oneOf:
+                    - type: string
+                    - type: null
+                  example: ph.anhduy1102@gmail.com
+                avatar:
+                  oneOf:
+                    - type: object
+                    - type: null
+              required:
+                - fullName
+                - email
+                - password
+                - contactEmail
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Updated successfully
+                  data:
+                    type: object
+                    properties:
+                        id:
+                          type: int
+                          example: 1
+                        userName:
+                          type: string
+                          example: duypha
+                        fullName:
+                          type: string
+                          example: Pham Hai Anh Duy
+                        email:
+                          type: string
+                          example: duy.pha@trans-tech.vn
+                        avatarUrl:
+                          type: string
+                          example: duypha
+                        isRealEmail:
+                          type: boolean
+                          example: false
+                        contactEmail:
+                          type: string
+                          example: ph.anhduy1102@gmail.com
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePassword:
+                  summary: Validate password
+                  value:
+                    message: Failed validation
+                    error:
+                      code: password
+                      message: Password is required / Password greater than or equal 8 character length.
+
+                validateEmail:
+                  summary: Validate email
+                  value:
+                    message: Failed validation
+                    error:
+                      code: email
+                      message: Email is required / Email is invalid.
+
+                validateIsRealEmail:
+                  summary: Validate isRealEmail
+                  value:
+                    message: Failed validation
+                    error:
+                      code: isRealEmail
+                      message: isRealEmail is boolean type.
+
+                validateContactEmail:
+                  summary: Validate contactEmail
+                  value:
+                    message: Failed validation
+                    error:
+                      code: contactEmail
+                      message: Contact email is required / Email is invalid.
+
+                validateAvatar:
+                  summary: Validate avatar
+                  value:
+                    message: Failed validation
+                    error:
+                      code: avatar
+                      message: Size limit 5MB / The type is not allow.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token is required
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REQUIRED_TOKEN
+                        message:
+                          type: string
+                          example: Token is required
+        '404':
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: USER_NOT_FOUND
+                        message:
+                          type: string
+                          example: User not found
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed updated user
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+
+                emailIsExisting:
+                  summary: Email is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: EMAIL_EXIST
+                      message: Email is existed.
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: {error}
+                        message:
+                          type: string
+                          example: Internal server error 
 
   /login:
     post:
