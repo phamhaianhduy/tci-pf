@@ -121,10 +121,12 @@ const UserDetail = observer(({ isMe = false }) => {
   const navigate = useNavigate();
 
   // Handle event for image.
-  const handleOnChangeImage = (event) => {
+  const handleOnChangeImage = (event, { setFieldValue }) => {
     const file = event.currentTarget.files[0];
+
     if (file) {
       const url = URL.createObjectURL(file);
+      setFieldValue('avatar', file);
       setPreviewImage(url);
       setFormData((prev) => ({ ...prev, avatar: file }));
       setIsDeleteAvatar(false);
@@ -200,7 +202,7 @@ const UserDetail = observer(({ isMe = false }) => {
                   name="avatar"
                   type="file"
                   accept="image/*"
-                  onChange={handleOnChangeImage}
+                  onChange={(event) => handleOnChangeImage(event, {setFieldValue})}
                 />
                 <ErrorMessage
                   name="avatar"
