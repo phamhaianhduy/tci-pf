@@ -7,7 +7,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const ResetPasswordForm = () => {
   const forgotPasswordSchema = Yup.object().shape({
-    password: Yup.string().required("Passowrd is required").min(5),
+    password: Yup.string()
+    .required("Passowrd is required")
+    .min(8, "Password greater than or equal 8 character length.")
+    .test("isStrong", "Password is not secure.", (value) => {
+      if (!value) {
+        return false;
+      }
+
+      const hasUper = /[A-Z]/.test(value);
+      const hasLower = /[a-z]/.test(value);
+      const hasNumber = /[0-9]/.test(value);
+      const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+      return hasUper && hasLower && hasNumber && hasSpecialCharacter;
+    }),
     confirmPassword: Yup.string()
       .required("Confirm password is required")
       .oneOf(
