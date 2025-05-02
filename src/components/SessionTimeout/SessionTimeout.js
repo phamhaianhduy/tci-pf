@@ -12,7 +12,7 @@ const SessionTimeout = () => {
   }, [navigate]);
 
   useIdleTimer({
-    timeout: 15 * 60 * 1000,
+    timeout: 30 * 60 * 1000,
     onIdle: logout,
     debounce: 500,
   });
