@@ -24,6 +24,11 @@ jobs:
       - name: Build React app
         run: npm run build
 
+      - name: Copy Swagger docs to build folder
+        run: |
+          mkdir -p build/swagger
+          cp -r swagger/* build/swagger/
+
       - name: Deploy to S3
         run: |
           aws s3 sync build/ s3://phamhaianhduy --delete

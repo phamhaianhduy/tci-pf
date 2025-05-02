@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: DuyPha API
+  description: Describe about the API document
+  version: 1.0.0
+
+servers:
+  - url: https://6om4hopl8a.execute-api.ap-southeast-1.amazonaws.com/dev
+    variables:
+      apiId:
+        default: abc123xyz  # ← thay bằng real API ID của bạn sau khi deploy
+
+tags:
+  - name: Auth
+    description: Các API liên quan đến xác thực
+
+  - name: User
+    description: Quản lý người dùng
+
+paths:
+  /users/create:
+    post:
+      tags:
+        - User
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  example: duypha
+                fullName:
+                  type: string
+                  example: Pham Hai Anh Duy
+                email:
+                  type: string
+                  example: duy.pha@trans-tech.vn
+                password:
+                  type: string
+                  example: b0z85O/KyueZmSMbZjqdRsww8rcISTLgSJSLTtg/7HOTEq8DhCzE+ZfghIUb1cjsxDB96YmoyNRI3QnqEDeBUN3mQ+j6YKS9SkQOPBTJTtcWRNbDnWVPDi1XDz7l3yUA6SATg8l8W6LkidL8T9wr6JjUF2UckX3d0hMW7qR/9jRnz2gitSwB9jpwFY9JAX6RvEGLs36qSogERH98fesZfvxtmVph5jgowX9t4ItWOxxYR8sWRW5mAAqJN6zUPQT3C5I2KEvmfA6Ckt3pL2gTQpsDh732YeiD5673JrbGW+AMT4uUL6rHwR1Ohnm6qV7S7cULfp40VGWEsdPaVCmtuw==
+                isRealEmail:
+                  type: boolean
+                  example: false
+                contactEmail:
+                  oneOf:
+                    - type: string
+                    - type: null
+                  example: ph.anhduy1102@gmail.com
+                avatar:
+                  oneOf:
+                    - type: object
+                    - type: null
+              required:
+                - userName
+                - fullName
+                - email
+                - password
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Created successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed validation
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: password
+                        message:
+                          type: string
+                          example: Password is required
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login failed
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: USERNAME_IS_NOT_EXIST
+                        message:
+                          type: string
+                          example: Username is not exist
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed created user
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                        example: USERNAME_EXIST
+                      message:
+                        type: string
+                        example: Username is existed
+        '500':
+          description: Internal server error
+
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                password:
+                  type: string
+              required:
+                - userName
+                - password
+      responses:
+        '200':
+          description: Login successfully
+        '401':
+          description: Sai thông tin đăng nhập

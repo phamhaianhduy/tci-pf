@@ -30,7 +30,7 @@ const LoginForm = () => {
 
       // Set token and expiry token.
       const expiryToken = Date.now() + 15 * 60 * 1000;
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('token', res.data.accessToken);
       localStorage.setItem('expiryToken', expiryToken);
 
       toast.success('Login successfully')
