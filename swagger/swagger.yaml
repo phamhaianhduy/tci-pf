@@ -1596,21 +1596,14 @@ paths:
                       message:
                         type: string
               examples:
-                validatePage:
+                validateField:
                   summary: Validate page
                   value:
                     message: Failed validation
                     error:
-                      code: page
-                      message: Page is required / page is a number.
+                      code: sortColumn / sortOrder / page / itemPerPage
+                      message: Field is invalid / Page is required / page is a number / itemPerPage is required / itemPerPage is a number.
 
-                validateItemPerPage:
-                  summary: Validate itemPerPage
-                  value:
-                    message: Failed validation
-                    error:
-                      code: page
-                      message: itemPerPage is required / itemPerPage is a number.
         '401':
           description: Unauthorized
           content:
@@ -1631,22 +1624,6 @@ paths:
                           type: string
                           example: Token is required         
 
-
-              examples:
-                userNameIsExisting:
-                  summary: Username is existing
-                  value:
-                    message: Failed created user
-                    error:
-                      code: USERNAME_EXIST
-                      message: Username is existed.
-                emailIsExisting:
-                  summary: Email is existing
-                  value:
-                    message: Failed created user
-                    error:
-                      code: EMAIL_EXIST
-                      message: Email is existed.
         '500':
           description: Internal server error
           content:
