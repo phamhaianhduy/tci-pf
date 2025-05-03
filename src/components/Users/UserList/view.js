@@ -219,11 +219,11 @@ const UserList = observer(() => {
               Email {renderSortIcon('email')}
             </th>
             <th
-              onClick={() => handleSort('createdAt')}
+              onClick={() => handleSort('updatedAt')}
               style={{ cursor: 'pointer' }}
               className={classes['col-25']}
             >
-              Created at {renderSortIcon('createdAt')}
+              Updated at {renderSortIcon('updatedAt')}
             </th>
             <th className={classes['col-25']}>Action</th>
           </tr>

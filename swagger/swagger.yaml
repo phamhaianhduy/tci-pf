@@ -615,7 +615,6 @@ paths:
               schema:
                 type: string
                 example: OK
-
         '400':
           description: Bad request
           content:
@@ -726,6 +725,225 @@ paths:
                         code:
                           type: string
                           example: "{error}"
+                        message:
+                          type: string
+                          example: Internal server error 
+
+  /users/list:
+    post:
+      tags:
+        - User
+      summary: Get the list user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromDate:
+                  type: string
+                  example: 2025-05-02 00:00:00
+                toDate:
+                  type: string
+                  example: 2025-05-04 23:59:59
+                searchString:
+                  type: string
+                  example: duy.pha@trans-tech.vn
+                page:
+                  type: number
+                  example: 1
+                sortColumn:
+                  type: string
+                  example: fullName / email / updatedAt
+                sortOrder:
+                  type: string
+                  example: asc / desc
+                itemPerPage:
+                  type: number
+                  example: 5
+              required:
+                - itemPerPage
+                - page
+
+      responses:
+        '200':
+          description: Get the list user successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  listUsers:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        userCode:
+                          type: string
+                        fullName:
+                          type: string
+                        email:
+                          type: string
+                        updatedAt:
+                          type: string
+                    example:
+                      - id: 1
+                        userCode: PHAD1A2B3C4
+                        fullName: Pham Hai Anh Duy
+                        email: ph.anhduy1102@gmail.com
+                        updatedAt: 2025-05-02T04:10:40.000Z
+                      - id: 2
+                        userCode: PHAD5F6G7H8
+                        fullName: Nguyen Van B
+                        email: b.nguyen@example.com
+                        updatedAt: 2025-05-01T10:20:30.000Z
+                  currentPage:
+                    type: number
+                    example: 1
+                  totalUsers:
+                    type: number
+                    example: 8
+                  totalPages:
+                    type: number
+                    example: 2
+                  itemPerPage:
+                    type: number
+                    example: 5
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePassword:
+                  summary: Validate password
+                  value:
+                    message: Failed validation
+                    error:
+                      code: password
+                      message: Password is required / Password greater than or equal 8 character length.
+
+                validateUsername:
+                  summary: Validate username
+                  value:
+                    message: Failed validation
+                    error:
+                      code: userName
+                      message: Username is required / Username is exceed maxlengh.
+
+                validateEmail:
+                  summary: Validate email
+                  value:
+                    message: Failed validation
+                    error:
+                      code: email
+                      message: Email is required / Email is invalid.
+
+                validateIsRealEmail:
+                  summary: Validate isRealEmail
+                  value:
+                    message: Failed validation
+                    error:
+                      code: isRealEmail
+                      message: isRealEmail is boolean type.
+
+                validateContactEmail:
+                  summary: Validate contactEmail
+                  value:
+                    message: Failed validation
+                    error:
+                      code: contactEmail
+                      message: Contact email is required / Email is invalid.
+
+                validateAvatar:
+                  summary: Validate avatar
+                  value:
+                    message: Failed validation
+                    error:
+                      code: avatar
+                      message: Size limit 5MB / The type is not allow.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token is required
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REQUIRED_TOKEN
+                        message:
+                          type: string
+                          example: Token is required         
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed created user
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+
+              examples:
+                userNameIsExisting:
+                  summary: Username is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: USERNAME_EXIST
+                      message: Username is existed.
+                emailIsExisting:
+                  summary: Email is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: EMAIL_EXIST
+                      message: Email is existed.
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: {error}
                         message:
                           type: string
                           example: Internal server error 

@@ -38,9 +38,9 @@ class UserStore {
       );
 
       runInAction(() => {
-        this.users = [...res.data.data.listUsers];
-        this.currentPage = res.data.data.currentPage;
-        this.totalPages = res.data.data.totalPages;
+        this.users = [...res.data.listUsers];
+        this.currentPage = res.data.currentPage;
+        this.totalPages = res.data.totalPages;
       });
     } catch (error) {
       toast.warn('Fetch failed');
