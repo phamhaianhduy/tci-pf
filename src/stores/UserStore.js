@@ -22,7 +22,8 @@ class UserStore {
     searchString = '',
     page = 1,
     fromDate = '',
-    toDate = ''
+    toDate = '',
+    itemPerpage = 5,
   ) => {
     this.isLoading = true;
     try {
@@ -32,7 +33,7 @@ class UserStore {
 
       const res = await axios.post(
         `${endpoint}/users/list`,
-        { sortColumn, sortOrder, searchString, page, fromDate, toDate },
+        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerpage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
