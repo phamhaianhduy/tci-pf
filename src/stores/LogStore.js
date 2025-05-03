@@ -19,7 +19,8 @@ class LogStore {
     searchString = '',
     page = 1,
     fromDate = '',
-    toDate = ''
+    toDate = '',
+    itemPerPage = 5,
   ) => {
     this.isLoading = true;
     try {
@@ -32,7 +33,7 @@ class LogStore {
 
       const res = await axios.post(
         `${endpoint}/logs/list`,
-        { sortColumn, sortOrder, searchString, page, fromDate, toDate },
+        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

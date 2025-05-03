@@ -829,53 +829,21 @@ paths:
                       message:
                         type: string
               examples:
-                validatePassword:
-                  summary: Validate password
+                validatePage:
+                  summary: Validate page
                   value:
                     message: Failed validation
                     error:
-                      code: password
-                      message: Password is required / Password greater than or equal 8 character length.
+                      code: page
+                      message: Page is required / page is a number.
 
-                validateUsername:
-                  summary: Validate username
+                validateItemPerPage:
+                  summary: Validate itemPerPage
                   value:
                     message: Failed validation
                     error:
-                      code: userName
-                      message: Username is required / Username is exceed maxlengh.
-
-                validateEmail:
-                  summary: Validate email
-                  value:
-                    message: Failed validation
-                    error:
-                      code: email
-                      message: Email is required / Email is invalid.
-
-                validateIsRealEmail:
-                  summary: Validate isRealEmail
-                  value:
-                    message: Failed validation
-                    error:
-                      code: isRealEmail
-                      message: isRealEmail is boolean type.
-
-                validateContactEmail:
-                  summary: Validate contactEmail
-                  value:
-                    message: Failed validation
-                    error:
-                      code: contactEmail
-                      message: Contact email is required / Email is invalid.
-
-                validateAvatar:
-                  summary: Validate avatar
-                  value:
-                    message: Failed validation
-                    error:
-                      code: avatar
-                      message: Size limit 5MB / The type is not allow.
+                      code: page
+                      message: itemPerPage is required / itemPerPage is a number.
         '401':
           description: Unauthorized
           content:
@@ -895,8 +863,25 @@ paths:
                         message:
                           type: string
                           example: Token is required         
-        '409':
-          description: Conflict
+
+
+              examples:
+                userNameIsExisting:
+                  summary: Username is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: USERNAME_EXIST
+                      message: Username is existed.
+                emailIsExisting:
+                  summary: Email is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: EMAIL_EXIST
+                      message: Email is existed.
+        '500':
+          description: Internal server error
           content:
             application/json:
               schema:
@@ -904,7 +889,55 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Failed created user
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: {error}
+                        message:
+                          type: string
+                          example: Internal server error 
+
+  /users/forgot-password:
+    put:
+      tags:
+        - User
+      summary: Forgot password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: ph.anhduy1102@gmail.com
+              required:
+                - email
+
+      responses:
+        '200':
+          description: Reset link sent to email.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Reset link sent to email.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
                   error:
                     type: object
                     properties: 
@@ -912,6 +945,42 @@ paths:
                         type: string
                       message:
                         type: string
+              examples:
+                validatePage:
+                  summary: Validate page
+                  value:
+                    message: Failed validation
+                    error:
+                      code: page
+                      message: Page is required / page is a number.
+
+                validateItemPerPage:
+                  summary: Validate itemPerPage
+                  value:
+                    message: Failed validation
+                    error:
+                      code: page
+                      message: itemPerPage is required / itemPerPage is a number.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token is required
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REQUIRED_TOKEN
+                        message:
+                          type: string
+                          example: Token is required         
+
 
               examples:
                 userNameIsExisting:
