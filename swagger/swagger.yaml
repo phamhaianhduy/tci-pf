@@ -946,21 +946,201 @@ paths:
                       message:
                         type: string
               examples:
-                validatePage:
-                  summary: Validate page
+                validateEmail:
+                  summary: Validate email
                   value:
                     message: Failed validation
                     error:
-                      code: page
-                      message: Page is required / page is a number.
+                      code: email
+                      message: Email is required / Email is invalid. 
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email is not exist
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: {error}
+                        message:
+                          type: string
+                          example: Internal server error 
 
-                validateItemPerPage:
-                  summary: Validate itemPerPage
+  /users/reset-password:
+    put:
+      tags:
+        - User
+      summary: Reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0NjI1NDI4MiwiZXhwIjoxNzQ2MjU1MTgyfQ.g17AJZtZTqBF3Mc_SjU9PJrRd2w8q9Jxpa7jQKTvVzs
+                password:
+                  type: string
+                  example: Abcd@1234
+              required:
+                - password
+                - token
+
+      responses:
+        '200':
+          description: Passowrd reset successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Passowrd reset successfully.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePassword:
+                  summary: Validate password
                   value:
                     message: Failed validation
                     error:
-                      code: page
-                      message: itemPerPage is required / itemPerPage is a number.
+                      code: password
+                      message: Passowrd is required / Password is not secure. / Password greater than or equal 8 character length.  
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePassword:
+                  summary: User Not Found
+                  value:
+                    message: Invalid or expired token
+                    error:
+                      code: USER_NOT_FOUND
+                      message: User not foun  
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: {error}
+                        message:
+                          type: string
+                          example: Internal server error 
+
+  /users/change-password:
+    put:
+      tags:
+        - User
+      summary: Update expired password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 1
+                password:
+                  type: string
+                  example: Abcd@1234
+              required:
+                - id
+                - password
+
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: PaUpdated successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePassword:
+                  summary: Validate password
+                  value:
+                    message: Failed validation
+                    error:
+                      code: password
+                      message: Passowrd is required / Password is not secure. / Password greater than or equal 8 character length.  
         '401':
           description: Unauthorized
           content:
@@ -970,33 +1150,45 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required         
-
-
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
               examples:
-                userNameIsExisting:
-                  summary: Username is existing
+                validatePassword:
+                  summary: Token is required
                   value:
-                    message: Failed created user
+                    message: Token is required
                     error:
-                      code: USERNAME_EXIST
-                      message: Username is existed.
-                emailIsExisting:
-                  summary: Email is existing
+                      code: REQUIRED_TOKEN
+                      message: Token is required
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePassword:
+                  summary: User Not Found
                   value:
-                    message: Failed created user
+                    message: User not found
                     error:
-                      code: EMAIL_EXIST
-                      message: Email is existed.
+                      code: USER_NOT_FOUND
+                      message: User not foun
         '500':
           description: Internal server error
           content:
