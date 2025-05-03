@@ -69,7 +69,7 @@ class UserStore {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      const data = res.data.data;
+      const data = res.data.userData;
       runInAction(() => {
         this.userDetail = data;
       });
@@ -95,7 +95,8 @@ class UserStore {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      const data = res.data.data;
+      const data = res.data.userData;
+
       runInAction(() => {
         this.userDetailByMe = data;
       });
@@ -214,7 +215,7 @@ class UserStore {
         `${endpoint}/users/forgot-password`,
         { email }
       );
-      alert(res.data.message);
+      toast.success(res.data.message);
     } catch (error) {
       throw error;
     } finally {
