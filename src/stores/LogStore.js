@@ -33,14 +33,14 @@ class LogStore {
 
       const res = await axios.post(
         `${endpoint}/logs/list`,
-        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage, token },
+        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
+      
       runInAction(() => {
-        this.logs = res.data.data.listLogs;
-        this.currentPage = res.data.data.currentPage;
-        this.totalPages = res.data.data.totalPages;
+        this.logs = res.data.listLogs;
+        this.currentPage = res.data.currentPage;
+        this.totalPages = res.data.totalPages;
       });
     } catch (error) {
       console.error('Fetch failed', error);

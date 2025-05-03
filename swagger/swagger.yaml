@@ -1509,7 +1509,7 @@ paths:
                   example: 1
                 sortColumn:
                   type: string
-                  example: fullName / email / updatedAt
+                  example: fullName / email / timestamp
                 sortOrder:
                   type: string
                   example: asc / desc
@@ -1517,12 +1517,11 @@ paths:
                   type: number
                   example: 5
               required:
-                - itemPerPage
                 - page
 
       responses:
         '200':
-          description: Get the list user successfully
+          description: Get the list log
           content:
             application/json:
               schema:
@@ -1535,37 +1534,51 @@ paths:
                       properties:
                         id:
                           type: number
-                        userCode:
+                        action:
                           type: string
-                        fullName:
+                        description:
                           type: string
-                        email:
+                        timestamp:
                           type: string
-                        updatedAt:
-                          type: string
+                        user:
+                          type: object
+                          properties:
+                            fullName:
+                              type: string
+                            email:
+                              type: string                            
                     example:
-                      - id: 1
-                        userCode: PHAD1A2B3C4
-                        fullName: Pham Hai Anh Duy
-                        email: ph.anhduy1102@gmail.com
-                        updatedAt: 2025-05-02T04:10:40.000Z
-                      - id: 2
-                        userCode: PHAD5F6G7H8
-                        fullName: Nguyen Van B
-                        email: b.nguyen@example.com
-                        updatedAt: 2025-05-01T10:20:30.000Z
+                      - id: 17
+                        action: UPDATE USER
+                        description: Change expired password
+                        timestamp: 2025-05-03T07:16:57.000Z
+                        user: 
+                          type: object
+                          properties:
+                            fullName: Pham Hai Anh Duy
+                            email: ph.anhduy1102@gmail.com
+
+                      - id: 15
+                        action: DELETE USER
+                        description: Delete the user tuitest
+                        timestamp: 2025-05-03T04:35:58.000Z
+                        user: 
+                          type: object
+                          properties:
+                            fullName: Pham Hai Anh Duy
+                            email: ph.anhduy1102@gmail.com
                   currentPage:
                     type: number
                     example: 1
-                  totalUsers:
+                  totalLogs:
                     type: number
-                    example: 8
+                    example: 17
                   totalPages:
                     type: number
-                    example: 2
+                    example: 6
                   itemPerPage:
                     type: number
-                    example: 5
+                    example: 3
         '400':
           description: Bad request
           content:
