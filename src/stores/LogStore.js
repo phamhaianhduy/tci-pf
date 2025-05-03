@@ -33,7 +33,7 @@ class LogStore {
 
       const res = await axios.post(
         `${endpoint}/logs/list`,
-        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage },
+        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage, token },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

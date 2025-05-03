@@ -17,6 +17,9 @@ tags:
   - name: User
     description: User management
 
+  - name: Log
+    description: Log management
+
 paths:
   /users/create:
     post:
@@ -1209,7 +1212,6 @@ paths:
                           type: string
                           example: Internal server error 
 
-
   /login:
     post:
       tags:
@@ -1224,13 +1226,430 @@ paths:
               properties:
                 userName:
                   type: string
+                  example: duypha
                 password:
                   type: string
+                  example: FsGxvhP0UHwA1nvTQP8W+xiAR39Qb19ojoLSwgDyog7sTNDu7Blp2b4KijJjyomzP7JolsbBe1dgr3/6jIKZ8vttQw5SdBpLbqSUm76JoNExhdETF5Xu086mXHtX2FrRPW3w/S+dK9Poy4kppd6xHEK1UaaC4jE9jPmXRhm2LjLPi1IqMggIt4GbW4qsYlZZFe4ER78hL64rDchdcm0EP96+tNAX0g4T3+4Oi3e6Ybn7a07HaP3mDPiSpipSA/P86wZubqTzf2dEYRe5cARpPoInEgZxB40XyNgzA710ggFdFDWA075uWOg1Ir5gJGpmRs8ru2MK6PXbKdscCU4E0w==
               required:
                 - userName
                 - password
       responses:
         '200':
           description: Login successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  listUsers:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Login successfully
+                        token:
+                          type: string
+                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2MjY0NjQ1fQ.bfHigSWgar_cS32tBBqYttrbUIwzszLb0HSr47ITjWw
+                        refreshToken:
+                          type: string
+                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2ODY4NTQ1fQ.rpLFhyZAQE-2Dqy-oQx-XPeJ7s5MH8vDrj_Hd8YbBHg
         '401':
-          description: Sai thông tin đăng nhập
+          description: Login failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Username is not exist
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: USERNAME_IS_NOT_EXIST
+                        message:
+                          type: string
+                          example: Username is not exist.        
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: PASSWORD_INCORRECT
+                        message:
+                          type: string
+                          example: Encrypted message length is invalid. 
+
+  /logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0NjI2NDc0NywiZXhwIjoxNzQ2ODY5NTQ3fQ.zsQkPVCpUaXHyz7R7ESHDFkuN9rxt_F--Ik067N2vxw
+              required:
+                - refreshToken
+
+      responses:
+        '200':
+          description: Logout successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  listUsers:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Logout successfully
+        '400':
+          description: Logout failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed validation
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: refreshToken
+                        message:
+                          type: string
+                          example: Refresh token is required
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Refresh Token is not found
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REFRESH_TOKEN_IS_NOT_EXIST
+                        message:
+                          type: string
+                          example: Refresh Token is not exist.        
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REFRESH_TOKEN_IS_NOT_EXIST
+                        message:
+                          type: string
+                          example: error
+
+  /refresh-token:
+    post:
+      tags:
+        - Auth
+      summary: Refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  example: FsGxvhP0UHwA1nvTQP8W+xiAR39Qb19ojoLSwgDyog7sTNDu7Blp2b4KijJjyomzP7JolsbBe1dgr3/6jIKZ8vttQw5SdBpLbqSUm76JoNExhdETF5Xu086mXHtX2FrRPW3w/S+dK9Poy4kppd6xHEK1UaaC4jE9jPmXRhm2LjLPi1IqMggIt4GbW4qsYlZZFe4ER78hL64rDchdcm0EP96+tNAX0g4T3+4Oi3e6Ybn7a07HaP3mDPiSpipSA/P86wZubqTzf2dEYRe5cARpPoInEgZxB40XyNgzA710ggFdFDWA075uWOg1Ir5gJGpmRs8ru2MK6PXbKdscCU4E0w==
+              required:
+                - refreshToken
+      responses:
+        '200':
+          description: Refresh access token successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  listUsers:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Refresh access token successfully
+                        token:
+                          type: string
+                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2MjY0NjQ1fQ.bfHigSWgar_cS32tBBqYttrbUIwzszLb0HSr47ITjWw
+                        refreshToken:
+                          type: string
+                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2ODY4NTQ1fQ.rpLFhyZAQE-2Dqy-oQx-XPeJ7s5MH8vDrj_Hd8YbBHg
+        '400':
+          description: Refresh token failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed validation
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: refreshToken
+                        message:
+                          type: string
+                          example: Refresh token is required.
+        '404':
+          description: Refresh token failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Refresh Token is expired
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REFRESH_TOKEN_IS_EXPIRED
+                        message:
+                          type: string
+                          example: Refresh Token is expired   
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REFRESH_TOKEN_IS_NOT_EXIST
+                        message:
+                          type: string
+                          example: error
+
+  /logs/list:
+    post:
+      tags:
+        - Log
+      summary: Get the list log
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromDate:
+                  type: string
+                  example: 2025-05-02 00:00:00
+                toDate:
+                  type: string
+                  example: 2025-05-04 23:59:59
+                searchString:
+                  type: string
+                  example: duy.pha@trans-tech.vn
+                page:
+                  type: number
+                  example: 1
+                sortColumn:
+                  type: string
+                  example: fullName / email / updatedAt
+                sortOrder:
+                  type: string
+                  example: asc / desc
+                itemPerPage:
+                  type: number
+                  example: 5
+              required:
+                - itemPerPage
+                - page
+
+      responses:
+        '200':
+          description: Get the list user successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  listUsers:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        userCode:
+                          type: string
+                        fullName:
+                          type: string
+                        email:
+                          type: string
+                        updatedAt:
+                          type: string
+                    example:
+                      - id: 1
+                        userCode: PHAD1A2B3C4
+                        fullName: Pham Hai Anh Duy
+                        email: ph.anhduy1102@gmail.com
+                        updatedAt: 2025-05-02T04:10:40.000Z
+                      - id: 2
+                        userCode: PHAD5F6G7H8
+                        fullName: Nguyen Van B
+                        email: b.nguyen@example.com
+                        updatedAt: 2025-05-01T10:20:30.000Z
+                  currentPage:
+                    type: number
+                    example: 1
+                  totalUsers:
+                    type: number
+                    example: 8
+                  totalPages:
+                    type: number
+                    example: 2
+                  itemPerPage:
+                    type: number
+                    example: 5
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: object
+                    properties: 
+                      code:
+                        type: string
+                      message:
+                        type: string
+              examples:
+                validatePage:
+                  summary: Validate page
+                  value:
+                    message: Failed validation
+                    error:
+                      code: page
+                      message: Page is required / page is a number.
+
+                validateItemPerPage:
+                  summary: Validate itemPerPage
+                  value:
+                    message: Failed validation
+                    error:
+                      code: page
+                      message: itemPerPage is required / itemPerPage is a number.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token is required
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: REQUIRED_TOKEN
+                        message:
+                          type: string
+                          example: Token is required         
+
+
+              examples:
+                userNameIsExisting:
+                  summary: Username is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: USERNAME_EXIST
+                      message: Username is existed.
+                emailIsExisting:
+                  summary: Email is existing
+                  value:
+                    message: Failed created user
+                    error:
+                      code: EMAIL_EXIST
+                      message: Email is existed.
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  error:
+                      type: object
+                      properties: 
+                        code:
+                          type: string
+                          example: error
+                        message:
+                          type: string
+                          example: Internal server error 
