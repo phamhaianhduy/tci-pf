@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #1d227e;
+  background-color: #1e663c;
   padding: 15px;
   text-align: center;
 }
@@ -9,19 +9,6 @@
   padding: 0;
 }
 
-.nav-links li {
-  display: inline;
-  margin-right: 20px;
-}
-
-.nav-links a {
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
 .nav-links a:hover {
   background-color: #333;
 }
@@ -29,12 +16,6 @@
 .nav-links a:focus, .nav-links a:active {
   outline: none;
   background-color: #444;
-}
-
-.navbar {
-  background-color: #1d227e;
-  padding: 15px;
-  text-align: center;
 }
 
 .nav-links {
@@ -54,7 +35,6 @@
   text-decoration: none;
   font-size: 18px;
   padding: 10px 20px;
-  border-radius: 5px;
 }
 
 .nav-links a:hover {
@@ -75,7 +55,6 @@
   top: 100%;
   left: 0;
   z-index: 1;
-  border-radius: 5px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -88,7 +67,7 @@
 }
 
 .dropdown-content a:hover {
-  background-color: #1d227e;
+  background-color: #1e663c;
   color:#fff;
 }
 
@@ -99,5 +78,16 @@
 .dropdown .dropbtn::after {
   content: " ▼";
   font-size: 12px;
+}
+
+.btn-logout {
+  background-color: #aa8514!important;
+  border: #aa8514!important;
+  color: #fff;
+}
+
+.btn-logout:hover {
+  background-color: #7a5f0e!important;
+  border: #7a5f0e!important;
 }
 

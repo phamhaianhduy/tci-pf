@@ -121,7 +121,7 @@ const CreateUser = () => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting, values }) => (
-          <Form>
+          <Form className={classes["form-login"]}>
             <div className={classes["form-group"]}>
               <label htmlFor="avatar">Avatar</label>
               <input
@@ -242,7 +242,7 @@ const CreateUser = () => {
               />
             </div>
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button className={classes["btn-submit"]} type="submit" disabled={isSubmitting}>
               Create
             </Button>
           </Form>

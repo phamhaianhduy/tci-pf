@@ -155,14 +155,14 @@ const LogList = () => {
                 </Col>
                 <Col md={12}>
                   <Button
-                    className='mt-4 mb-4'
+                    className={`${classes['btn-submit']} + ' mt-4 mb-4'`}
                     type='submit'
                     onClick={() => setSearchKeyword(searchString)}
                   >
                     Search
                   </Button>&nbsp;
                   <Button
-                    className='mt-4 mb-4'
+                    className={`${classes['btn-submit']} + ' mt-4 mb-4'`}
                     type='button'
                     onClick={() => handleReset(setFieldValue)}
                     variant='secondary'

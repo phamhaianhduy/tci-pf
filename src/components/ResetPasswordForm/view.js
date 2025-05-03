@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/esm/Button";
 import { userStore } from "../../stores/UserStore";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ResetPasswordForm = () => {
   const forgotPasswordSchema = Yup.object().shape({
@@ -40,7 +41,7 @@ const ResetPasswordForm = () => {
     try {
       await userStore.resetPasswordUser(password, token, navigate);
     } catch (error) {
-      console.error(error.message);
+      toast.warn(error.response.data.message);
     }
   };
 
@@ -53,7 +54,7 @@ const ResetPasswordForm = () => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className={classes["form-login"]}>
             <div>
               <div className={classes["form-group"]}>
                 <label htmlFor="password">New Password</label>
@@ -82,7 +83,7 @@ const ResetPasswordForm = () => {
                 />
               </div>
             </div>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button className={classes["btn-submit"]} type="submit" disabled={isSubmitting}>
               Reset password
             </Button>
           </Form>

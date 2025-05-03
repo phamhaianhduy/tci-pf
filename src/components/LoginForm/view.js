@@ -54,7 +54,7 @@ const LoginForm = () => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className={classes['form-login']}>
             <div className={classes['form-group']}>
               <label htmlFor='userName'>Username</label>
               <Field name='userName' placeholder='Enter your username' />
@@ -67,7 +67,7 @@ const LoginForm = () => {
                 type='password'
               />
             </div>
-            <Button type='submit' disabled={isSubmitting}>
+            <Button className={classes['btn-submit']} type='submit' disabled={isSubmitting}>
               Login
             </Button>
           </Form>

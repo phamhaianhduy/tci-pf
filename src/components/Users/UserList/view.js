@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/esm/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Pencil, Trash2 } from "lucide-react";
 
 const UserList = observer(() => {
   const searchSchema = Yup.object().shape({
@@ -180,17 +181,16 @@ const UserList = observer(() => {
                 </Col>
                 <Col md={12}>
                   <Button
-                    className='mt-4 mb-4'
+                    className={`${classes['btn-submit']} + ' mt-4 mb-4'`}
                     type='submit'
                     onClick={() => setSearchKeyword(searchString)}
                   >
                     Search
                   </Button>&nbsp;
                   <Button
-                    className='mt-4 mb-4'
+                    className={`${classes['btn-submit']} + ' mt-4 mb-4'`}
                     type='button'
                     onClick={() => handleReset(setFieldValue)}
-                    variant='secondary'
                   >
                     Reset
                   </Button>
@@ -254,19 +254,19 @@ const UserList = observer(() => {
                   {dayjs(user.createdAt).format('YYYY/MM/DD HH:mm:ss')}
                 </td>
                 <td className={classes['col-25']}>
-                  <a
+                  <Button
                     href={`/users/${user.userCode}/edit`}
                     className={classes['edit-btn']}
                   >
-                    Edit
-                  </a>
+                    <Pencil strokeWidth={0.75} />
+                  </Button>
                   <Button
                     className={classes['delete-btn']}
                     onClick={handleDelete}
                     value={user.id}
                     variant='danger'
                   >
-                    Delete
+                    <Trash2 strokeWidth={0.75} />
                   </Button>
                 </td>
               </tr>

@@ -53,11 +53,11 @@ const Navbar = () => {
             <a href='/logs'>Logs</a>
           </li>
           {!token && (<li><a href='/login'>Login</a></li>)}
-          {token && (<li><Button onClick={handleLogout} variant='warning'>Logout</Button></li>)}
+          {token && (<li><Button onClick={handleLogout} className={classes['btn-logout']}>Logout</Button></li>)}
         </ul>
       </nav>
     </div>
   );
-};
+}
 
 export default Navbar;

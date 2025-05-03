@@ -57,8 +57,8 @@ th {
 }
 
 .pagination button.active {
-  background-color: #1d227e;
-  border: 1px solid #1d227e;
+  background-color: #1e663c;
+  border: 1px solid #1e663c;
   color: white;
   font-weight: bold;
 }
@@ -67,7 +67,20 @@ th {
   width: 20%;
 }
 
-
 .col-25 {
   width: 25%;
+}
+
+.btn-submit, .edit-btn {
+  background-color: #1e663c!important;
+  border-color: #1e663c!important;
+}
+
+.btn-submit:hover, .edit-btn:hover {
+  background-color: #333!important;
+  border-color: #333!important;
+}
+
+tbody {
+  background-color: #fff;
 }

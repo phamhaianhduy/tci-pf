@@ -181,8 +181,8 @@ const UserDetail = observer(({ isMe = false }) => {
     <div className={classes["login-container"]}>
       <h2 className={classes["title"]}>User Detail</h2>
       {userStore.isLoading && (
-        <div className="text-center my-3">
-          <Spinner animation="border" variant="primary" />
+        <div className="text-center my-3 mt-3 mb-5">
+          <Spinner animation="border" className={classes["text-duypha"]} />
           <div>Loading data...</div>
         </div>
       )}
@@ -194,7 +194,7 @@ const UserDetail = observer(({ isMe = false }) => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting, setFieldValue, values }) => (
-            <Form>
+            <Form className={classes["form-login"]}>
               <div className={classes["form-group"]}>
                 <label htmlFor="avatar">Avatar</label>
                 <input
@@ -338,7 +338,7 @@ const UserDetail = observer(({ isMe = false }) => {
                   </div>
                 </div>
               )}
-              <Button type="submit" disabled={isSubmitting}>
+              <Button className={classes["btn-submit"]} type="submit" disabled={isSubmitting}>
                 Update
               </Button>
             </Form>

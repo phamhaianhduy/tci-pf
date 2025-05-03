@@ -32,13 +32,13 @@ const ForgotPasswordForm = () => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className={classes['form-login']}>
             <div className={classes['form-group']}>
               <label htmlFor='email'>Email</label>
               <Field name='email' placeholder='Enter your email'/>
               <ErrorMessage name='email' component='div' style={{ color: 'red' }} />
             </div>
-            <Button type='submit' disabled={isSubmitting}>Reset password</Button>
+            <Button className={classes['btn-submit']} type='submit' disabled={isSubmitting}>Reset password</Button>
           </Form>
         )}
       </Formik>

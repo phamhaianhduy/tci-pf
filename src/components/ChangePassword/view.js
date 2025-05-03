@@ -62,7 +62,7 @@ const ChangePassword = () => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className={classes["form-login"]}>
             <div>
               <div className={classes["form-group"]}>
                 <label htmlFor="password">New Password</label>
@@ -91,7 +91,7 @@ const ChangePassword = () => {
                 />
               </div>
             </div>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button className={classes["btn-submit"]} type="submit" disabled={isSubmitting}>
               Reset password
             </Button>
           </Form>
