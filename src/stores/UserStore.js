@@ -209,7 +209,7 @@ class UserStore {
     }
   };
 
-  forgotPasswordUser = async (email) => {
+  forgotPasswordUser = async (email, navigate) => {
     this.isLoading = true;
     try {
       const res = await axios.put(
@@ -217,6 +217,7 @@ class UserStore {
         { email }
       );
       toast.success(res.data.message);
+      navigate(`/login`);
     } catch (error) {
       throw error;
     } finally {

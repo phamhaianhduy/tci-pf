@@ -15,8 +15,7 @@ const ForgotPasswordForm = () => {
 
   const handleSubmit = async (values, { setErrors }) => {
     try {
-      await userStore.forgotPasswordUser(values.email);
-      navigate(`/login`);
+      await userStore.forgotPasswordUser(values.email, navigate);
     } catch (error) {
       setErrors({ email: error.response.data.message });
     }
