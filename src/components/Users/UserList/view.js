@@ -251,7 +251,7 @@ const UserList = observer(() => {
                 <td className={classes['col-25']}>{user.fullName}</td>
                 <td className={classes['col-25']}>{user.email}</td>
                 <td className={classes['col-25']}>
-                  {dayjs(user.createdAt).format('YYYY/MM/DD HH:mm:ss')}
+                  {dayjs(user.updatedAt).format('YYYY/MM/DD HH:mm:ss')}
                 </td>
                 <td className={classes['col-25']}>
                   <Button
