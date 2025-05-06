@@ -38,17 +38,6 @@ const UserList = observer(() => {
 
   }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate]);
 
-  useEffect(() => {
-    // const dispose = autorun(() => {
-      if (userStore.isReloadUsers) {
-        userStore.getUsers();
-        userStore.isReloadUsers = false;
-      }
-    // });
-  
-    // return () => dispose();
-  }, []);
-
   const navigate = useNavigate();
 
   // Search
@@ -95,7 +84,6 @@ const UserList = observer(() => {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
-  // const usersList = toJS(userStore.users);
   const totalPages = userStore.totalPages;
 
   const renderSortIcon = (field) => {

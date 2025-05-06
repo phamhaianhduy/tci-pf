@@ -186,6 +186,11 @@ const UserDetail = observer(({ isMe = false }) => {
           <div>Loading data...</div>
         </div>
       )}
+      {!userStore.isLoading && !userData && (
+        <div className="text-center my-3 mt-3 mb-5">
+          <div className="mb-4">Not found.</div>
+        </div>
+      )}
       {!userStore.isLoading && userData && (
         <Formik
           initialValues={formData}
