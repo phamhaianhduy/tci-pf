@@ -42,8 +42,7 @@ const ChangePassword = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (data, { isSubmitting } ) => {
-    const id = userStore.userDetailByMe.id;
-    const payload = { id, password: data.password };
+    const payload = { password: data.password };
     try {
       await userStore.updateExpiredPasswordUser(payload, navigate);
     } catch (error) {
