@@ -31,9 +31,23 @@ class UserStore {
       const token = localStorage.getItem('token');
       verifyTokenExpiry(token);
 
-      const res = await axios.post(
-        `${endpoint}/users/list`,
-        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage },
+      const params = {
+        sortColumn,
+        sortOrder,
+        searchString,
+        page,
+        fromDate,
+        toDate,
+        itemPerPage
+      };
+
+      const queryString = Object.entries(params)
+        .filter(([_, value]) => value !== undefined && value !== null)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+
+      const res = await axios.get(
+        `${endpoint}/users/list?${queryString}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
