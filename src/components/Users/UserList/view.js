@@ -33,7 +33,8 @@ const UserList = observer(() => {
       searchKeyword,
       currentPage,
       fromDate,
-      toDate
+      toDate,
+      10
     );
 
   }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate]);
