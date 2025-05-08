@@ -134,6 +134,7 @@ class UserStore {
 
   clearUserDetail = () => {
     this.userDetail = null;
+    this.userDetailByMe = null;
   };
 
   deleteUser = async (id, navigate) => {

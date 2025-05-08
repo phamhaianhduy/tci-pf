@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import api from "../utils/api";
 import encryptPassword from '../utils/encryptPassword';
+import { userStore } from "./UserStore";
 
 class AuthStore {
   constructor() {
@@ -43,6 +44,8 @@ class AuthStore {
       localStorage.removeItem('token');
       localStorage.removeItem('expiryToken');
       localStorage.removeItem('refreshToken');
+
+      userStore.clearUserDetail();
     } catch (error) {
       toast.warn("Logout failed!");
       console.error("Logout failed", error);
