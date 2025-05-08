@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import classes from './Users.module.css';
 import { observer } from 'mobx-react-lite';
 import { userStore } from '../../../stores/UserStore';
-import { Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/esm/Button';
@@ -34,9 +33,7 @@ const UserList = observer(() => {
       currentPage,
       fromDate,
       toDate,
-      10
     );
-
   }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate]);
 
   const navigate = useNavigate();
@@ -92,13 +89,11 @@ const UserList = observer(() => {
     return sortOrder === 'asc' ? '↑' : '↓';
   };
 
-  const handleDelete = async (e) => {
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm('Are you sure delete this use?');
     if (!confirmDelete) {
       return;
     }
-
-    const id = e.target.value;
     await userStore.deleteUser(id, navigate);
     await userStore.getUsers();
   };
@@ -118,6 +113,8 @@ const UserList = observer(() => {
     }
     return buttons;
   };
+
+  const userList = userStore.users.filter((user) => user.id !== userStore.userDetailByMe.id);
 
   return (
     <div className={classes['table-container']}>
@@ -218,24 +215,15 @@ const UserList = observer(() => {
           </tr>
         </thead>
         <tbody>
-          {userStore.isLoading && (
-            <tr>
-              <td colSpan='4' style={{ textAlign: 'center', padding: '20px' }}>
-                <Spinner animation='border' variant='primary' />
-                <div>Loading data...</div>
-              </td>
-            </tr>
-          )}
-          {!userStore.isLoading && userStore.users.length === 0 && (
+          {userList.length === 0 && (
             <tr>
               <td colSpan='4' style={{ textAlign: 'center', padding: '20px' }}>
                 No users found.
               </td>
             </tr>
           )}
-          {!userStore.isLoading &&
-            userStore.users.length > 0 &&
-            userStore.users.map((user) => (
+          {userList.length > 0 &&
+            userList.map((user) => (
               <tr key={user.id}>
                 <td className={classes['col-25']}>{user.fullName}</td>
                 <td className={classes['col-25']}>{user.email}</td>
@@ -251,7 +239,7 @@ const UserList = observer(() => {
                   </Button>
                   <Button
                     className={classes['delete-btn']}
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(user.id)}
                     value={user.id}
                     variant='danger'
                   >

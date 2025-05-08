@@ -1,9 +1,6 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import verifyTokenExpiry from '../utils/verifyTokenExpiry';
-
-const endpoint = process.env.REACT_APP_RDS_END_POINT;
+import { makeAutoObservable, runInAction } from "mobx";
+import { toast } from "react-toastify";
+import api from "../utils/api";
 
 class UserStore {
   users = [];
@@ -12,25 +9,21 @@ class UserStore {
   userDetailByMe = null;
   page = 1;
   totalPages = 1;
+
   constructor() {
     makeAutoObservable(this);
   }
 
   getUsers = async (
-    sortColumn = 'fullName',
-    sortOrder = 'asc',
-    searchString = '',
+    sortColumn = "fullName",
+    sortOrder = "asc",
+    searchString = "",
     page = 1,
-    fromDate = '',
-    toDate = '',
-    itemPerPage = 5,
+    fromDate = "",
+    toDate = "",
+    itemPerPage = 10
   ) => {
-    this.isLoading = true;
     try {
-      // Verify token.
-      const token = localStorage.getItem('token');
-      verifyTokenExpiry(token);
-
       const params = {
         sortColumn,
         sortOrder,
@@ -38,18 +31,18 @@ class UserStore {
         page,
         fromDate,
         toDate,
-        itemPerPage
+        itemPerPage,
       };
 
       const queryString = Object.entries(params)
         .filter(([_, value]) => value !== undefined && value !== null)
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&');
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        )
+        .join("&");
 
-      const res = await axios.get(
-        `${endpoint}/users/list?${queryString}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.get(`/users/list?${queryString}`);
 
       runInAction(() => {
         this.users = [...res.data.listUsers];
@@ -57,12 +50,10 @@ class UserStore {
         this.totalPages = res.data.totalPages;
       });
     } catch (error) {
-      toast.warn('Fetch failed');
-      console.error('Fetch failed', error);
+      toast.warn("Fetch failed");
+      console.error("Fetch failed", error);
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
 
@@ -72,105 +63,57 @@ class UserStore {
   };
 
   getUserByUserCode = async (userCode) => {
-    this.isLoading = true;
     try {
-      // Verify token.
-      const token = localStorage.getItem('token');
-      verifyTokenExpiry(token);
-
-      const res = await axios.get(
-        `${endpoint}/users/${userCode}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.get(`/users/${userCode}`);
       const data = res.data.userData;
+
       runInAction(() => {
         this.userDetail = data;
       });
     } catch (error) {
-      toast.warn('Fetch failed');
-      console.error('Fetch failed', error);
+      toast.warn("Fetch failed");
+      console.error("Fetch failed", error);
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
   getUserByMe = async () => {
-    this.isLoading = true;
     try {
-      // Verify token.
-      const token = localStorage.getItem('token');
-      verifyTokenExpiry(token);
-
-      const res = await axios.get(
-        `${endpoint}/users/me`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const token = localStorage.getItem("token");
+      if (!token) {
+        return;
+      }
+      const res = await api.get(`/users/me`);
       const data = res.data.userData;
 
       runInAction(() => {
         this.userDetailByMe = data;
       });
     } catch (error) {
-      toast.warn('Fetch failed');
-      console.error('Fetch failed', error);
+      toast.warn("Fetch failed");
+      console.error("Fetch failed", error);
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
   createUser = async (data, navigate) => {
-    this.isLoading = true;
-
-    // Verify token.
-    const token = localStorage.getItem('token');
-    verifyTokenExpiry(token);
-
     try {
-      await axios.post(
-        `${endpoint}/users/create`,
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.post(`/users/create`, data);
 
-      toast.success('Created Successfully!');
+      toast.success("Created Successfully!");
 
-      navigate('/users');
-      
+      navigate("/users");
     } catch (error) {
-      toast.warn('Failed create user!');
+      toast.warn("Failed create user!");
       throw error;
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
 
   updateUser = async (data, navigate) => {
-    this.isLoading = true;
-
-    // Verify token.
-    const token = localStorage.getItem('token');
-    verifyTokenExpiry(token);
-
     try {
-      const res = await axios.put(
-        `${endpoint}/users/update`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await api.put(`/users/update`, data);
 
       const updatedUser = res.data.data;
       runInAction(() => {
@@ -181,14 +124,11 @@ class UserStore {
       });
 
       navigate(`/users`);
-      toast.success('Updated Successfully!');
-
+      toast.success("Updated Successfully!");
     } catch (error) {
       throw error;
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
 
@@ -198,90 +138,53 @@ class UserStore {
 
   deleteUser = async (id, navigate) => {
     this.isLoading = false;
-
-    // Verify token.
-    const token = localStorage.getItem('token');
-    verifyTokenExpiry(token);
-  
     try {
-      await axios.delete(
-        `${endpoint}/users/delete/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.delete(`/users/delete/${id}`);
 
-      toast.success('Deleted Successfully!');
+      toast.success("Deleted Successfully!");
       navigate(`/users`);
     } catch (error) {
-      toast.warn('Failed deleted!');
-      console.error('Failed deleted', error);
+      toast.warn("Failed deleted!");
+      console.error("Failed deleted", error);
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
 
   forgotPasswordUser = async (email, navigate) => {
-    this.isLoading = true;
     try {
-      const res = await axios.put(
-        `${endpoint}/users/forgot-password`,
-        { email }
-      );
+      const res = await api.put(`/users/forgot-password`, { email });
       toast.success(res.data.message);
       navigate(`/login`);
     } catch (error) {
       throw error;
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
 
   resetPasswordUser = async (password, token, navigate) => {
-    this.isLoading = true;
     try {
-      await axios.put(
-        `${endpoint}/users/reset-password`,
-        { password, token }
-      );
+      await api.put(`/users/reset-password`, { password, token });
       toast.success("Reset password successfully!");
       navigate(`/login`);
     } catch (error) {
       throw error;
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
 
   updateExpiredPasswordUser = async (data, navigate) => {
-  
-    // Verify token.
-    const token = localStorage.getItem('token');
-    verifyTokenExpiry(token);
-
     try {
-      await axios.put(
-        `${endpoint}/users/change-password`,
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      toast.success('Updated password successfully!');
-      localStorage.removeItem('token');
+      await api.put(`/users/change-password`, data);
+      toast.success("Updated password successfully!");
+      localStorage.removeItem("token");
       navigate(`/users/`);
     } catch (error) {
       throw error;
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      runInAction(() => {});
     }
   };
 }

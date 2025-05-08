@@ -1,13 +1,10 @@
 import classes from '../../assets/css/Form.module.css';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import Button from 'react-bootstrap/esm/Button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import encryptPassword from '../../utils/encryptPassword';
-
-const endpoint = process.env.REACT_APP_RDS_END_POINT;
+import { authStore } from '../../stores/AuthStore';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -19,23 +16,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (values) => {
     try {
-      // Encrypt password.
-      const encryptedPassword = encryptPassword(values.password);
-      values = {...values, password: encryptedPassword};
-
-      const res = await axios.post(
-        `${endpoint}/login`,
-        values,
-      );
-
-      // Set token and expiry token.
-      const minutes = 15;
-      const expiryToken = Date.now() + minutes * 60 * 1000;
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('expiryToken', expiryToken);
-      localStorage.setItem('refreshToken', res.data.refreshToken);
-
-      toast.success('Login successfully')
+      await authStore.login(values, navigate);
       navigate('/users/me');
     } catch (error) {
       toast.warn(error.response.data.error.message);

@@ -6,7 +6,6 @@ import { userStore } from "../../../stores/UserStore";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/esm/Button";
-import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -72,9 +71,8 @@ const UserDetail = observer(({ isMe = false }) => {
 
   useEffect(() => {
     const getProfile = async () => {
-      if (isMe) {
-        await userStore.getUserByMe();
-      } else {
+      if (!isMe) {
+        // await userStore.getUserByMe();
         await userStore.getUserByUserCode(userCode);
       }
     };
@@ -180,18 +178,12 @@ const UserDetail = observer(({ isMe = false }) => {
   return (
     <div className={classes["login-container"]}>
       <h2 className={classes["title"]}>User Detail</h2>
-      {userStore.isLoading && (
-        <div className="text-center my-3 mt-3 mb-5">
-          <Spinner animation="border" className={classes["text-duypha"]} />
-          <div>Loading data...</div>
-        </div>
-      )}
-      {!userStore.isLoading && !userData && (
+      {!userData && (
         <div className="text-center my-3 mt-3 mb-5">
           <div className="mb-4">Not found.</div>
         </div>
       )}
-      {!userStore.isLoading && userData && (
+      {userData && (
         <Formik
           initialValues={formData}
           enableReinitialize

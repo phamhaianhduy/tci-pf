@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import classes from './Log.module.css';
 import { observer } from 'mobx-react-lite';
 import { logStore } from '../../../stores/LogStore';
-import { Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/esm/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -31,7 +30,7 @@ const LogList = () => {
       searchKeyword,
       currentPage,
       fromDate,
-      toDate
+      toDate,
     );
   }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate]);
 
@@ -205,14 +204,6 @@ const LogList = () => {
           </tr>
         </thead>
         <tbody>
-          {logStore.isLoading && (
-            <tr>
-              <td colSpan='5' style={{ textAlign: 'center', padding: '20px' }}>
-                <Spinner animation='border' variant='primary' />
-                <div>Loading data...</div>
-              </td>
-            </tr>
-          )}
           {!logStore.isLoading && currentLogs.length === 0 && (
             <tr>
               <td colSpan='5' style={{ textAlign: 'center', padding: '20px' }}>

@@ -1,34 +1,22 @@
 import classes from './Navbar.module.css';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/esm/Button';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-
-const endpoint = process.env.REACT_APP_RDS_END_POINT;
+import { authStore } from '../../../stores/AuthStore';
+import { observer } from 'mobx-react-lite';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
-  const handleLogout = async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
+  const handleLogout = async (e) => {
+    e.preventDefault();
     try {
-      const res = await axios.post(
-        `${endpoint}/logout`,
-        { refreshToken },
-      );
-
-      toast.success(res.data.message);
-
-      localStorage.removeItem('token');
-      localStorage.removeItem('expiryToken');
-      localStorage.removeItem('refreshToken');
-
+      await authStore.logout();
       navigate('/login');
     } catch (error) {
       toast.error(error.response.data.error.message);
     }
-
   }
   
   return (
@@ -60,4 +48,4 @@ const Navbar = () => {
   );
 }
 
-export default Navbar;
+export default observer(Navbar);

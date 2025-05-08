@@ -1,11 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import axios from 'axios';
-
-const endpoint = process.env.REACT_APP_RDS_END_POINT;
+import api from '../utils/api';
 
 class LogStore {
   logs = [];
-  isLoading = false;
   page = 1;
   totalPages = 1;
 
@@ -20,21 +17,12 @@ class LogStore {
     page = 1,
     fromDate = '',
     toDate = '',
-    itemPerPage = 5,
+    itemPerPage = 10,
   ) => {
-    this.isLoading = true;
     try {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        console.warn('Access denied');
-        return;
-      }
-
-      const res = await axios.post(
-        `${endpoint}/logs/list`,
+      const res = await api.post(
+        `/logs/list`,
         { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage },
-        { headers: { Authorization: `Bearer ${token}` } }
       );
       
       runInAction(() => {
@@ -45,40 +33,12 @@ class LogStore {
     } catch (error) {
       console.error('Fetch failed', error);
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
     }
   };
 
   setPage = (page) => {
     this.page = page;
     this.getLogs();
-  };
-
-  createLog = async (data, navigate) => {
-    const token = localStorage.getItem('token');
-    try {
-      await axios.post(
-        'https://t78tx3ksfj.execute-api.ap-southeast-1.amazonaws.com/dev/logs/create',
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      alert('Created Successfully!');
-      if (!token) {
-        navigate('/login');
-      } else {
-        navigate('/logs');
-      }
-    } catch (error) {
-      console.error('Create failed', error);
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
-    }
   };
 
   clearLogDetail = () => {
