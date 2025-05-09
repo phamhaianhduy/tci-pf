@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/esm/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Pencil, Trash2 } from "lucide-react";
+import { UserRoundPen, UserRoundPlus, UserRoundMinus } from "lucide-react";
 
 const UserList = observer(() => {
   const searchSchema = Yup.object().shape({
@@ -180,6 +180,14 @@ const UserList = observer(() => {
                   >
                     Reset
                   </Button>
+
+                  <Button
+                    className={`${classes['btn-add-user']} + ' mt-4 mb-4'`}
+                    type='button'
+                    href='/users/create'
+                  >
+                    <UserRoundPlus strokeWidth={1.5} />
+                  </Button>
                 </Col>
               </Row>
             </Container>
@@ -235,7 +243,7 @@ const UserList = observer(() => {
                     href={`/users/${user.userCode}/edit`}
                     className={classes['edit-btn']}
                   >
-                    <Pencil strokeWidth={0.75} />
+                    <UserRoundPen strokeWidth={1.5} />
                   </Button>
                   <Button
                     className={classes['delete-btn']}
@@ -243,7 +251,7 @@ const UserList = observer(() => {
                     value={user.id}
                     variant='danger'
                   >
-                    <Trash2 strokeWidth={0.75} />
+                    <UserRoundMinus strokeWidth={1.5} />
                   </Button>
                 </td>
               </tr>

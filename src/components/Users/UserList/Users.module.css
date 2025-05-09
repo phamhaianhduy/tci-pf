@@ -77,6 +77,10 @@ th {
   border-color: #333!important;
 }
 
+.btn-add-user {
+  float: right;
+}
+
 tbody {
   background-color: #fff;
 }

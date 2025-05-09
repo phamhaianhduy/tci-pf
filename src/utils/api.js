@@ -36,9 +36,8 @@ api.interceptors.response.use(
     const code = error?.response?.status;
 
     if (code === 401) {
-      toast.warn("Unauthorized. Please log in again.");
+      toast.warn(error.response.data.error.message);
       localStorage.removeItem("token");
-      window.location.href = "/login";
     }
 
     if (code >= 500) {

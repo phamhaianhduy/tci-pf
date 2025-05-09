@@ -18,9 +18,7 @@ const LoginForm = () => {
     try {
       await authStore.login(values, navigate);
       navigate('/users/me');
-    } catch (error) {
-      toast.warn(error.response.data.error.message);
-    }
+    } catch (error) {}
   };
 
   return (

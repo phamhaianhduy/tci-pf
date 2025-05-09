@@ -1289,7 +1289,7 @@ paths:
                       properties: 
                         code:
                           type: string
-                          example: PASSWORD_INCORRECT
+                          example: INCORRECT_LOGIN
                         message:
                           type: string
                           example: Encrypted message length is invalid. 

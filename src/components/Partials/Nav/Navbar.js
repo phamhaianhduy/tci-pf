@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { authStore } from '../../../stores/AuthStore';
 import { observer } from 'mobx-react-lite';
 import { userStore } from '../../../stores/UserStore';
+import { UserRound } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -19,7 +20,6 @@ const Navbar = () => {
       toast.error(error.response.data.error.message);
     }
   }
-  const user = userStore.userDetailByMe ? userStore.userDetailByMe : null;
   return (
     <div>
       <nav className={classes.navbar}>
@@ -42,9 +42,19 @@ const Navbar = () => {
             <a href='/logs'>Logs</a>
           </li>
           {!token && (<li><a href='/login'>Login</a></li>)}
-          {token && (<li><Button onClick={handleLogout} className={classes['btn-logout']}>Logout</Button></li>)}
-          <li>{user !== null && `Xin chào ${user.fullName}`}</li>
-          
+
+          {token && (
+            <li className={classes.dropdown}>
+              <a href='/users/me' className={classes['dropbtn']}>
+                <UserRound strokeWidth={1.5} />
+              </a>
+              <div className={classes['dropdown-content']}>
+                <a href='/users/me'>Profile</a>
+                <button onClick={handleLogout} className={classes['btn-logout']}>Logout</button>
+              </div>
+            </li>
+          )}
+
         </ul>
       </nav>
     </div>
