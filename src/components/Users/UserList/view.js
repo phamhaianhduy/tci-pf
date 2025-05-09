@@ -114,7 +114,7 @@ const UserList = observer(() => {
     return buttons;
   };
 
-  const userList = userStore.users.filter((user) => user.id !== userStore.userDetailByMe.id);
+  const userList = userStore.users;
 
   return (
     <div className={classes['table-container']}>
@@ -231,8 +231,13 @@ const UserList = observer(() => {
             </tr>
           )}
           {userList.length > 0 &&
-            userList.map((user) => (
-              <tr key={user.id}>
+            userList.map((user) => {
+              if (user.id === userStore.userDetailByMe.id) {
+                return null;
+              }
+
+              return (
+                <tr key={user.id}>
                 <td className={classes['col-25']}>{user.fullName}</td>
                 <td className={classes['col-25']}>{user.email}</td>
                 <td className={classes['col-25']}>
@@ -255,7 +260,9 @@ const UserList = observer(() => {
                   </Button>
                 </td>
               </tr>
-            ))}
+              )
+            })
+          }
         </tbody>
       </table>
 
