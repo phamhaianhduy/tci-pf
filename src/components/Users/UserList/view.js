@@ -95,7 +95,14 @@ const UserList = observer(() => {
       return;
     }
     await userStore.deleteUser(id, navigate);
-    await userStore.getUsers();
+    await userStore.getUsers(
+      sortColumn,
+      sortOrder,
+      searchKeyword,
+      currentPage,
+      fromDate,
+      toDate,
+    );
   };
 
   const pagination = () => {
