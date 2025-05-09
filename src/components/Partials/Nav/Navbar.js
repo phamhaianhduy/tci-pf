@@ -1,10 +1,10 @@
 import classes from './Navbar.module.css';
 import { useNavigate } from 'react-router-dom';
-import Button from 'react-bootstrap/esm/Button';
+// import Button from 'react-bootstrap/esm/Button';
 import { toast } from 'react-toastify';
 import { authStore } from '../../../stores/AuthStore';
 import { observer } from 'mobx-react-lite';
-import { userStore } from '../../../stores/UserStore';
+// import { userStore } from '../../../stores/UserStore';
 import { UserRound } from "lucide-react";
 
 const Navbar = () => {
