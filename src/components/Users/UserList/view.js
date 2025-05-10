@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import classes from './Users.module.css';
 import { observer } from 'mobx-react-lite';
 import { userStore } from '../../../stores/UserStore';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/esm/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -35,8 +34,6 @@ const UserList = observer(() => {
       toDate,
     );
   }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate]);
-
-  const navigate = useNavigate();
 
   // Search
   const handleSubmitSearch = (values) => {
@@ -94,7 +91,9 @@ const UserList = observer(() => {
     if (!confirmDelete) {
       return;
     }
-    await userStore.deleteUser(id, navigate);
+    await userStore.deleteUser(id);
+
+    // Call api to refresh the user list.
     await userStore.getUsers(
       sortColumn,
       sortOrder,
@@ -239,10 +238,6 @@ const UserList = observer(() => {
           )}
           {userList.length > 0 &&
             userList.map((user) => {
-              if (user.id === userStore.userDetailByMe.id) {
-                return null;
-              }
-
               return (
                 <tr key={user.id}>
                 <td className={classes['col-25']}>{user.fullName}</td>

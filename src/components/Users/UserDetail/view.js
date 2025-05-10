@@ -6,44 +6,11 @@ import { userStore } from "../../../stores/UserStore";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/esm/Button";
-import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
 
 const UserDetail = observer(({ isMe = false }) => {
   const userSchema = Yup.object().shape({
     fullName: Yup.string().required("Fullname is required").max(100),
     email: Yup.string().email("Email is invalid").required("Email is required"),
-    isChangePassword: Yup.boolean(),
-    password: Yup.string().when("isChangePassword", {
-      is: true,
-      then: (schema) =>
-        schema
-          .required("Passowrd is required")
-          .min(8, "Password greater than or equal 8 character length.")
-          .test("isStrong", "Password is not strong", (value) => {
-            if (!value) {
-              return false;
-            }
-
-            const hasUper = /[A-Z]/.test(value);
-            const hasLower = /[a-z]/.test(value);
-            const hasNumber = /[0-9]/.test(value);
-            const hasSpecialCharacter = /[!@#$%^&*(),.?':{}|<>]/.test(value);
-            return hasUper && hasLower && hasNumber && hasSpecialCharacter;
-          }),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-    confirmPassword: Yup.string().when("isChangePassword", {
-      is: true,
-      then: (schema) =>
-        schema
-          .required("Confirm password is required")
-          .oneOf(
-            [Yup.ref("password"), null],
-            "Confirm password must match password"
-          ),
-      otherwise: (schema) => schema.notRequired(),
-    }),
     avatar: Yup.mixed()
       .nullable(true)
       .test("fileSize", "Size limit 5MB", (image) => {
@@ -72,7 +39,6 @@ const UserDetail = observer(({ isMe = false }) => {
   useEffect(() => {
     const getProfile = async () => {
       if (!isMe) {
-        // await userStore.getUserByMe();
         await userStore.getUserByUserCode(userCode);
       }
     };
@@ -91,9 +57,6 @@ const UserDetail = observer(({ isMe = false }) => {
     userName: userData ? userData.userName : "",
     fullName: "",
     email: "",
-    password: "",
-    confirmPassword: "",
-    isChangePassword: false,
     avatar: null,
     isRealEmail: true,
     contactEmail: "",
@@ -106,17 +69,12 @@ const UserDetail = observer(({ isMe = false }) => {
         userName: userData.userName,
         fullName: userData.fullName,
         email: userData.email,
-        password: "",
-        confirmPassword: "",
-        isChangePassword: false,
         avatar: null,
         isRealEmail: userData.isRealEmail,
         contactEmail: userData.contactEmail,
       });
     }
   }, [userData]);
-
-  const navigate = useNavigate();
 
   // Handle event for image.
   const handleOnChangeImage = (event, { setFieldValue }) => {
@@ -126,7 +84,6 @@ const UserDetail = observer(({ isMe = false }) => {
       const url = URL.createObjectURL(file);
       setFieldValue('avatar', file);
       setPreviewImage(url);
-      setFormData((prev) => ({ ...prev, avatar: file }));
       setIsDeleteAvatar(false);
     }
   };
@@ -150,10 +107,6 @@ const UserDetail = observer(({ isMe = false }) => {
       formData.append("fullName", values.fullName);
       formData.append("email", values.email);
       formData.append("id", userData.id);
-      formData.append("isChangePassword", values.isChangePassword);
-      if (values.isChangePassword) {
-        formData.append("password", values.password);
-      }
 
       if (values.avatar) {
         formData.append("avatar", values.avatar);
@@ -165,11 +118,9 @@ const UserDetail = observer(({ isMe = false }) => {
         formData.append("contactEmail", values.contactEmail);
       }
 
-      await userStore.updateUser(formData, navigate);
+      await userStore.updateUser(formData);
 
-      setFieldValue("isChangePassword", false);
     } catch (error) {
-      toast.warn(error.response.data.error.message);
     } finally {
       setSubmitting(false);
     }
@@ -286,58 +237,10 @@ const UserDetail = observer(({ isMe = false }) => {
                 </div>
               )}
 
-              <div className={classes["form-group"]}>
-                <Field name="isChangePassword">
-                  {({ field }) => (
-                    <label className={classes["label-checkbox"]}>
-                      <input
-                        type="checkbox"
-                        {...field}
-                        checked={field.value === true}
-                      />
-                      &nbsp;Change password
-                    </label>
-                  )}
-                </Field>
-              </div>
-
-              {values.isChangePassword && (
-                <div>
-                  <div className={classes["form-group"]}>
-                    <label htmlFor="password">Password</label>
-                    <Field
-                      name="password"
-                      placeholder="Enter your password"
-                      type="password"
-                    />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      style={{ color: "red" }}
-                    />
-                    <p className={classes["condition-password"]}>
-                      Password has contain least: lower character, upper
-                      character, special character, number
-                    </p>
-                  </div>
-                  <div className={classes["form-group"]}>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                    <Field
-                      name="confirmPassword"
-                      placeholder="Enter your confirm password"
-                      type="password"
-                    />
-                    <ErrorMessage
-                      name="confirmPassword"
-                      component="div"
-                      style={{ color: "red" }}
-                    />
-                  </div>
-                </div>
-              )}
               <Button className={classes["btn-submit"]} type="submit" disabled={isSubmitting}>
                 Update
               </Button>
+              
             </Form>
           )}
         </Formik>

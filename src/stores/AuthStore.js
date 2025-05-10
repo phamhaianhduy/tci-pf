@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import api from "../utils/api";
 import encryptPassword from '../utils/encryptPassword';
 import { userStore } from "./UserStore";
+import logout from "../utils/logout";
 
 class AuthStore {
   constructor() {
@@ -23,7 +24,7 @@ class AuthStore {
       localStorage.setItem('expiryToken', expiryToken);
       localStorage.setItem('refreshToken', res.data.refreshToken);
 
-      toast.success('Login successfully');
+
     } catch (error) {
       throw error;
     } finally {
@@ -34,17 +35,10 @@ class AuthStore {
   logout = async () => {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
-      const res = await api.post(
+      await api.post(
         `/logout`,
         { refreshToken },
       );
-  
-      toast.success(res.data.message);
-  
-      localStorage.removeItem('token');
-      localStorage.removeItem('expiryToken');
-      localStorage.removeItem('refreshToken');
-
       userStore.clearUserDetail();
     } catch (error) {
       toast.warn("Logout failed!");

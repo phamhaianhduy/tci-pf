@@ -1,21 +1,19 @@
 import classes from './Navbar.module.css';
-import { useNavigate } from 'react-router-dom';
 // import Button from 'react-bootstrap/esm/Button';
 import { toast } from 'react-toastify';
 import { authStore } from '../../../stores/AuthStore';
 import { observer } from 'mobx-react-lite';
-// import { userStore } from '../../../stores/UserStore';
 import { UserRound } from "lucide-react";
 
+
 const Navbar = () => {
-  const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
       await authStore.logout();
-      navigate('/login');
+      
     } catch (error) {
       toast.error(error.response.data.error.message);
     }
@@ -50,6 +48,7 @@ const Navbar = () => {
               </a>
               <div className={classes['dropdown-content']}>
                 <a href='/users/me'>Profile</a>
+                <a href='/users/change-password'>Change Password</a>
                 <button onClick={handleLogout} className={classes['btn-logout']}>Logout</button>
               </div>
             </li>

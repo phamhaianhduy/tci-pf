@@ -50,8 +50,7 @@ class UserStore {
         this.totalPages = res.data.totalPages;
       });
     } catch (error) {
-      toast.warn("Fetch failed");
-      console.error("Fetch failed", error);
+      throw error;
     } finally {
       runInAction(() => {});
     }
@@ -71,8 +70,7 @@ class UserStore {
         this.userDetail = data;
       });
     } catch (error) {
-      toast.warn("Fetch failed");
-      console.error("Fetch failed", error);
+      throw error;
     } finally {
       runInAction(() => {});
     }
@@ -90,41 +88,24 @@ class UserStore {
         this.userDetailByMe = data;
       });
     } catch (error) {
-      toast.warn("Fetch failed");
-      console.error("Fetch failed", error);
+      throw error;
     } finally {
       runInAction(() => {});
     }
   };
-  createUser = async (data, navigate) => {
+  createUser = async (data) => {
     try {
       await api.post(`/users/create`, data);
-
-      toast.success("Created Successfully!");
-
-      navigate("/users");
     } catch (error) {
-      toast.warn("Failed create user!");
       throw error;
     } finally {
       runInAction(() => {});
     }
   };
 
-  updateUser = async (data, navigate) => {
+  updateUser = async (data) => {
     try {
-      const res = await api.put(`/users/update`, data);
-
-      const updatedUser = res.data.data;
-      runInAction(() => {
-        const index = this.users.findIndex((u) => u.id === updatedUser.id);
-        if (index !== -1) {
-          this.users.splice(index, 1, updatedUser);
-        }
-      });
-
-      navigate(`/users`);
-      toast.success("Updated Successfully!");
+      await api.put(`/users/update`, data);
     } catch (error) {
       throw error;
     } finally {
@@ -137,16 +118,12 @@ class UserStore {
     this.userDetailByMe = null;
   };
 
-  deleteUser = async (id, navigate) => {
+  deleteUser = async (id) => {
     this.isLoading = false;
     try {
       await api.delete(`/users/delete/${id}`);
-
-      toast.success("Deleted Successfully!");
-      navigate(`/users`);
     } catch (error) {
-      toast.warn("Failed deleted!");
-      console.error("Failed deleted", error);
+      throw error;
     } finally {
       runInAction(() => {});
     }
@@ -154,8 +131,7 @@ class UserStore {
 
   forgotPasswordUser = async (email, navigate) => {
     try {
-      const res = await api.put(`/users/forgot-password`, { email });
-      toast.success(res.data.message);
+      await api.put(`/users/forgot-password`, { email });
       navigate(`/login`);
     } catch (error) {
       throw error;
@@ -176,12 +152,9 @@ class UserStore {
     }
   };
 
-  updateExpiredPasswordUser = async (data, navigate) => {
+  updatePasswordUser = async (data) => {
     try {
       await api.put(`/users/change-password`, data);
-      toast.success("Updated password successfully!");
-      localStorage.removeItem("token");
-      navigate(`/users/`);
     } catch (error) {
       throw error;
     } finally {

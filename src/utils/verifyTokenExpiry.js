@@ -28,7 +28,6 @@ const verifyTokenExpiry = async (token) => {
           const expiryToken = Date.now() + 15 * 60 * 1000;
           localStorage.setItem('token', res.data.token);
           localStorage.setItem('expiryToken', expiryToken);
-          localStorage.setItem('DUy', "OK");
         }
 
       } catch (errorRefreshToken) {

@@ -2,6 +2,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import verifyTokenExpiry from "./verifyTokenExpiry";
 import { loadingStore } from "../stores/LoadingStore";
+import logout from "./logout";
+import redirect from "./redirect";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_RDS_END_POINT,
@@ -29,19 +31,57 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => {
     loadingStore.stopLoading();
+
+    const code = response?.data?.code;
+    const message = response?.data?.message;
+  
+    switch (code) {
+      case "UPDATE_PASSWORD":
+        toast.success(message);
+        logout();
+        break;
+      case "UPDATE_USER":
+      case "CREATE_USER":
+        toast.success(message);
+
+          redirect('/users');
+
+        break;
+      case "LOGIN":
+        toast.success(message);
+
+        redirect('/users/me');
+
+        break;
+      case "LOGOUT":
+        toast.success(message);
+        logout();
+        break;
+      case "REFRESH_TOKEN":
+        break;
+      default:
+        toast.success(message);
+
+    }
+    
     return response;
   },
   (error) => {
     loadingStore.stopLoading();
-    const code = error?.response?.status;
 
-    if (code === 401) {
-      toast.warn(error.response.data.error.message);
-      localStorage.removeItem("token");
-    }
+    const code = error?.response?.data?.code;
+    const message = error?.response?.data?.message;
 
-    if (code >= 500) {
-      toast.error("Server error, please try again later.");
+    switch (code) {
+      case "EXPIRED_TOKEN":
+        toast.warn(message);
+        logout();
+        break;
+      case "INTERNAL_SERVER_ERROR":
+        toast.error(message);
+        break;
+      default:
+        toast.warn(message);
     }
 
     return Promise.reject(error);

@@ -6,23 +6,26 @@ import { userStore } from "../../stores/UserStore";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import encryptPassword from "../../utils/encryptPassword";
+import { toast } from "react-toastify";
 
 const ChangePassword = () => {
   const changePasswordSchema = Yup.object().shape({
+    oldPassword: Yup.string().required("Old password is required"),
     password: Yup.string()
-    .required("Passowrd is required")
-    .min(8, "Password greater than or equal 8 character length.")
-    .test("isStrong", "Password is not secure.", (value) => {
-      if (!value) {
-        return false;
-      }
+      .required("Password is required")
+      .min(8, "Password greater than or equal 8 character length.")
+      .test("isStrong", "Password is not secure.", (value) => {
+        if (!value) {
+          return false;
+        }
 
-      const hasUper = /[A-Z]/.test(value);
-      const hasLower = /[a-z]/.test(value);
-      const hasNumber = /[0-9]/.test(value);
-      const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-      return hasUper && hasLower && hasNumber && hasSpecialCharacter;
-    }),
+        const hasUper = /[A-Z]/.test(value);
+        const hasLower = /[a-z]/.test(value);
+        const hasNumber = /[0-9]/.test(value);
+        const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+        return hasUper && hasLower && hasNumber && hasSpecialCharacter;
+      }),
     confirmPassword: Yup.string()
       .required("Confirm password is required")
       .oneOf(
@@ -39,16 +42,20 @@ const ChangePassword = () => {
     return () => userStore.clearUserDetail();
   }, []);
 
-  const navigate = useNavigate();
+  const handleSubmit = async (data, { setSubmitting, setFieldValue }) => {
+    const payload = {
+      oldPassword: encryptPassword(data.oldPassword),
+      password: encryptPassword(data.password),
+    };
 
-  const handleSubmit = async (data, { isSubmitting } ) => {
-    const payload = { password: data.password };
     try {
-      await userStore.updateExpiredPasswordUser(payload, navigate);
+      await userStore.updatePasswordUser(payload);
     } catch (error) {
-      console.error(error.message);
+      setFieldValue("oldPassword", "");
+      setFieldValue("password", "");
+      setFieldValue("confirmPassword", "");
     } finally {
-      isSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -56,13 +63,26 @@ const ChangePassword = () => {
     <div className={classes["login-container"]}>
       <h2 className={classes["title"]}>Change Password</h2>
       <Formik
-        initialValues={{ password: "", confirmPassword: "" }}
+        initialValues={{ oldPassword: "", password: "", confirmPassword: "" }}
         validationSchema={changePasswordSchema}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
           <Form className={classes["form-login"]}>
             <div>
+              <div className={classes["form-group"]}>
+                <label htmlFor="oldPassword">Old Password</label>
+                <Field
+                  name="oldPassword"
+                  placeholder="Enter your old password"
+                  type="password"
+                />
+                <ErrorMessage
+                  name="oldPassword"
+                  component="div"
+                  style={{ color: "red" }}
+                />
+              </div>
               <div className={classes["form-group"]}>
                 <label htmlFor="password">New Password</label>
                 <Field
@@ -90,8 +110,12 @@ const ChangePassword = () => {
                 />
               </div>
             </div>
-            <Button className={classes["btn-submit"]} type="submit" disabled={isSubmitting}>
-              Reset password
+            <Button
+              className={classes["btn-submit"]}
+              type="submit"
+              disabled={isSubmitting}
+            >
+              Change password
             </Button>
           </Form>
         )}

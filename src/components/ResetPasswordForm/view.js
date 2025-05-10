@@ -5,6 +5,7 @@ import Button from "react-bootstrap/esm/Button";
 import { userStore } from "../../stores/UserStore";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import encryptPassword from '../../utils/encryptPassword';
 
 const ResetPasswordForm = () => {
   const forgotPasswordSchema = Yup.object().shape({
@@ -39,7 +40,8 @@ const ResetPasswordForm = () => {
 
   const handleSubmit = async ({ password }) => {
     try {
-      await userStore.resetPasswordUser(password, token, navigate);
+      const encryptedPassword = encryptPassword(password);
+      await userStore.resetPasswordUser(encryptedPassword, token, navigate);
     } catch (error) {
       toast.warn(error.response.data.message);
     }

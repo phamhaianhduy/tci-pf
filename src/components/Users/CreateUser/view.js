@@ -2,12 +2,11 @@ import classes from "../../../assets/css/Form.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/esm/Button";
-import { useNavigate } from "react-router-dom";
 import { userStore } from "../../../stores/UserStore";
 import { useState } from "react";
+import encryptPassword from '../../../utils/encryptPassword';
 
 const CreateUser = () => {
-  const navigate = useNavigate();
 
   const userSchema = Yup.object().shape({
     userName: Yup.string().required("Username is required").max(100),
@@ -76,7 +75,9 @@ const CreateUser = () => {
       formData.append("userName", values.userName);
       formData.append("fullName", values.fullName);
       formData.append("email", values.email);
-      formData.append("password", values.password);
+
+      const encryptedPassword = encryptPassword(values.password);
+      formData.append("password", encryptedPassword);
 
       if (values.avatar) {
         formData.append("avatar", values.avatar);
@@ -86,9 +87,8 @@ const CreateUser = () => {
         formData.append("isRealEmail", values.isRealEmail);
         formData.append("contactEmail", values.contactEmail);
       }
-      await userStore.createUser(formData, navigate);
-    } catch (error) {
-      console.log(error);
+      await userStore.createUser(formData);
+    } catch (error) {;
       const res = error.response.data;
       if ("USERNAME_EXIST" === res.error.code) {
         setErrors({ userName: res.error.message });

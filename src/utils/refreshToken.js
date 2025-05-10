@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 import logout from "./logout";
 
 const endpoint = process.env.REACT_APP_RDS_END_POINT;
@@ -13,7 +12,6 @@ const refreshToken = async () => {
       });
 
       if (res.data.token) {
-        toast.success(res.data.message);
         // Set expiry token
         const minutes = 15;
         const expiryToken = Date.now() + minutes * 60 * 1000;
