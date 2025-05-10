@@ -3,11 +3,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/esm/Button";
 import { userStore } from "../../stores/UserStore";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import encryptPassword from "../../utils/encryptPassword";
-import { toast } from "react-toastify";
 
 const ChangePassword = () => {
   const changePasswordSchema = Yup.object().shape({

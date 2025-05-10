@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import api from "../utils/api";
 import encryptPassword from '../utils/encryptPassword';
 import { userStore } from "./UserStore";
-import logout from "../utils/logout";
 
 class AuthStore {
   constructor() {
