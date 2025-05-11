@@ -1,28 +1,28 @@
-import { useEffect, useState } from 'react';
-import classes from './Users.module.css';
-import { observer } from 'mobx-react-lite';
-import { userStore } from '../../../stores/UserStore';
-import dayjs from 'dayjs';
-import Button from 'react-bootstrap/esm/Button';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { Container, Row, Col } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+import classes from "./Users.module.css";
+import { observer } from "mobx-react-lite";
+import { userStore } from "../../../stores/UserStore";
+import dayjs from "dayjs";
+import Button from "react-bootstrap/esm/Button";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { Container, Row, Col } from "react-bootstrap";
 import { UserRoundPen, UserRoundPlus, UserRoundMinus } from "lucide-react";
 
 const UserList = observer(() => {
   const searchSchema = Yup.object().shape({
     searchString: Yup.string(),
-    fromDate: Yup.date().typeError('Invalid date'),
-    toDate: Yup.date().typeError('Invalid date'),
+    fromDate: Yup.date().typeError("Invalid date"),
+    toDate: Yup.date().typeError("Invalid date"),
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchString, setSearchString] = useState('');
+  const [searchString, setSearchString] = useState("");
   const [searchKeyword, setSearchKeyword] = useState(searchString);
-  const [sortColumn, setSortColumn] = useState('updatedAt');
-  const [sortOrder, setSortOrder] = useState('desc');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [sortColumn, setSortColumn] = useState("updatedAt");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   useEffect(() => {
     userStore.getUsers(
@@ -31,19 +31,21 @@ const UserList = observer(() => {
       searchKeyword,
       currentPage,
       fromDate,
-      toDate,
+      toDate
     );
   }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate]);
 
   // Search
   const handleSubmitSearch = (values) => {
-    setFromDate(values.fromDate
-      ? dayjs(values.fromDate).format('YYYY-MM-DD 00:00:00')
-      : null);
+    setFromDate(
+      values.fromDate
+        ? dayjs(values.fromDate).format("YYYY-MM-DD 00:00:00")
+        : null
+    );
 
-    setToDate(values.toDate
-      ? dayjs(values.toDate).format('YYYY-MM-DD 23:59:59')
-      : null);
+    setToDate(
+      values.toDate ? dayjs(values.toDate).format("YYYY-MM-DD 23:59:59") : null
+    );
 
     setSearchKeyword(searchString);
     setCurrentPage(1);
@@ -51,24 +53,24 @@ const UserList = observer(() => {
 
   // Reset
   const handleReset = (setFieldValue) => {
-    setFieldValue('fromDate', '');
-    setFieldValue('toDate', '');
-    setFieldValue('searchString', '');
-    setFromDate('');
-    setToDate('');
-    setSearchString('');
-    setSearchKeyword('');
-    setSortColumn('updatedAt');
-    setSortOrder('desc');
-  }
+    setFieldValue("fromDate", "");
+    setFieldValue("toDate", "");
+    setFieldValue("searchString", "");
+    setFromDate("");
+    setToDate("");
+    setSearchString("");
+    setSearchKeyword("");
+    setSortColumn("updatedAt");
+    setSortOrder("desc");
+  };
 
   // Sort
   const handleSort = (field) => {
     if (field === sortColumn) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortColumn(field);
-      setSortOrder('asc');
+      setSortOrder("asc");
     }
   };
 
@@ -82,12 +84,12 @@ const UserList = observer(() => {
   const totalPages = userStore.totalPages;
 
   const renderSortIcon = (field) => {
-    if (sortColumn !== field) return '⇅';
-    return sortOrder === 'asc' ? '↑' : '↓';
+    if (sortColumn !== field) return "⇅";
+    return sortOrder === "asc" ? "↑" : "↓";
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('Are you sure delete this use?');
+    const confirmDelete = window.confirm("Are you sure delete this use?");
     if (!confirmDelete) {
       return;
     }
@@ -100,97 +102,93 @@ const UserList = observer(() => {
       searchKeyword,
       currentPage,
       fromDate,
-      toDate,
+      toDate
     );
   };
 
   const pagination = () => {
-    const buttons = [];
+    const options = [];
     for (let i = 1; i <= totalPages; i++) {
-      buttons.push(
-        <button
-          key={i}
-          className={currentPage === i ? classes['active'] : ''}
-          onClick={() => handlePageChange(i)}
-        >
+      options.push(
+        <option key={i} value={i}>
           {i}
-        </button>
+        </option>
       );
     }
-    return buttons;
+    return options;
   };
 
   const userList = userStore.users;
 
   return (
-    <div className={classes['table-container']}>
+    <div className={classes["table-container"]}>
       <h2>User List</h2>
       <Formik
         initialValues={{
-          searchString: '',
-          fromDate: '',
-          toDate: '',
+          searchString: "",
+          fromDate: "",
+          toDate: "",
         }}
         validationSchema={searchSchema}
         onSubmit={handleSubmitSearch}
       >
-        {({setFieldValue, resetForm}) => (
-          <Form style={{ display: 'flex', gap: '10px' }}>
-            <Container className='mb-4'>
+        {({ setFieldValue, resetForm }) => (
+          <Form style={{ display: "flex", gap: "10px" }}>
+            <Container className="mb-4">
               <Row>
                 <Col md={4}>
                   <Field
-                    name='searchString'
-                    type='text'
-                    placeholder='Search by fullname or email...'
-                    className={classes['search-input']}
+                    name="searchString"
+                    type="text"
+                    placeholder="Search by fullname or email..."
+                    className={classes["search-input"]}
                     onChange={handleSearchChange}
                     value={searchString}
                   />
                   <ErrorMessage
-                    name='searchString'
-                    component='div'
-                    style={{ color: 'red' }}
+                    name="searchString"
+                    component="div"
+                    style={{ color: "red" }}
                   />
                 </Col>
                 <Col md={4}>
-                  {' '}
-                  <Field type='date' name='fromDate' placeholder='From date' />
+                  {" "}
+                  <Field type="date" name="fromDate" placeholder="From date" />
                   <ErrorMessage
-                    name='fromDate'
-                    component='div'
-                    style={{ color: 'red' }}
+                    name="fromDate"
+                    component="div"
+                    style={{ color: "red" }}
                   />
                 </Col>
                 <Col md={4}>
-                  {' '}
-                  <Field type='date' name='toDate' placeholder='To date' />
+                  {" "}
+                  <Field type="date" name="toDate" placeholder="To date" />
                   <ErrorMessage
-                    name='toDate'
-                    component='div'
-                    style={{ color: 'red' }}
+                    name="toDate"
+                    component="div"
+                    style={{ color: "red" }}
                   />
                 </Col>
                 <Col md={12}>
                   <Button
-                    className={`${classes['btn-submit']} + ' mt-4 mb-4'`}
-                    type='submit'
+                    className={`${classes["btn-submit"]} + ' mt-4 mb-4'`}
+                    type="submit"
                     onClick={() => setSearchKeyword(searchString)}
                   >
                     Search
-                  </Button>&nbsp;
+                  </Button>
+                  &nbsp;
                   <Button
-                    className={`${classes['btn-submit']} + ' mt-4 mb-4'`}
-                    type='button'
+                    className={`${classes["btn-submit"]} + ' mt-4 mb-4'`}
+                    type="button"
                     onClick={() => handleReset(setFieldValue)}
                   >
                     Reset
                   </Button>
-
                   <Button
-                    className={`${classes['btn-add-user']} + ' mt-4 mb-4'`}
-                    type='button'
-                    href='/users/create'
+                    className={`${classes["btn-add-user"]} + ' mt-4 mb-4'`}
+                    type="button"
+                    href="/users/create"
                   >
                     <UserRoundPlus strokeWidth={1.5} />
                   </Button>
@@ -205,33 +203,33 @@ const UserList = observer(() => {
         <thead>
           <tr>
             <th
-              onClick={() => handleSort('fullName')}
-              style={{ cursor: 'pointer' }}
-              className={classes['col-25']}
+              onClick={() => handleSort("fullName")}
+              style={{ cursor: "pointer" }}
+              className={classes["col-25"]}
             >
-              Fullname {renderSortIcon('fullName')}
+              Fullname {renderSortIcon("fullName")}
             </th>
             <th
-              onClick={() => handleSort('email')}
-              style={{ cursor: 'pointer' }}
-              className={classes['col-25']}
+              onClick={() => handleSort("email")}
+              style={{ cursor: "pointer" }}
+              className={classes["col-25"]}
             >
-              Email {renderSortIcon('email')}
+              Email {renderSortIcon("email")}
             </th>
             <th
-              onClick={() => handleSort('updatedAt')}
-              style={{ cursor: 'pointer' }}
-              className={classes['col-25']}
+              onClick={() => handleSort("updatedAt")}
+              style={{ cursor: "pointer" }}
+              className={classes["col-25"]}
             >
-              Updated at {renderSortIcon('updatedAt')}
+              Updated at {renderSortIcon("updatedAt")}
             </th>
-            <th className={classes['col-25']}>Action</th>
+            <th className={classes["col-25"]}>Action</th>
           </tr>
         </thead>
         <tbody>
           {userList.length === 0 && (
             <tr>
-              <td colSpan='4' style={{ textAlign: 'center', padding: '20px' }}>
+              <td colSpan="4" style={{ textAlign: "center", padding: "20px" }}>
                 No users found.
               </td>
             </tr>
@@ -240,35 +238,44 @@ const UserList = observer(() => {
             userList.map((user) => {
               return (
                 <tr key={user.id}>
-                <td className={classes['col-25']}>{user.fullName}</td>
-                <td className={classes['col-25']}>{user.email}</td>
-                <td className={classes['col-25']}>
-                  {dayjs(user.updatedAt).format('YYYY/MM/DD HH:mm:ss')}
-                </td>
-                <td className={classes['col-25']}>
-                  <Button
-                    href={`/users/${user.userCode}/edit`}
-                    className={classes['edit-btn']}
-                  >
-                    <UserRoundPen strokeWidth={1.5} />
-                  </Button>
-                  <Button
-                    className={classes['delete-btn']}
-                    onClick={() => handleDelete(user.id)}
-                    value={user.id}
-                    variant='danger'
-                  >
-                    <UserRoundMinus strokeWidth={1.5} />
-                  </Button>
-                </td>
-              </tr>
-              )
-            })
-          }
+                  <td className={classes["col-25"]}>{user.fullName}</td>
+                  <td className={classes["col-25"]}>{user.email}</td>
+                  <td className={classes["col-25"]}>
+                    {dayjs(user.updatedAt).format("YYYY/MM/DD HH:mm:ss")}
+                  </td>
+                  <td className={classes["col-25"]}>
+                    <Button
+                      href={`/users/${user.userCode}/edit`}
+                      className={classes["edit-btn"]}
+                    >
+                      <UserRoundPen strokeWidth={1.5} />
+                    </Button>
+                    <Button
+                      className={classes["delete-btn"]}
+                      onClick={() => handleDelete(user.id)}
+                      value={user.id}
+                      variant="danger"
+                    >
+                      <UserRoundMinus strokeWidth={1.5} />
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 
-      <div className={classes['pagination']}>{pagination()}</div>
+      <div className={classes["pagination-container"]}>
+        <span>Pages: </span>
+        <select
+          className={classes["pagination-select"]}
+          onChange={(e) => handlePageChange(Number(e.target.value))}
+          value={currentPage}
+        >
+          {pagination()}
+        </select>
+        <span className={classes["pagination-total"]}>/ {totalPages}</span>
+      </div>
     </div>
   );
 });
