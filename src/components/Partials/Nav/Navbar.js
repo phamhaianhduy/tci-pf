@@ -22,10 +22,6 @@ const Navbar = () => {
     <div>
       <nav className={classes.navbar}>
         <ul className={classes['nav-links']}>
-          <li>
-            <a href='/'>Home</a>
-          </li>
-
           <li className={classes.dropdown}>
             <a href='/users' className={classes['dropbtn']}>
               Users

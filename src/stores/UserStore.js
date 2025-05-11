@@ -86,6 +86,7 @@ class UserStore {
 
       runInAction(() => {
         this.userDetailByMe = data;
+        this.userDetailByMe.mustChangePassword = res.data.mustChangePassword;
       });
     } catch (error) {
       throw error;

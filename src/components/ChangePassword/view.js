@@ -6,6 +6,7 @@ import { userStore } from "../../stores/UserStore";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import encryptPassword from "../../utils/encryptPassword";
+import { toast } from "react-toastify";
 
 const ChangePassword = () => {
   const changePasswordSchema = Yup.object().shape({
@@ -35,6 +36,9 @@ const ChangePassword = () => {
   useEffect(() => {
     const getProfile = async () => {
       await userStore.getUserByMe();
+        if (userStore.userDetailByMe && userStore.userDetailByMe.mustChangePassword === true) {
+          toast.error("You must change your password becausse your password is expired.");
+        }
     };
     getProfile();
     return () => userStore.clearUserDetail();

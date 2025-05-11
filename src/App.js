@@ -20,9 +20,11 @@ import { useEffect } from "react";
 import { userStore } from "./stores/UserStore";
 
 function App() {
-
   useEffect(() => {
-    userStore.getUserByMe();
+    const getUserByMe = async () => {
+      await userStore.getUserByMe();
+    }
+    getUserByMe();
   }, []);
 
   return (
@@ -39,15 +41,6 @@ function App() {
         <Navbar />
 
         <Routes>
-          <Route
-            path="/"
-            exact
-            element={
-              <ValidateRoute>
-                <Home />
-              </ValidateRoute>
-            }
-          />
           <Route
             path="/users"
             element={

@@ -43,15 +43,11 @@ api.interceptors.response.use(
       case "UPDATE_USER":
       case "CREATE_USER":
         toast.success(message);
-
-          redirect('/users');
-
+        redirect('/users');
         break;
       case "LOGIN":
         toast.success(message);
-
         redirect('/users/me');
-
         break;
       case "LOGOUT":
         toast.success(message);
