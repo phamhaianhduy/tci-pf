@@ -825,6 +825,7 @@ paths:
                   value:
                     message: itemPerPage must be a `number` type
                     code: ITEMPERPAGE
+
         '401':
           description: Unauthorized
           content:
@@ -1345,7 +1346,6 @@ paths:
                   error:
                     type: object
 
-
   /refresh-token:
     post:
       tags:
@@ -1447,42 +1447,49 @@ paths:
                   error:
                     type: object
 
-
   /logs/list:
-    post:
+    get:
       tags:
         - Log
       summary: Get the list log
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fromDate:
-                  type: string
-                  example: 2025-05-02 00:00:00
-                toDate:
-                  type: string
-                  example: 2025-05-04 23:59:59
-                searchString:
-                  type: string
-                  example: duy.pha@trans-tech.vn
-                page:
-                  type: number
-                  example: 1
-                sortColumn:
-                  type: string
-                  example: fullName / email / timestamp
-                sortOrder:
-                  type: string
-                  example: asc / desc
-                itemPerPage:
-                  type: number
-                  example: 5
-              required:
-                - page
+      parameters:
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            example: 2025-05-02 00:00:00
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            example: 2025-05-04 23:59:59
+        - name: searchString
+          in: query
+          schema:
+            type: string
+            example: duy.pha@trans-tech.vn
+        - name: page
+          in: query
+          schema:
+            type: number
+            example: 1
+          required: true
+        - name: sortColumn
+          in: query
+          schema:
+            type: string
+            example: fullName
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            example: asc
+        - name: itemPerPage
+          in: query
+          schema:
+            type: number
+            example: 5
+          required: true
 
       responses:
         '200':
@@ -1492,7 +1499,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  listUsers:
+                  listLogs:
                     type: array
                     items: 
                       type: object
@@ -1557,13 +1564,41 @@ paths:
                       message:
                         type: string
               examples:
-                validateField:
+                validateSortOrder:
+                  summary: Validate sort order
+                  value:
+                    message: Order is invalid
+                    code: SORTORDER
+
+                validateSorColumn:
+                  summary: Validate sort column
+                  value:
+                    message: Field is invalid
+                    code: SORTCOLUMN
+
+                validateFromDate:
+                  summary: Validate from date
+                  value:
+                    message: fromDate or toDate is not a valid datetime string
+                    code: INVALID_DATE
+
+                validateToDate:
+                  summary: Validate to date
+                  value:
+                    message: fromDate or toDate is not a valid datetime string
+                    code: INVALID_DATE
+
+                validatePage:
                   summary: Validate page
                   value:
-                    message: Failed validation
-                    error:
-                      code: sortColumn / sortOrder / page / itemPerPage
-                      message: Field is invalid / Page is required / page is a number / itemPerPage is required / itemPerPage is a number.
+                    message: page must be a `number` type
+                    code: PAGE
+
+                validateItemPerPage:
+                  summary: Validate itemPerPage
+                  value:
+                    message: itemPerPage must be a `number` type
+                    code: ITEMPERPAGE
 
         '401':
           description: Unauthorized
@@ -1576,7 +1611,6 @@ paths:
                     type: string
                   error:
                     type: string
-
               examples:
                 tokenisRequired:
                   summary: Token is required
@@ -1592,8 +1626,8 @@ paths:
                   summary: Invalid token
                   value:
                     message: Invalid token
-                    code: INVALID_TOKEN       
-
+                    code: INVALID_TOKEN
+   
         '500':
           description: Internal server error
           content:
@@ -1603,13 +1637,9 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: error
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
