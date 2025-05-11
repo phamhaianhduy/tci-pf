@@ -9,7 +9,6 @@ const verifyTokenExpiry = async (token) => {
 
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log('Payload:', payload);
     if (Date.now() >= payload.exp * 1000) {
       await refreshToken();
     }
