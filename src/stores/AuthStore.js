@@ -4,6 +4,8 @@ import api from "../utils/api";
 import encryptPassword from '../utils/encryptPassword';
 import { userStore } from "./UserStore";
 
+const expiryMinutesToken = process.env.REACT_APP_EXPIRY_TOKEN;
+
 class AuthStore {
   constructor() {
     makeAutoObservable(this);
@@ -17,8 +19,7 @@ class AuthStore {
       const res = await api.post(`/login`, data);
 
       // Set token and expiry token.
-      const minutes = 15;
-      const expiryToken = Date.now() + minutes * 60 * 1000;
+      const expiryToken = Date.now() + expiryMinutesToken * 60 * 1000;
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('expiryToken', expiryToken);
       localStorage.setItem('refreshToken', res.data.refreshToken);

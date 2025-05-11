@@ -11,11 +11,12 @@ const api = axios.create({
 
 // Request
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const token = localStorage.getItem("token");
     if (token) {
-      verifyTokenExpiry(token);
-      config.headers.Authorization = `Bearer ${token}`;
+      await verifyTokenExpiry(token);
+      const newToken = localStorage.getItem("token");
+      config.headers.Authorization = `Bearer ${newToken}`;
     }
 
     loadingStore.startLoading();
