@@ -9,7 +9,7 @@ import Logs from "./components/Logs/LogList/view";
 import ValidateRoute from "./components/ValidateRoute/ValidateRoute";
 import ResetPasswordForm from "./components/ResetPasswordForm/view";
 import ChangePassword from "./components/ChangePassword/view";
-import SessionTimeout from "./components/SessionTimeout/SessionTimeout";
+import IdleSessionHandler  from "./components/IdleSessionHandler/IdleSessionHandler";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loadingStore } from "./stores/LoadingStore";
@@ -35,7 +35,7 @@ function App() {
           </Spinner>
         </div>
       )}
-      <SessionTimeout />
+      <IdleSessionHandler  />
       <div>
         <Navbar />
 
