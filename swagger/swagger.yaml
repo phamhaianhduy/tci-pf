@@ -29,47 +29,93 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
                 userName:
                   type: string
-                  example: duypha
+                  example: duypha5
                 fullName:
                   type: string
-                  example: Pham Hai Anh Duy
-                email:
-                  type: string
-                  example: duy.pha@trans-tech.vn
+                  example: Pham Van Hai
                 password:
                   type: string
-                  example: b0z85O/KyueZmSMbZjqdRsww8rcISTLgSJSLTtg/7HOTEq8DhCzE+ZfghIUb1cjsxDB96YmoyNRI3QnqEDeBUN3mQ+j6YKS9SkQOPBTJTtcWRNbDnWVPDi1XDz7l3yUA6SATg8l8W6LkidL8T9wr6JjUF2UckX3d0hMW7qR/9jRnz2gitSwB9jpwFY9JAX6RvEGLs36qSogERH98fesZfvxtmVph5jgowX9t4ItWOxxYR8sWRW5mAAqJN6zUPQT3C5I2KEvmfA6Ckt3pL2gTQpsDh732YeiD5673JrbGW+AMT4uUL6rHwR1Ohnm6qV7S7cULfp40VGWEsdPaVCmtuw==
+                  description: RSA-encrypted password string
+                  example: ENCRYPTED_STRING_HERE
+                email:
+                  type: string
+                  format: email
+                  example: ph.anhduy11025@gmail.com
                 isRealEmail:
-                  type: boolean
-                  example: false
+                  type: string
+                  enum: ['0', '1']
+                  example: '1'
                 contactEmail:
                   type: string
-                  example: ph.anhduy1102@gmail.com
+                  example: 343434
                 avatar:
                   type: string
-              required:
-                - userName
-                - fullName
-                - email
-                - password
-                - contactEmail
+                  format: binary
       responses:
         '201':
-          description: Created
+          description: Created user successfully.
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  code:
+                    type: string
+                    example: CREATE_USER
                   message:
                     type: string
-                    example: Created successfully
+                    example: Created user successfully.
+                  newUser:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 410
+                      userName:
+                        type: string
+                        example: duypha5
+                      userCode:
+                        type: string
+                        example: PHADHBIKT9F
+                      fullName:
+                        type: string
+                        example: Pham Van Hai
+                      password:
+                        type: string
+                        example: $2b$05$EJiulXSOzUVUUOC23DZgnu5n2GALF4SvtqH/l5F5gjN793sX8ZlTC
+                      email:
+                        type: string
+                        format: email
+                        example: ph.anhduy11025@gmail.com
+                      isRealEmail:
+                        type: string
+                        enum: ['0', '1']
+                        example: '1'
+                      contactEmail:
+                        type: string
+                        example: 343434
+                      avatarUrl:
+                        type: string
+                        nullable: true
+                        example: null
+                      lastPasswordChange:
+                        type: string
+                        format: date-time
+                        example: "2025-05-11T07:54:16.145Z"
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: "2025-05-11T07:54:16.147Z"
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2025-05-11T07:54:16.147Z"
         '400':
           description: Bad request
           content:
@@ -79,54 +125,39 @@ paths:
                 properties:
                   message:
                     type: string
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
+                  code:
+                    type: string
               examples:
                 validatePassword:
                   summary: Validate password
                   value:
-                    message: Failed validation
-                    error:
-                      code: password
-                      message: Password is required / Password greater than or equal 8 character length.
-
+                    message: Password is required / Password is unencrypted
+                    code: PASSWORD
+                validateFullname:
+                  summary: Validate fullname
+                  value:
+                    message: Fullname is required / Fullname is exceed maxlengh.
+                    code: FULLNAME
                 validateUsername:
                   summary: Validate username
                   value:
-                    message: Failed validation
-                    error:
-                      code: userName
-                      message: Username is required / Username is exceed maxlengh.
-
+                    message: Username is required / Username is exceed maxlengh.
+                    code: USERNAME
                 validateEmail:
                   summary: Validate email
                   value:
-                    message: Failed validation
-                    error:
-                      code: email
-                      message: Email is required / Email is invalid.
-
+                    message: Email is required / Email is invalid
+                    code: EMAIL
                 validateIsRealEmail:
                   summary: Validate isRealEmail
                   value:
-                    message: Failed validation
-                    error:
-                      code: isRealEmail
-                      message: isRealEmail is boolean type.
-
+                    message: isRealEmail must be a `boolean` type.
+                    code: ISREALEMAIL
                 validateContactEmail:
                   summary: Validate contactEmail
                   value:
-                    message: Failed validation
-                    error:
-                      code: contactEmail
-                      message: Contact email is required / Email is invalid.
-
+                    message: Contact email is required / Email is invalid.
+                    code: CONTACTEMAIL
                 validateAvatar:
                   summary: Validate avatar
                   value:
@@ -134,6 +165,7 @@ paths:
                     error:
                       code: avatar
                       message: Size limit 5MB / The type is not allow.
+
         '401':
           description: Unauthorized
           content:
@@ -143,16 +175,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required         
+                  code:
+                    type: string
+              examples:
+                tokenisRequired:
+                  summary: Token is required
+                  value:
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
+                  value:
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN
+
         '409':
           description: Conflict
           content:
@@ -162,30 +203,11 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Failed created user
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
+                    example: Username or email is existing
+                  code:
+                    type: string
+                    example: USERNAME_OR_EMAIL
 
-              examples:
-                userNameIsExisting:
-                  summary: Username is existing
-                  value:
-                    message: Failed created user
-                    error:
-                      code: USERNAME_EXIST
-                      message: Username is existed.
-                emailIsExisting:
-                  summary: Email is existing
-                  value:
-                    message: Failed created user
-                    error:
-                      code: EMAIL_EXIST
-                      message: Email is existed.
         '500':
           description: Internal server error
           content:
@@ -195,16 +217,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: {error}
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
 
   /users/update:
     put:
@@ -284,46 +302,34 @@ paths:
                 properties:
                   message:
                     type: string
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
+                  code:
+                    type: string
               examples:
                 validatePassword:
                   summary: Validate password
                   value:
-                    message: Failed validation
-                    error:
-                      code: password
-                      message: Password is required / Password greater than or equal 8 character length.
-
+                    message: Password is required / Password is unencrypted
+                    code: PASSWORD
+                validateFullname:
+                  summary: Validate fullname
+                  value:
+                    message: Fullname is required / Fullname is exceed maxlengh.
+                    code: FULLNAME
                 validateEmail:
                   summary: Validate email
                   value:
-                    message: Failed validation
-                    error:
-                      code: email
-                      message: Email is required / Email is invalid.
-
+                    message: Email is required / Email is invalid
+                    code: EMAIL
                 validateIsRealEmail:
                   summary: Validate isRealEmail
                   value:
-                    message: Failed validation
-                    error:
-                      code: isRealEmail
-                      message: isRealEmail is boolean type.
-
+                    message: isRealEmail must be a `boolean` type.
+                    code: ISREALEMAIL
                 validateContactEmail:
                   summary: Validate contactEmail
                   value:
-                    message: Failed validation
-                    error:
-                      code: contactEmail
-                      message: Contact email is required / Email is invalid.
-
+                    message: Contact email is required / Email is invalid.
+                    code: CONTACTEMAIL
                 validateAvatar:
                   summary: Validate avatar
                   value:
@@ -331,6 +337,7 @@ paths:
                     error:
                       code: avatar
                       message: Size limit 5MB / The type is not allow.
+             
         '401':
           description: Unauthorized
           content:
@@ -340,16 +347,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required
+                    type: string
+              examples:
+                tokenisRequired:
+                  summary: Token is required
+                  value:
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
+                  value:
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN
+
         '404':
           description: User Not Found
           content:
@@ -360,15 +376,9 @@ paths:
                   message:
                     type: string
                     example: User not found
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: USER_NOT_FOUND
-                        message:
-                          type: string
-                          example: User not found
+                  code:
+                    type: string
+                    example: USER_NOT_FOUND
         '409':
           description: Conflict
           content:
@@ -378,14 +388,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Failed updated user
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
+                    example: Username or email is existing
+                  code:
+                    type: string
+                    example: USERNAME_OR_EMAIL
 
         '500':
           description: Internal server error
@@ -396,16 +402,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: "{error}"
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
 
   /users/:userCode:
     get:
@@ -415,7 +417,7 @@ paths:
 
       responses:
         '200':
-          description: Created
+          description: Get user by userCode
           content:
             application/json:
               schema:
@@ -457,16 +459,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required
+                    type: string
+              examples:
+                tokenisRequired:
+                  summary: Token is required
+                  value:
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
+                  value:
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN
+
         '404':
           description: User Not Found
           content:
@@ -477,15 +488,9 @@ paths:
                   message:
                     type: string
                     example: User not found
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: USER_NOT_FOUND
-                        message:
-                          type: string
-                          example: User not found
+                  code:
+                    type: string
+                    example: USER_NOT_FOUND
         '500':
           description: Internal server error
           content:
@@ -495,16 +500,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: {error}
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
   
   /users/me:
     get:
@@ -547,6 +548,9 @@ paths:
                       avatarUrl:
                         type: string
                         example: https://duypha.s3.ap-southeast-1.amazonaws.com/avatars/1746159883458_cart.png
+                  mustChangePassword:
+                    type: boolean
+                    example: false
         '401':
           description: Unauthorized
           content:
@@ -556,16 +560,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required
+                    type: string
+
+              examples:
+                tokenisRequired:
+                  summary: Token is required
+                  value:
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
+                  value:
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN
         '404':
           description: User Not Found
           content:
@@ -576,15 +589,9 @@ paths:
                   message:
                     type: string
                     example: User not found
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: USER_NOT_FOUND
-                        message:
-                          type: string
-                          example: User not found
+                  code:
+                    type: string
+                    example: USER_NOT_FOUND
         '500':
           description: Internal server error
           content:
@@ -594,17 +601,13 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: {error}
-                        message:
-                          type: string
-                          example: Internal server error 
-  
+                    type: object
+
   /users/delete/:userId:
     delete:
       tags:
@@ -616,64 +619,14 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                example: OK
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
                 type: object
                 properties:
                   message:
                     type: string
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
-              examples:
-                validatePassword:
-                  summary: Validate password
-                  value:
-                    message: Failed validation
-                    error:
-                      code: password
-                      message: Password is required / Password greater than or equal 8 character length.
-
-                validateEmail:
-                  summary: Validate email
-                  value:
-                    message: Failed validation
-                    error:
-                      code: email
-                      message: Email is required / Email is invalid.
-
-                validateIsRealEmail:
-                  summary: Validate isRealEmail
-                  value:
-                    message: Failed validation
-                    error:
-                      code: isRealEmail
-                      message: isRealEmail is boolean type.
-
-                validateContactEmail:
-                  summary: Validate contactEmail
-                  value:
-                    message: Failed validation
-                    error:
-                      code: contactEmail
-                      message: Contact email is required / Email is invalid.
-
-                validateAvatar:
-                  summary: Validate avatar
-                  value:
-                    message: Failed validation
-                    error:
-                      code: avatar
-                      message: Size limit 5MB / The type is not allow.
+                    example: Delete user successfully.   
+                  code:
+                    type: string
+                    example: DELETE_USER
         '401':
           description: Unauthorized
           content:
@@ -683,16 +636,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required
+                    type: string
+
+              examples:
+                tokenisRequired:
+                  summary: Token is required
+                  value:
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
+                  value:
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN
         '404':
           description: User Not Found
           content:
@@ -702,16 +664,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "{id} is not exist"
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: USER_NOT_FOUND
-                        message:
-                          type: string
-                          example: User not found
+                    example: User not found
+                  code:
+                    type: string
+                    example: USER_NOT_FOUND
         '500':
           description: Internal server error
           content:
@@ -721,54 +677,56 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: "{error}"
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
 
   /users/list:
-    post:
+    get:
       tags:
         - User
       summary: Get the list user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fromDate:
-                  type: string
-                  example: 2025-05-02 00:00:00
-                toDate:
-                  type: string
-                  example: 2025-05-04 23:59:59
-                searchString:
-                  type: string
-                  example: duy.pha@trans-tech.vn
-                page:
-                  type: number
-                  example: 1
-                sortColumn:
-                  type: string
-                  example: fullName / email / updatedAt
-                sortOrder:
-                  type: string
-                  example: asc / desc
-                itemPerPage:
-                  type: number
-                  example: 5
-              required:
-                - itemPerPage
-                - page
-
+      parameters:
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            example: 2025-05-02 00:00:00
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            example: 2025-05-04 23:59:59
+        - name: searchString
+          in: query
+          schema:
+            type: string
+            example: duy.pha@trans-tech.vn
+        - name: page
+          in: query
+          schema:
+            type: number
+            example: 1
+          required: true
+        - name: sortColumn
+          in: query
+          schema:
+            type: string
+            example: fullName
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            example: asc
+        - name: itemPerPage
+          in: query
+          schema:
+            type: number
+            example: 5
+          required: true
       responses:
         '200':
           description: Get the list user successfully
@@ -832,21 +790,41 @@ paths:
                       message:
                         type: string
               examples:
+                validateSortOrder:
+                  summary: Validate sort order
+                  value:
+                    message: Order is invalid
+                    code: SORTORDER
+
+                validateSorColumn:
+                  summary: Validate sort column
+                  value:
+                    message: Field is invalid
+                    code: SORTCOLUMN
+
+                validateFromDate:
+                  summary: Validate from date
+                  value:
+                    message: fromDate or toDate is not a valid datetime string
+                    code: INVALID_DATE
+
+                validateToDate:
+                  summary: Validate to date
+                  value:
+                    message: fromDate or toDate is not a valid datetime string
+                    code: INVALID_DATE
+
                 validatePage:
                   summary: Validate page
                   value:
-                    message: Failed validation
-                    error:
-                      code: page
-                      message: Page is required / page is a number.
+                    message: page must be a `number` type
+                    code: PAGE
 
                 validateItemPerPage:
                   summary: Validate itemPerPage
                   value:
-                    message: Failed validation
-                    error:
-                      code: page
-                      message: itemPerPage is required / itemPerPage is a number.
+                    message: itemPerPage must be a `number` type
+                    code: ITEMPERPAGE
         '401':
           description: Unauthorized
           content:
@@ -856,33 +834,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required         
-
-
+                    type: string
               examples:
-                userNameIsExisting:
-                  summary: Username is existing
+                tokenisRequired:
+                  summary: Token is required
                   value:
-                    message: Failed created user
-                    error:
-                      code: USERNAME_EXIST
-                      message: Username is existed.
-                emailIsExisting:
-                  summary: Email is existing
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
                   value:
-                    message: Failed created user
-                    error:
-                      code: EMAIL_EXIST
-                      message: Email is existed.
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN
+   
         '500':
           description: Internal server error
           content:
@@ -892,16 +862,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: {error}
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
 
   /users/forgot-password:
     put:
@@ -931,7 +897,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Reset link sent to email.
+                    example: Reset link sent to email.   
+                  code:
+                    type: string
+                    example: FORGOT_PASSWORD
         '400':
           description: Bad request
           content:
@@ -942,20 +911,14 @@ paths:
                   message:
                     type: string
                   error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
+                    type: string
+
               examples:
                 validateEmail:
                   summary: Validate email
                   value:
-                    message: Failed validation
-                    error:
-                      code: email
-                      message: Email is required / Email is invalid. 
+                    message: Email is invalid
+                    code: EMAIL
         '404':
           description: Not found
           content:
@@ -965,7 +928,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Email is not exist
+                    example: Email is not exist  
+                  code:
+                    type: string
+                    example: EMAIL_IS_NOT_EXIST
         '500':
           description: Internal server error
           content:
@@ -975,16 +941,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: {error}
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
 
   /users/reset-password:
     put:
@@ -1003,22 +965,25 @@ paths:
                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0NjI1NDI4MiwiZXhwIjoxNzQ2MjU1MTgyfQ.g17AJZtZTqBF3Mc_SjU9PJrRd2w8q9Jxpa7jQKTvVzs
                 password:
                   type: string
-                  example: Abcd@1234
+                  example: CzyVQ3709UdgswEmP6QUOfIcIPwG/8yVkbGKu9mmkmX0MftULEZV7sZiZDhCz18L3Edv/a3uUoxO9K0wSgGB4AI7k18BL9Fzpw2xxrEjgjueMgkCdHBN/E65hEjksqIlkkBDhrim32D03CuhDdGk4eKaQ8A2keL4yUOB3eo7BEcfqqTy0pJ+V7PQbjjyNcxZHKq1O1lvMGVuG0jrkLI6Ksrpb6IXhUNXpHWcLAM/hczQhMNkT/MofZpqZD2IpZ5BJdYrCWS5wa2gCCA04nF0fwDjq7YlTtg0AJ6rjfzBiJC2uSWKvA1HxfvI3Qxl+rQlD2+C5MfLGZ528EbAnOHuxw==
               required:
                 - password
                 - token
 
       responses:
         '200':
-          description: Passowrd reset successfully.
+          description: Password reset successfully.
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  code:
+                    type: string
+                    example: RESET_PASSWORD
                   message:
                     type: string
-                    example: Passowrd reset successfully.
+                    example: Password reset successfully.
         '400':
           description: Bad request
           content:
@@ -1039,10 +1004,15 @@ paths:
                 validatePassword:
                   summary: Validate password
                   value:
-                    message: Failed validation
-                    error:
-                      code: password
-                      message: Passowrd is required / Password is not secure. / Password greater than or equal 8 character length.  
+                    message: Password is required / Password is unencrypted
+                    code: PASSWORD
+
+                validateToken:
+                  summary: Validate token
+                  value:
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+
         '404':
           description: Not found
           content:
@@ -1052,21 +1022,16 @@ paths:
                 properties:
                   message:
                     type: string
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
+                  code:
+                    type: string
+
               examples:
-                validatePassword:
-                  summary: User Not Found
+                validateNotFound:
+                  summary: Validate password
                   value:
                     message: Invalid or expired token
-                    error:
-                      code: USER_NOT_FOUND
-                      message: User not foun  
+                    code: INVALID_OR_EXPIRED_TOKEN
+
         '500':
           description: Internal server error
           content:
@@ -1076,16 +1041,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: {error}
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
 
   /users/change-password:
     put:
@@ -1119,7 +1080,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: PaUpdated successfully
+                    example: Updated successfully
+                  code:
+                    type: string
+                    example: UPDATE_PASSWORD
         '400':
           description: Bad request
           content:
@@ -1140,10 +1104,13 @@ paths:
                 validatePassword:
                   summary: Validate password
                   value:
-                    message: Failed validation
-                    error:
-                      code: password
-                      message: Passowrd is required / Password is not secure. / Password greater than or equal 8 character length.  
+                    message: Password is required / Password is unencrypted
+                    code: PASSWORD
+                validateOldPassword:
+                  summary: Validate old password
+                  value:
+                    message: Old password is required / Old password is unencrypted
+                    code: OLDPASSWORD
         '401':
           description: Unauthorized
           content:
@@ -1153,21 +1120,25 @@ paths:
                 properties:
                   message:
                     type: string
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
+                  code:
+                    type: string
+
               examples:
-                validatePassword:
+                tokenisRequired:
                   summary: Token is required
                   value:
                     message: Token is required
-                    error:
-                      code: REQUIRED_TOKEN
-                      message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
+                  value:
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN
         '404':
           description: Not found
           content:
@@ -1177,21 +1148,10 @@ paths:
                 properties:
                   message:
                     type: string
-                  error:
-                    type: object
-                    properties: 
-                      code:
-                        type: string
-                      message:
-                        type: string
-              examples:
-                validatePassword:
-                  summary: User Not Found
-                  value:
-                    message: User not found
-                    error:
-                      code: USER_NOT_FOUND
-                      message: User not foun
+                    example: User not found
+                  code:
+                    type: string
+                    example: USER_NOT_FOUND
         '500':
           description: Internal server error
           content:
@@ -1201,16 +1161,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: {error}
-                        message:
-                          type: string
-                          example: Internal server error 
+                    type: object
 
   /login:
     post:
@@ -1246,6 +1202,9 @@ paths:
                     items: 
                       type: object
                       properties:
+                        code:
+                          type: string
+                          example: LOGIN                      
                         message:
                           type: string
                           example: Login successfully
@@ -1264,16 +1223,26 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Username is not exist
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: USERNAME_IS_NOT_EXIST
-                        message:
-                          type: string
-                          example: Username is not exist.        
+                  code:
+                    type: string
+
+              examples:
+                loginFailed:
+                  summary: Username is not exist
+                  value:
+                    message: Username is not exist
+                    code: USERNAME_IS_NOT_EXIST
+                validateUsername:
+                  summary: Username is required
+                  value:
+                    message: Username is required
+                    code: USERNAME
+
+                validatePassword:
+                  summary: Validate password
+                  value:
+                    message: Password is unencrypted / Password greater than or equal 8 character length.
+                    code: PASSWORD
         '500':
           description: Internal server error
           content:
@@ -1283,16 +1252,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: INCORRECT_LOGIN
-                        message:
-                          type: string
-                          example: Encrypted message length is invalid. 
+                    type: object
 
   /logout:
     post:
@@ -1328,6 +1293,9 @@ paths:
                         message:
                           type: string
                           example: Logout successfully
+                        code:
+                          type: string
+                          example: LOGOUT
         '400':
           description: Logout failed
           content:
@@ -1347,25 +1315,20 @@ paths:
                         message:
                           type: string
                           example: Refresh token is required
+
         '404':
           description: Not found
           content:
             application/json:
               schema:
                 type: object
-                properties:
+                properties: 
+                  code:
+                    type: string
+                    example: REFRESH_TOKEN_IS_NOT_EXIST
                   message:
                     type: string
-                    example: Refresh Token is not found
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REFRESH_TOKEN_IS_NOT_EXIST
-                        message:
-                          type: string
-                          example: Refresh Token is not exist.        
+                    example: Refresh Token is not exist
         '500':
           description: Internal server error
           content:
@@ -1375,16 +1338,13 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REFRESH_TOKEN_IS_NOT_EXIST
-                        message:
-                          type: string
-                          example: error
+                    type: object
+
 
   /refresh-token:
     post:
@@ -1411,20 +1371,19 @@ paths:
               schema:
                 type: object
                 properties:
-                  listUsers:
-                    type: array
-                    items: 
-                      type: object
-                      properties:
-                        message:
-                          type: string
-                          example: Refresh access token successfully
-                        token:
-                          type: string
-                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2MjY0NjQ1fQ.bfHigSWgar_cS32tBBqYttrbUIwzszLb0HSr47ITjWw
-                        refreshToken:
-                          type: string
-                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2ODY4NTQ1fQ.rpLFhyZAQE-2Dqy-oQx-XPeJ7s5MH8vDrj_Hd8YbBHg
+                  message:
+                    type: string
+                    example: Refresh access token successfully
+                  code:
+                    type: string
+                    example: REFRESH_TOKEN
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0Njk1OTk5MywiZXhwIjoxNzQ2OTYwODkzfQ.VPTa5PyTkedo-jPz6kFzXpKnG9ogYmq4CJysCI-hxjs
+                  refreshToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0Njk1OTk5MCwiZXhwIjoxNzQ3NTY0NzkwfQ.ixaWXe3fwUU1tNEUv4HJRgMRZc9VlEatqfoeu2PKLRI
+                   
         '400':
           description: Refresh token failed
           content:
@@ -1434,35 +1393,44 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Failed validation
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: refreshToken
-                        message:
-                          type: string
-                          example: Refresh token is required.
+                    example: Refresh access token successfully
+                  code:
+                    type: string
+                    example: REFRESH_TOKEN
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0Njk1OTk5MywiZXhwIjoxNzQ2OTYwODkzfQ.VPTa5PyTkedo-jPz6kFzXpKnG9ogYmq4CJysCI-hxjs
+                  refreshToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0Njk1OTk5MCwiZXhwIjoxNzQ3NTY0NzkwfQ.ixaWXe3fwUU1tNEUv4HJRgMRZc9VlEatqfoeu2PKLRI
+              examples:
+                refreshTokenIsRequired:
+                  summary: Refresh token is required
+                  value:
+                    message: Refresh token is required
+                    code: REFRESHTOKEN
         '404':
           description: Refresh token failed
           content:
             application/json:
               schema:
                 type: object
-                properties:
+                properties: 
+                  code:
+                    type: string
                   message:
                     type: string
-                    example: Refresh Token is expired
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REFRESH_TOKEN_IS_EXPIRED
-                        message:
-                          type: string
-                          example: Refresh Token is expired   
+              examples:
+                refreshTokenIsNotExist:
+                  summary: Refresh Token is not exist
+                  value:
+                    message: Refresh Token is not exist
+                    code: REFRESH_TOKEN_IS_NOT_EXIST
+                refreshTokenIsExpired:
+                  summary: Refresh Token is expired
+                  value:
+                    message: Refresh Token is expired
+                    code: REFRESH_TOKEN_IS_EXPIRED        
         '500':
           description: Internal server error
           content:
@@ -1472,16 +1440,13 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error
+                    example: Internal server error    
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REFRESH_TOKEN_IS_NOT_EXIST
-                        message:
-                          type: string
-                          example: error
+                    type: object
+
 
   /logs/list:
     post:
@@ -1609,16 +1574,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Token is required
                   error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: REQUIRED_TOKEN
-                        message:
-                          type: string
-                          example: Token is required         
+                    type: string
+
+              examples:
+                tokenisRequired:
+                  summary: Token is required
+                  value:
+                    message: Token is required
+                    code: TOKEN_IS_REQUIRED
+                expiredToken:
+                  summary: Token expired
+                  value:
+                    message: Token expired
+                    code: EXPIRED_TOKEN
+                invalidToken:
+                  summary: Invalid token
+                  value:
+                    message: Invalid token
+                    code: INVALID_TOKEN       
 
         '500':
           description: Internal server error

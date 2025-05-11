@@ -10,7 +10,7 @@ import encryptPassword from '../../utils/encryptPassword';
 const ResetPasswordForm = () => {
   const forgotPasswordSchema = Yup.object().shape({
     password: Yup.string()
-    .required("Passowrd is required")
+    .required("Password is required")
     .min(8, "Password greater than or equal 8 character length.")
     .test("isStrong", "Password is not secure.", (value) => {
       if (!value) {

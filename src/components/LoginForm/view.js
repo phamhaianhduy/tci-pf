@@ -10,7 +10,7 @@ const LoginForm = () => {
 
   const loginSchema = Yup.object().shape({
     userName: Yup.string().required('Username is required'),
-    password: Yup.string().required('Passowrd is required').min(6, 'Password greater than > 6 character length.'),
+    password: Yup.string().required('Password is required').min(6, 'Password greater than > 6 character length.'),
   });
 
   const handleSubmit = async (values) => {

@@ -19,7 +19,7 @@ const CreateUser = () => {
         schema.email("Email is invalid").required("Contact email is required"),
     }),
     password: Yup.string()
-      .required("Passowrd is required")
+      .required("Password is required")
       .min(8, "Password greater than or equal 8 character length.")
       .test("isStrong", "Password is not secure.", (value) => {
         if (!value) {

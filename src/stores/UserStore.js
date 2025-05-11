@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { toast } from "react-toastify";
 import api from "../utils/api";
 
 class UserStore {
@@ -144,7 +143,6 @@ class UserStore {
   resetPasswordUser = async (password, token, navigate) => {
     try {
       await api.put(`/users/reset-password`, { password, token });
-      toast.success("Reset password successfully!");
       navigate(`/login`);
     } catch (error) {
       throw error;

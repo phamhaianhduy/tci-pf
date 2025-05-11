@@ -20,10 +20,25 @@ class LogStore {
     itemPerPage = 10,
   ) => {
     try {
-      const res = await api.post(
-        `/logs/list`,
-        { sortColumn, sortOrder, searchString, page, fromDate, toDate, itemPerPage },
-      );
+      const params = {
+        sortColumn,
+        sortOrder,
+        searchString,
+        page,
+        fromDate,
+        toDate,
+        itemPerPage,
+      };
+
+      const queryString = Object.entries(params)
+        .filter(([_, value]) => value !== undefined && value !== null)
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        )
+        .join("&");
+
+      const res = await api.get(`/logs/list?${queryString}`);
       
       runInAction(() => {
         this.logs = res.data.listLogs;
