@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Login from "./components/Login/view";
 import Navbar from "./components/Partials/Nav/Navbar";
 import CreateUser from "./components/Users/CreateUser/view";
@@ -40,6 +40,12 @@ function App() {
         <Navbar />
 
         <Routes>
+          <Route 
+            path="/"
+            element={
+              userStore.userDetailByMe ? <Navigate to="/users/me" /> : <Navigate to="/login" />
+            }
+          />
           <Route
             path="/users"
             element={

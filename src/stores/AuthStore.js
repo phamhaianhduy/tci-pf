@@ -23,8 +23,6 @@ class AuthStore {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('expiryToken', expiryToken);
       localStorage.setItem('refreshToken', res.data.refreshToken);
-
-
     } catch (error) {
       throw error;
     } finally {

@@ -13,7 +13,6 @@ const Navbar = () => {
     e.preventDefault();
     try {
       await authStore.logout();
-      
     } catch (error) {
       toast.error(error.response.data.error.message);
     }

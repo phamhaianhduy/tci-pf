@@ -4,9 +4,14 @@ import * as Yup from 'yup';
 import Button from 'react-bootstrap/esm/Button';
 import { useNavigate } from 'react-router-dom';
 import { authStore } from '../../stores/AuthStore';
-
+import { observer } from 'mobx-react-lite';
+import { userStore } from '../../stores/UserStore';
 const LoginForm = () => {
   const navigate = useNavigate();
+
+  if (userStore.userDetailByMe) {
+    navigate('/users/me');
+  }
 
   const loginSchema = Yup.object().shape({
     userName: Yup.string().required('Username is required'),
@@ -16,7 +21,6 @@ const LoginForm = () => {
   const handleSubmit = async (values) => {
     try {
       await authStore.login(values, navigate);
-      navigate('/users/me');
     } catch (error) {}
   };
 
@@ -55,4 +59,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default observer(LoginForm);

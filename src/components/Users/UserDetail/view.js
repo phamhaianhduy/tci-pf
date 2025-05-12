@@ -131,7 +131,7 @@ const UserDetail = observer(({ isMe = false }) => {
       <h2 className={classes["title"]}>User Detail</h2>
       {!userData && (
         <div className="text-center my-3 mt-3 mb-5">
-          <div className="mb-4">Not found.</div>
+          <div className="mb-4">Loading..</div>
         </div>
       )}
       {userData && (

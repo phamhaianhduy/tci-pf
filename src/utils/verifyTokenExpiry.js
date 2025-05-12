@@ -14,7 +14,6 @@ const verifyTokenExpiry = async (token) => {
     }
   } catch (error) {
     console.error('Failed to parse token:', error);
-    logout();
   }
 };
 
