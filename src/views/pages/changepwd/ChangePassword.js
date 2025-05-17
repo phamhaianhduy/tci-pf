@@ -5,7 +5,6 @@ import {
   CCol,
   CRow,
   CFormLabel,
-
   CButton,
   CContainer,
 } from '@coreui/react'
@@ -41,7 +40,10 @@ const ChangePassword = () => {
     const getProfile = async () => {
       await userStore.getUserByMe()
       if (userStore.userDetailByMe?.mustChangePassword) {
-        toast.error('You must change your password because it is expired.')
+        toast.warn('You must change your password because it is expired.')
+      }
+      if (userStore.userDetailByMe?.requiredChangePassword) {
+        toast.warn('You must change your password for the first login.')
       }
     }
     getProfile()
@@ -58,7 +60,6 @@ const ChangePassword = () => {
       await userStore.updatePasswordUser(payload)
       toast.success('Password updated successfully.')
     } catch (error) {
-      toast.error('Failed to update password.')
       setFieldValue('oldPassword', '')
       setFieldValue('password', '')
       setFieldValue('confirmPassword', '')
@@ -84,7 +85,7 @@ const ChangePassword = () => {
                 <CRow>
                   <CCol md={12}>
                     <CFormLabel htmlFor="email" className="mt-3">
-                      Old Password
+                      Current Password
                     </CFormLabel>
                     <CustomCFormInput
                       name="oldPassword"

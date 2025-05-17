@@ -1,21 +1,14 @@
 import React, { Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
-
 import './scss/examples.scss'
 import { ToastContainer } from 'react-toastify'
-
 import { loadingStore } from './stores/LoadingStore'
-
 import classes from './assets/loading/loading.module.css'
-
 import { observer } from 'mobx-react-lite'
-
 import { userStore } from './stores/UserStore'
-
 import IdleSessionHandler from './components/IdleSessionHandler/IdleSessionHandler'
 
 // Containers
@@ -35,7 +28,9 @@ const App = () => {
     const getUserByMe = async () => {
       await userStore.getUserByMe()
     }
-    getUserByMe()
+    // if (!userStore.userDetailByMe) {
+      getUserByMe()
+    // }
   }, [])
 
   useEffect(() => {

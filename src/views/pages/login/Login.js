@@ -17,12 +17,12 @@ const Login = () => {
   }
 
   const loginSchema = Yup.object().shape({
-    userName: Yup.string().required('Username is required'),
+    loginId: Yup.string().required('Login ID is required').email('Email invalid'),
     password: Yup.string().required('Password is required').min(6),
   })
 
   const forgotSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email is required'),
+    loginId: Yup.string().email('Invalid email').required('Email is required'),
   })
 
   const handleLoginSubmit = async (values) => {
@@ -59,9 +59,9 @@ const Login = () => {
                           <p className="text-body-secondary">Sign In to your account</p>
                           <div className="mb-3">
                             <CustomCFormInput
-                              name="userName"
-                              placeholder="Username"
-                              autoComplete="username"
+                              name="loginId"
+                              placeholder="Login ID"
+                              autoComplete="loginId"
                               type="text"
                             />
                           </div>
@@ -113,8 +113,8 @@ const Login = () => {
                           </p>
                           <div className="mb-3">
                             <CustomCFormInput
-                              name="email"
-                              placeholder="Enter your email"
+                              name="loginId"
+                              placeholder="Enter your Login Id"
                               type="email"
                             />
                           </div>

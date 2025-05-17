@@ -59,7 +59,6 @@ const ChangePassword = () => {
       await userStore.updatePasswordUser(payload)
       toast.success('Password updated successfully.')
     } catch (error) {
-      toast.error('Failed to update password.')
       setFieldValue('oldPassword', '')
       setFieldValue('password', '')
       setFieldValue('confirmPassword', '')
@@ -81,18 +80,18 @@ const ChangePassword = () => {
               <CContainer>
                 <CRow>
                   <CCol md={12}>
-                    <CFormLabel htmlFor="email" className="mt-3">
-                      Old Password
+                    <CFormLabel htmlFor="email" className="mt-3 fw-bold">
+                      Current Password
                     </CFormLabel>
                     <CustomCFormInput
                       name="oldPassword"
                       type="password"
                       label="Old Password"
-                      placeholder="Enter your old password"
+                      placeholder="Enter your current password"
                     />
                   </CCol>
                   <CCol md={12}>
-                    <CFormLabel htmlFor="email" className="mt-3">
+                    <CFormLabel htmlFor="email" className="mt-3 fw-bold">
                       New Password
                     </CFormLabel>
                     <CustomCFormInput
@@ -103,7 +102,7 @@ const ChangePassword = () => {
                     />
                   </CCol>
                   <CCol md={12}>
-                    <CFormLabel htmlFor="email" className="mt-3">
+                    <CFormLabel htmlFor="email" className="mt-3 fw-bold">
                       Confirm Password
                     </CFormLabel>
                     <CustomCFormInput

@@ -23,6 +23,7 @@ import * as Yup from 'yup'
 import { UserRoundPen, UserRoundPlus, UserRoundMinus } from 'lucide-react'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
 import Pagination from '../../../components/Pagination/Pagination'
+import ItemPerPage from '../../../components/ItemPerPage/ItemPerPage'
 
 const UserList = () => {
   const searchSchema = Yup.object().shape({
@@ -38,10 +39,19 @@ const UserList = () => {
   const [sortOrder, setSortOrder] = useState('desc')
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
+  const [itemPerPage, setitemPerPage] = useState(5)
 
   useEffect(() => {
-    userStore.getUsers(sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate)
-  }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate])
+    userStore.getUsers(
+      sortColumn,
+      sortOrder,
+      searchKeyword,
+      currentPage,
+      fromDate,
+      toDate,
+      itemPerPage,
+    )
+  }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate, itemPerPage])
 
   // Search
   const handleSubmitSearch = (values) => {
@@ -81,6 +91,12 @@ const UserList = () => {
     setSearchString(value)
   }
 
+  const handleItemPerPageChange = (e) => {
+    const value = e.target.value
+    setitemPerPage(value)
+    setCurrentPage(1)
+  }
+
   const handlePageChange = (page) => setCurrentPage(page)
 
   const totalPages = userStore.totalPages
@@ -101,6 +117,16 @@ const UserList = () => {
     await userStore.getUsers(sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate)
   }
 
+  const itemRender = (_, type, originalElement) => {
+    if (type === 'prev') {
+      return <a>Previous</a>
+    }
+    if (type === 'next') {
+      return <a>Next</a>
+    }
+    return originalElement
+  }
+
   const userList = userStore.users
   return (
     <CRow>
@@ -114,7 +140,7 @@ const UserList = () => {
           validationSchema={searchSchema}
           onSubmit={handleSubmitSearch}
         >
-          {({ setFieldValue, resetForm }) => (
+          {({ setFieldValue, values }) => (
             <Form style={{ display: 'flex', gap: '10px' }}>
               <CContainer>
                 <CRow>
@@ -124,8 +150,11 @@ const UserList = () => {
                       placeholder="Input search string"
                       autoComplete="searchString"
                       type="text"
-                      onChange={handleSearchChange}
-                      value={searchString}
+                      value={values.searchString}
+                      onChange={(e) => {
+                        setFieldValue('searchString', e.target.value.toLowerCase())
+                        setSearchString(e.target.value.toLowerCase())
+                      }}
                       className="mb-4"
                     />
                   </CCol>
@@ -172,82 +201,92 @@ const UserList = () => {
           </CCardHeader>
           <CCardBody>
             <CTable striped>
+              <CTableHead color="dark">
+                <CTableRow>
+                  <CTableHeaderCell
+                    scope="col"
+                    onClick={() => handleSort('firstName')}
+                    role="button"
+                  >
+                    Fist name {renderSortIcon('firstName')}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    scope="col"
+                    onClick={() => handleSort('lastName')}
+                    role="button"
+                  >
+                    Last name {renderSortIcon('lastName')}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" onClick={() => handleSort('loginId')} role="button">
+                    Login ID {renderSortIcon('loginId')}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    scope="col"
+                    onClick={() => handleSort('employeeId')}
+                    role="button"
+                  >
+                    Employee ID {renderSortIcon('employeeId')}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    scope="col"
+                    onClick={() => handleSort('updatedAt')}
+                    role="button"
+                  >
+                    Updated At {renderSortIcon('updatedAt')}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
               <CTableBody>
-                <CTableHeaderCell colSpan={4}>
-                  <CTable>
-                    <CTableHead color="dark">
-                      <CTableRow>
-                        <CTableHeaderCell
-                          scope="col"
-                          onClick={() => handleSort('fullName')}
-                          role="button"
-                        >
-                          Fullname {renderSortIcon('fullName')}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell
-                          scope="col"
-                          onClick={() => handleSort('email')}
-                          role="button"
-                        >
-                          Email {renderSortIcon('email')}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell
-                          scope="col"
-                          onClick={() => handleSort('updatedAt')}
-                          role="button"
-                        >
-                          Updated At {renderSortIcon('updatedAt')}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                {userList.length > 0 &&
+                  userList.map((user) => {
+                    return (
+                      <CTableRow key={user.id}>
+                        <CTableDataCell>{user.firstName}</CTableDataCell>
+                        <CTableDataCell>{user.lastName}</CTableDataCell>
+                        <CTableDataCell>{user.loginId}</CTableDataCell>
+                        <CTableDataCell>{user.employeeId}</CTableDataCell>
+                        <CTableDataCell>
+                          {dayjs(user.updatedAt).format('YYYY/MM/DD HH:mm:ss')}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <CButton
+                            href={`/users/${user.id}/edit`}
+                            color="primary"
+                            variant="outline"
+                          >
+                            <UserRoundPen strokeWidth={1.5} />
+                          </CButton>
+                          &nbsp;
+                          <CButton
+                            onClick={() => handleDelete(user.id)}
+                            value={user.id}
+                            color="danger"
+                            variant="outline"
+                          >
+                            <UserRoundMinus strokeWidth={1.5} />
+                          </CButton>
+                        </CTableDataCell>
                       </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                      {userList.length > 0 &&
-                        userList.map((user) => {
-                          return (
-                            <>
-                              <CTableRow>
-                                <CTableHeaderCell scope="row">{user.fullName}</CTableHeaderCell>
-                                <CTableDataCell>{user.email}</CTableDataCell>
-                                <CTableDataCell>
-                                  {dayjs(user.updatedAt).format('YYYY/MM/DD HH:mm:ss')}
-                                </CTableDataCell>
-                                <CTableDataCell>
-                                  <CButton
-                                    href={`/users/${user.userCode}/edit`}
-                                    color="primary"
-                                    variant="outline"
-                                  >
-                                    <UserRoundPen strokeWidth={1.5} />
-                                  </CButton>
-                                  &nbsp;
-                                  <CButton
-                                    onClick={() => handleDelete(user.id)}
-                                    value={user.id}
-                                    color="danger"
-                                    variant="outline"
-                                  >
-                                    <UserRoundMinus strokeWidth={1.5} />
-                                  </CButton>
-                                </CTableDataCell>
-                              </CTableRow>
-                            </>
-                          )
-                        })}
-                    </CTableBody>
-                  </CTable>
-                </CTableHeaderCell>
+                    )
+                  })}
               </CTableBody>
             </CTable>
           </CCardBody>
         </CCard>
       </CCol>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        maxPagesToShow={5}
-        onPageChange={handlePageChange}
-      />
+
+      <CCol md={10}>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          maxPagesToShow={5}
+          onPageChange={handlePageChange}
+        />
+      </CCol>
+      <CCol md={2}>
+        <ItemPerPage onItemPerPageChange={handleItemPerPageChange} />
+      </CCol>
     </CRow>
   )
 }

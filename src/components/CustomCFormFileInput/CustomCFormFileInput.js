@@ -33,7 +33,11 @@ const CustomCFormFileInput = ({ label, initialImageUrl = null, onDelete = null, 
 
   return (
     <div className="mb-3">
-      {label && <CFormLabel htmlFor={props.id || props.name}>{label}</CFormLabel>}
+      {label && (
+        <CFormLabel htmlFor={props.id || props.name} className="fw-bold">
+          {label}
+        </CFormLabel>
+      )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <CFormInput
           type="file"
@@ -49,11 +53,10 @@ const CustomCFormFileInput = ({ label, initialImageUrl = null, onDelete = null, 
               src={previewUrl}
               alt="preview"
               style={{
-                width: '120px',
-                height: '120px',
+                width: '100%',
+                height: 'auto',
                 objectFit: 'cover',
                 borderRadius: '8px',
-                border: '1px solid #ccc',
               }}
             />
             <button

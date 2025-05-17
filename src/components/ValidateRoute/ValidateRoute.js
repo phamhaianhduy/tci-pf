@@ -14,7 +14,7 @@ const ValidateRoute = ({ children }) => {
 
   if (
     userData &&
-    userData.mustChangePassword === true &&
+    (userData.mustChangePassword || userData.requiredChangePassword) &&
     location.pathname !== '/change-password'
   ) {
     return <Navigate to="/change-password" replace />

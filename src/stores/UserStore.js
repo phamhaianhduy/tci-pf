@@ -44,6 +44,7 @@ class UserStore {
         this.users = [...res.data.listUsers]
         this.currentPage = res.data.currentPage
         this.totalPages = res.data.totalPages
+        this.totals = res.data.totalUsers
       })
     } catch (error) {
       throw error
@@ -151,6 +152,16 @@ class UserStore {
   updatePasswordUser = async (data) => {
     try {
       await api.put(`/users/change-password`, data)
+    } catch (error) {
+      throw error
+    } finally {
+      runInAction(() => {})
+    }
+  }
+
+  blockUser = async (userId) => {
+    try {
+      await api.put(`/users/block`, { userId })
     } catch (error) {
       throw error
     } finally {

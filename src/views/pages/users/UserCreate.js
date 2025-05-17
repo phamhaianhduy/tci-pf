@@ -19,30 +19,23 @@ import CustomCFormFileInput from '../../../components/CustomCFormFileInput/Custo
 
 const UserCreate = () => {
   const userSchema = Yup.object().shape({
-    userName: Yup.string().required('Username is required').max(100),
-    fullName: Yup.string().required('Fullname is required').max(100),
-    email: Yup.string().email('Email is invalid').required('Email is required'),
+    employeeId: Yup.string()
+      .required('Employee ID is required')
+      .max(20, 'Employee ID is max exceed length'),
+    firstName: Yup.string()
+      .required('Firstname is required')
+      .max(255, 'Firstname is max exceed length'),
+    lastName: Yup.string().max(255, 'Lastname is max exceed length'),
+    loginId: Yup.string()
+      .email('Email is invalid')
+      .required('Email is required')
+      .max(111, 'Login ID is max exceed length'),
     isRealEmail: Yup.boolean(),
     contactEmail: Yup.string().when('isRealEmail', {
       is: false,
       then: (schema) => schema.email('Email is invalid').required('Contact email is required'),
       otherwise: (schema) => schema.notRequired(),
     }),
-    password: Yup.string()
-      .required('Password is required')
-      .min(8, 'Password must be at least 8 characters')
-      .test('isStrong', 'Password is not secure', (value) => {
-        if (!value) return false
-        return (
-          /[A-Z]/.test(value) &&
-          /[a-z]/.test(value) &&
-          /[0-9]/.test(value) &&
-          /[!@#$%^&*(),.?':{}|<>]/.test(value)
-        )
-      }),
-    confirmPassword: Yup.string()
-      .required('Confirm password is required')
-      .oneOf([Yup.ref('password'), null], 'Confirm password must match password'),
     avatar: Yup.mixed()
       .nullable(true)
       .test('fileSize', 'Size limit 5MB', (image) => !image || image.size <= 5 * 1024 * 1024)
@@ -54,11 +47,10 @@ const UserCreate = () => {
   })
 
   const initialFormData = {
-    userName: '',
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    employeeId: '',
+    firstName: '',
+    lastName: '',
+    loginId: '',
     avatar: null,
     isRealEmail: true,
     contactEmail: '',
@@ -74,10 +66,10 @@ const UserCreate = () => {
   const handleSubmit = async (values, { setErrors, setSubmitting }) => {
     try {
       const formData = new FormData()
-      formData.append('userName', values.userName)
-      formData.append('fullName', values.fullName)
-      formData.append('email', values.email)
-      formData.append('password', encryptPassword(values.password))
+      formData.append('employeeId', values.employeeId)
+      formData.append('firstName', values.firstName)
+      formData.append('lastName', values.lastName)
+      formData.append('loginId', values.loginId)
 
       if (values.avatar) formData.append('avatar', values.avatar)
       if (!values.isRealEmail) {
@@ -87,9 +79,6 @@ const UserCreate = () => {
 
       await userStore.createUser(formData)
     } catch (error) {
-      const res = error.response?.data
-      if (res?.error?.code === 'USERNAME_EXIST') setErrors({ userName: res.error.message })
-      if (res?.error?.code === 'EMAIL_EXIST') setErrors({ email: res.error.message })
     } finally {
       setSubmitting(false)
     }
@@ -121,17 +110,21 @@ const UserCreate = () => {
                   </CCol>
                   <CCol md={8}>
                     <CRow>
-                      <CCol md={6} className="mb-4">
-                        <CFormLabel>Fullname</CFormLabel>
-                        <CustomCFormInput name="fullName" type="text" />
-                      </CCol>
                       <CCol md={6}>
-                        <CFormLabel>Username</CFormLabel>
-                        <CustomCFormInput name="userName" type="text" />
+                        <CFormLabel>Employee ID</CFormLabel>
+                        <CustomCFormInput name="employeeId" type="text" maxLength="20" />
                       </CCol>
                       <CCol md={6} className="mb-4">
-                        <CFormLabel>Email</CFormLabel>
-                        <CustomCFormInput name="email" type="email" />
+                        <CFormLabel>Login ID</CFormLabel>
+                        <CustomCFormInput name="loginId" type="email" maxLength="255" />
+                      </CCol>
+                      <CCol md={6} className="mb-4">
+                        <CFormLabel>First name</CFormLabel>
+                        <CustomCFormInput name="firstName" type="text" maxLength="255" />
+                      </CCol>
+                      <CCol md={6} className="mb-4">
+                        <CFormLabel>Last name</CFormLabel>
+                        <CustomCFormInput name="lastName" type="text" maxLength="255" />
                       </CCol>
                       <CCol md={6}>
                         <CFormLabel htmlFor="email">Real email</CFormLabel>
@@ -147,17 +140,6 @@ const UserCreate = () => {
                           <CustomCFormInput name="contactEmail" type="text" />
                         </CCol>
                       )}
-                      <CCol md={6}>
-                        <CFormLabel>Password</CFormLabel>
-                        <CustomCFormInput name="password" type="password" />
-                        <small className="text-muted">
-                          Password must include upper, lower, number, and special character
-                        </small>
-                      </CCol>
-                      <CCol md={6}>
-                        <CFormLabel>Confirm Password</CFormLabel>
-                        <CustomCFormInput name="confirmPassword" type="password" />
-                      </CCol>
                       <CCol md={12} className="mt-4">
                         <CButton
                           type="submit"

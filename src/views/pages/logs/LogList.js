@@ -22,6 +22,7 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
 import Pagination from '../../../components/Pagination/Pagination'
+import ItemPerPage from '../../../components/ItemPerPage/ItemPerPage'
 
 const LogList = () => {
   const searchSchema = Yup.object().shape({
@@ -37,13 +38,24 @@ const LogList = () => {
   const [sortOrder, setSortOrder] = useState('desc')
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
+  const [itemPerPage, setitemPerPage] = useState(5)
 
   useEffect(() => {
-    logStore.getLogs(sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate)
-  }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate])
+    logStore.getLogs(
+      sortColumn,
+      sortOrder,
+      searchKeyword,
+      currentPage,
+      fromDate,
+      toDate,
+      itemPerPage,
+    )
+  }, [sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate, itemPerPage])
 
-  const handleSearchChange = (e) => {
-    setSearchString(e.target.value.toLowerCase())
+  const handleItemPerPageChange = (e) => {
+    const value = e.target.value
+    setitemPerPage(value)
+    setCurrentPage(1)
   }
 
   const handleSort = (field) => {
@@ -101,7 +113,7 @@ const LogList = () => {
           validationSchema={searchSchema}
           onSubmit={handleSubmitSearch}
         >
-          {({ setFieldValue, resetForm }) => (
+          {({ setFieldValue, resetForm, values }) => (
             <Form style={{ display: 'flex', gap: '10px' }}>
               <CContainer>
                 <CRow>
@@ -111,8 +123,11 @@ const LogList = () => {
                       placeholder="Input search string"
                       autoComplete="searchString"
                       type="text"
-                      onChange={handleSearchChange}
-                      value={searchString}
+                      value={values.searchString}
+                      onChange={(e) => {
+                        setFieldValue('searchString', e.target.value.toLowerCase())
+                        setSearchString(e.target.value.toLowerCase())
+                      }}
                       className="mb-4"
                     />
                   </CCol>
@@ -149,75 +164,72 @@ const LogList = () => {
             <strong>Log List</strong>
           </CCardHeader>
           <CCardBody>
-            <CTable striped>
+            <CTable striped responsive>
+              <CTableHead color="dark">
+                <CTableRow>
+                  <CTableHeaderCell
+                    scope="col"
+                    onClick={() => handleSort('loginId')}
+                    role="button"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Login ID {renderSortIcon('loginId')}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    scope="col"
+                    onClick={() => handleSort('action')}
+                    role="button"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Action {renderSortIcon('action')}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Description</CTableHeaderCell>
+                  <CTableHeaderCell
+                    scope="col"
+                    onClick={() => handleSort('timestamp')}
+                    role="button"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Timestamp {renderSortIcon('timestamp')}
+                  </CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+
               <CTableBody>
-                <CTableHeaderCell colSpan={4}>
-                  <CTable>
-                    <CTableHead color="dark">
-                      <CTableRow>
-                        <CTableHeaderCell
-                          scope="col"
-                          onClick={() => handleSort('fullName')}
-                          role="button"
-                        >
-                          Fullname {renderSortIcon('fullName')}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell
-                          scope="col"
-                          onClick={() => handleSort('email')}
-                          role="button"
-                        >
-                          Email {renderSortIcon('email')}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell
-                          scope="col"
-                          onClick={() => handleSort('action')}
-                          role="button"
-                        >
-                          Action {renderSortIcon('action')}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                        <CTableHeaderCell
-                          scope="col"
-                          onClick={() => handleSort('updatedAt')}
-                          role="button"
-                        >
-                          Timestamp {renderSortIcon('updatedAt')}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Action</CTableHeaderCell>
-                      </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                      {loglist.length > 0 &&
-                        loglist.map((log) => {
-                          return (
-                            <>
-                              <CTableRow>
-                                <CTableHeaderCell scope="row">{log.user.fullName}</CTableHeaderCell>
-                                <CTableDataCell>{log.user.email}</CTableDataCell>
-                                <CTableDataCell>{log.action}</CTableDataCell>
-                                <CTableDataCell>{log.description}</CTableDataCell>
-                                <CTableDataCell>
-                                  {dayjs(log.timestamp).format('YYYY/MM/DD HH:mm:ss')}
-                                </CTableDataCell>
-                              </CTableRow>
-                            </>
-                          )
-                        })}
-                    </CTableBody>
-                  </CTable>
-                </CTableHeaderCell>
+                {loglist.length > 0 ? (
+                  loglist.map((log) => (
+                    <CTableRow key={log.id}>
+                      <CTableDataCell>{log.user.loginId}</CTableDataCell>
+                      <CTableDataCell>{log.action}</CTableDataCell>
+                      <CTableDataCell>{log.description}</CTableDataCell>
+                      <CTableDataCell>
+                        {dayjs(log.timestamp).format('YYYY/MM/DD HH:mm:ss')}
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))
+                ) : (
+                  <CTableRow>
+                    <CTableDataCell colSpan={4} style={{ textAlign: 'center' }}>
+                      No logs found.
+                    </CTableDataCell>
+                  </CTableRow>
+                )}
               </CTableBody>
             </CTable>
           </CCardBody>
         </CCard>
       </CCol>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        maxPagesToShow={5}
-        onPageChange={handlePageChange}
-      />
+      <CCol md={10}>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          maxPagesToShow={5}
+          onPageChange={handlePageChange}
+        />
+      </CCol>
+      <CCol md={2}>
+        <ItemPerPage onItemPerPageChange={handleItemPerPageChange} />
+      </CCol>
     </CRow>
   )
 }

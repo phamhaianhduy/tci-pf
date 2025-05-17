@@ -29,8 +29,8 @@ import ChangePassword from '../../../components/ChangePassword/ChangePassword'
 
 const UserDetail = () => {
   const userSchema = Yup.object().shape({
-    fullName: Yup.string().required('Fullname is required').max(100),
-    email: Yup.string().email('Email is invalid').required('Email is required'),
+    firstName: Yup.string().required('Firstname is required').max(255),
+    lastName: Yup.string().max(255),
     avatar: Yup.mixed()
       .nullable(true)
       .test('fileSize', 'Size limit 5MB', (image) => {
@@ -53,7 +53,7 @@ const UserDetail = () => {
     }),
   })
 
-  const [activeTab, setActiveTab] = useState('detail')
+  const [activeTab, setActiveTab] = useState('profile')
 
   let { userCode } = useParams()
 
@@ -76,11 +76,12 @@ const UserDetail = () => {
 
   // Set state for form data.
   const [formData, setFormData] = useState({
-    userName: userData ? userData.userName : '',
-    fullName: '',
-    email: '',
+    loginId: userData ? userData.loginId : '',
+    employeeId: userData ? userData.employeeId : '',
+    firstName: '',
+    lastName: '',
     avatar: null,
-    isRealEmail: true,
+    isRealEmail: userData ? userData.employeeId : true,
     contactEmail: '',
   })
 
@@ -88,9 +89,10 @@ const UserDetail = () => {
   useEffect(() => {
     if (userData) {
       setFormData({
-        userName: userData.userName,
-        fullName: userData.fullName,
-        email: userData.email,
+        loginId: userData.loginId,
+        employeeId: userData.employeeId,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
         avatar: null,
         isRealEmail: userData.isRealEmail,
         contactEmail: userData.contactEmail,
@@ -110,8 +112,8 @@ const UserDetail = () => {
     try {
       // Handle form dât.
       const formData = new FormData()
-      formData.append('fullName', values.fullName)
-      formData.append('email', values.email)
+      formData.append('firstName', values.firstName)
+      formData.append('lastName', values.lastName)
       formData.append('id', userData.id)
 
       if (values.avatar) {
@@ -119,10 +121,7 @@ const UserDetail = () => {
       }
       formData.append('isDeletedAvatar', isDeleteAvatar)
 
-      if (!values.isRealEmail || !userData.isRealEmail) {
-        formData.append('isRealEmail', values.isRealEmail)
-        formData.append('contactEmail', values.contactEmail)
-      }
+      formData.append('contactEmail', values.contactEmail)
 
       await userStore.updateUser(formData)
     } catch (error) {
@@ -130,15 +129,27 @@ const UserDetail = () => {
       setSubmitting(false)
     }
   }
+
+  // Handle block.
+  const handleBlock = async () => {
+    const confirm = window.confirm('Are you sure this action?')
+    if (!confirm) {
+      return
+    }
+
+    try {
+      await userStore.blockUser(userCode)
+    } catch (error) {}
+  }
   return (
     <CNav variant="tabs" role="tablist">
       <CNavItem>
         <CNavLink
-          active={activeTab === 'detail'}
-          onClick={() => setActiveTab('detail')}
+          active={activeTab === 'profile'}
+          onClick={() => setActiveTab('profile')}
           role="button"
         >
-          User Detail
+          Profile
         </CNavLink>
       </CNavItem>
       {isShowTabChangePwd && (
@@ -154,7 +165,7 @@ const UserDetail = () => {
       )}
 
       <CTabContent>
-        <CTabPane visible={activeTab === 'detail'}>
+        <CTabPane visible={activeTab === 'profile'}>
           <CRow>
             <CCol xs={12}>
               {userData && (
@@ -182,31 +193,61 @@ const UserDetail = () => {
 
                               <CCol md={9}>
                                 <CRow>
-                                  <CCol md={6}>
-                                    <CFormLabel htmlFor="userName">Username</CFormLabel>
+                                  <CCol md={4}>
+                                    <CFormLabel htmlFor="employeeId" className="fw-bold">
+                                      Employee ID
+                                    </CFormLabel>
                                     <CustomCFormInput
-                                      name="userName"
+                                      name="employeeId"
                                       type="text"
                                       className="mb-4"
                                       disabled
                                     />
                                   </CCol>
-                                  <CCol md={6}>
-                                    <CFormLabel htmlFor="fullName">Fullname</CFormLabel>
+                                  <CCol md={4}>
+                                    <CFormLabel htmlFor="loginId" className="fw-bold">
+                                      Login ID
+                                    </CFormLabel>
                                     <CustomCFormInput
-                                      name="fullName"
+                                      name="loginId"
+                                      type="text"
+                                      className="mb-4"
+                                      disabled
+                                    />
+                                  </CCol>
+                                  <CCol md={4}>
+                                    <CFormLabel htmlFor="firstName" className="fw-bold">
+                                      First name
+                                    </CFormLabel>
+                                    <CustomCFormInput
+                                      name="firstName"
                                       type="text"
                                       className="mb-4"
                                     />
                                   </CCol>
-                                  <CCol md={6}>
-                                    <CFormLabel htmlFor="email">Email</CFormLabel>
-                                    <CustomCFormInput name="email" type="text" className="mb-4" />
+                                  <CCol md={4}>
+                                    <CFormLabel htmlFor="lastName" className="fw-bold">
+                                      Last name
+                                    </CFormLabel>
+                                    <CustomCFormInput
+                                      name="lastName"
+                                      type="text"
+                                      className="mb-4"
+                                    />
+                                  </CCol>
+                                  <CCol md={2}>
+                                    <CFormLabel htmlFor="email" className="fw-bold">
+                                      Real email
+                                    </CFormLabel>
+                                    <CustomCFormSwitch
+                                      id="formSwitchCheckChecked"
+                                      name="isRealEmail"
+                                    />
                                   </CCol>
                                   <CCol md={6}>
                                     {!values.isRealEmail && (
                                       <>
-                                        <CFormLabel htmlFor="contactEmail">
+                                        <CFormLabel htmlFor="contactEmail" className="fw-bold">
                                           Contact Email
                                         </CFormLabel>
                                         <CustomCFormInput
@@ -217,26 +258,21 @@ const UserDetail = () => {
                                       </>
                                     )}
                                   </CCol>
-                                  <CCol md={6}>
-                                    <CFormLabel htmlFor="email">Real email</CFormLabel>
-                                    <CustomCFormSwitch
-                                      id="formSwitchCheckChecked"
-                                      defaultChecked
-                                      name="isRealEmail"
-                                    />
-                                  </CCol>
                                 </CRow>
 
                                 <CRow className="mt-3">
-                                  <CCol>
+                                  <CCol md={12}>
                                     <CButton
                                       type="submit"
                                       color="primary"
                                       variant="outline"
-                                      className="float-end"
                                       disabled={isSubmitting}
                                     >
                                       Update
+                                    </CButton>
+                                    &nbsp;
+                                    <CButton color="danger" variant="outline" onClick={handleBlock}>
+                                      {userData.isBlock ? 'Unblock' : 'Block'}
                                     </CButton>
                                   </CCol>
                                 </CRow>
