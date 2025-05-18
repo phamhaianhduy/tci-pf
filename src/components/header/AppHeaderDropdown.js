@@ -24,7 +24,7 @@ const AppHeaderDropdown = () => {
 
   const handleLogout = async (e) => {
     e.preventDefault()
-    await authStore.logout(userData.id)
+    await authStore.logout()
   }
 
   return (

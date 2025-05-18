@@ -33,10 +33,9 @@ class AuthStore {
     }
   }
 
-  logout = async (userId) => {
+  logout = async () => {
     try {
-      const refreshToken = localStorage.getItem('refreshToken')
-      await api.post(`/logout`, { refreshToken, userId })
+      await api.post(`/logout`)
       userStore.clearUserDetail()
       redirect('/login')
     } catch (error) {}

@@ -1289,11 +1289,9 @@ paths:
             schema:
               type: object
               properties:
-                refreshToken:
+                userId:
                   type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0NjI2NDc0NywiZXhwIjoxNzQ2ODY5NTQ3fQ.zsQkPVCpUaXHyz7R7ESHDFkuN9rxt_F--Ik067N2vxw
-              required:
-                - refreshToken
+                  example: KDVH3H4PNVLANZQNIF1P3I9OEI
 
       responses:
         '200':
