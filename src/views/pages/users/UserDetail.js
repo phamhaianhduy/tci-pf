@@ -82,7 +82,7 @@ const UserDetail = () => {
     firstName: '',
     lastName: '',
     avatar: null,
-    isRealEmail: userData ? userData.employeeId : true,
+    isRealEmail: true,
     contactEmail: '',
   })
 
@@ -129,6 +129,8 @@ const UserDetail = () => {
       }
       formData.append('isDeletedAvatar', isDeleteAvatar)
 
+      formData.append('isRealEmail', values.isRealEmail)
+
       formData.append('contactEmail', values.contactEmail)
 
       await userStore.updateUser(formData, navigate)
@@ -149,6 +151,7 @@ const UserDetail = () => {
       await userStore.blockUser(userCode, navigate)
     } catch (error) {}
   }
+
   return (
     <CNav variant="tabs" role="tablist">
       <CNavItem>

@@ -1,10 +1,9 @@
 import React from 'react'
 import { useField } from 'formik'
-import { CFormSwitch, CFormLabel, CFormFeedback } from '@coreui/react'
+import { CFormSwitch, CFormFeedback } from '@coreui/react'
 
 const CustomCFormSwitch = ({ label, ...props }) => {
   const [field, meta, helpers] = useField({ ...props, type: 'checkbox' })
-
   return (
     <div className="mb-3">
       <CFormSwitch
