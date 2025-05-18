@@ -43,8 +43,7 @@ const ChangePassword = () => {
       await userStore.getUserByMe()
       if (userStore.userDetailByMe?.mustChangePassword) {
         toast.warn('You must change your password because it is expired.')
-      }
-      if (userStore.userDetailByMe?.requiredChangePassword) {
+      } else if (userStore.userDetailByMe?.requiredChangePassword) {
         toast.warn('You must change your password for the first login.')
       }
     }
@@ -60,6 +59,7 @@ const ChangePassword = () => {
 
     try {
       await userStore.updatePasswordUser(payload, navigate)
+      navigate('/users')
     } catch (error) {
       setFieldValue('oldPassword', '')
       setFieldValue('password', '')

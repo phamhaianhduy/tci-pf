@@ -57,11 +57,12 @@ const UserDetail = () => {
   })
 
   const [activeTab, setActiveTab] = useState('profile')
-
   let { userCode } = useParams()
+  const userData = userCode ? userStore.userDetail : userStore.userDetailByMe
+
   useEffect(() => {
     const getProfile = async () => {
-      if (userCode) {
+      if (userCode && !userStore.userDetail) {
         await userStore.getUserByUserCode(userCode)
       }
     }
@@ -69,8 +70,6 @@ const UserDetail = () => {
 
     return () => userStore.clearUserDetail()
   }, [userCode])
-
-  let userData = userCode ? userStore.userDetail : userStore.userDetailByMe
 
   const isShowTabChangePwd = !userCode ? true : false
 
@@ -110,7 +109,11 @@ const UserDetail = () => {
   }
 
   // Handle block btn.
-  const isShowBlockbtn = location.pathname == '/users/me' || userCode == userStore.userDetailByMe.id ? false : true
+  const isShowBlockbtn =
+    location.pathname == '/users/me' ||
+    (userStore.userDetailByMe && userCode == userStore.userDetailByMe.id)
+      ? false
+      : true
 
   // Submit form.
   const handleSubmit = async (values, { setSubmitting, setFieldValue }) => {

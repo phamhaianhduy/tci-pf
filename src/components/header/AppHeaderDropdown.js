@@ -14,9 +14,13 @@ import { authStore } from '../../stores/AuthStore'
 import { observer } from 'mobx-react-lite'
 import defaultAvatar from '../../assets/images/avatars/avatar.png'
 
-const AppHeaderDropdown = async () => {
-  const userData = await userStore.userDetailByMe
-  const avatar = userData && userData.avatarUrl ? userData.avatarUrl : defaultAvatar
+const AppHeaderDropdown = () => {
+  const userData = userStore.userDetailByMe
+  if (!userData) {
+    return null
+  }
+
+  const avatar = userData.avatarUrl || defaultAvatar
 
   const handleLogout = async (e) => {
     e.preventDefault()

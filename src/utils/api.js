@@ -3,8 +3,6 @@ import { toast } from 'react-toastify'
 import verifyTokenExpiry from './verifyTokenExpiry'
 import { loadingStore } from '../stores/LoadingStore'
 import logout from './logout'
-import redirect from './redirect'
-
 const api = axios.create({
   baseURL: import.meta.env.VITE_RDS_END_POINT,
 })
@@ -57,6 +55,9 @@ api.interceptors.response.use(
 
     switch (code) {
       case 'EXPIRED_TOKEN':
+      case 'USER_NOT_FOUND':
+      case 'USER_DELETED':
+      case 'USER_BLOCKED':
         toast.warn(message)
         logout()
         break

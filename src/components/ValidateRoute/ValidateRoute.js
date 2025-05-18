@@ -24,7 +24,7 @@ const ValidateRoute = ({ children }) => {
 
   // If user was blocked then logout.
   if (userData && userData.isBlock) {
-    logout(navigate)
+    logout()
   }
 
   return children

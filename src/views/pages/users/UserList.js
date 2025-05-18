@@ -112,7 +112,15 @@ const UserList = () => {
     await userStore.deleteUser(id)
 
     // Call api to refresh the user list.
-    await userStore.getUsers(sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate)
+    await userStore.getUsers(
+      sortColumn,
+      sortOrder,
+      searchKeyword,
+      currentPage,
+      fromDate,
+      toDate,
+      itemPerPage,
+    )
   }
 
   const handleDetailUser = async (id) => {

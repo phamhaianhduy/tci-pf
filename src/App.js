@@ -25,7 +25,9 @@ const App = () => {
   const storedTheme = useSelector((state) => state.theme)
   useEffect(() => {
     const getUserByMe = async () => {
-      await userStore.getUserByMe()
+      if (!userStore.userDetailByMe) {
+        await userStore.getUserByMe()
+      }
     }
     getUserByMe()
   }, [])

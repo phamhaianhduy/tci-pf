@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import api from '../utils/api'
+import logout from '../utils/logout'
 
 class UserStore {
   users = []
@@ -8,13 +9,14 @@ class UserStore {
   userDetailByMe = null
   page = 1
   totalPages = 1
+  hasFetchedMe = false
 
   constructor() {
     makeAutoObservable(this)
   }
 
   getUsers = async (
-    sortColumn = 'fullName',
+    sortColumn = 'firstName',
     sortOrder = 'asc',
     searchString = '',
     page = 1,
@@ -67,12 +69,17 @@ class UserStore {
         this.userDetail = data
       })
     } catch (error) {
+      logout()
       throw error
     } finally {
       runInAction(() => {})
     }
   }
   getUserByMe = async () => {
+    if (this.hasFetchedMe) {
+      return
+    }
+
     try {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -84,8 +91,10 @@ class UserStore {
       runInAction(() => {
         this.userDetailByMe = data
         this.userDetailByMe.mustChangePassword = res.data.mustChangePassword
+        this.hasFetchedMe = true
       })
     } catch (error) {
+      logout()
       throw error
     } finally {
       runInAction(() => {})
@@ -116,7 +125,6 @@ class UserStore {
 
   clearUserDetail = () => {
     this.userDetail = null
-    this.userDetailByMe = null
   }
 
   deleteUser = async (id) => {
