@@ -138,9 +138,9 @@ class UserStore {
     }
   }
 
-  forgotPasswordUser = async (email, navigate) => {
+  forgotPasswordUser = async (loginId, navigate) => {
     try {
-      await api.put(`/users/forgot-password`, { email })
+      await api.put(`/users/forgot-password`, { loginId })
       navigate(`/login`)
     } catch (error) {
       throw error

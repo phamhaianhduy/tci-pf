@@ -7,6 +7,7 @@ const UserCreate = React.lazy(() => import('./views/pages/users/UserCreate'))
 const LogList = React.lazy(() => import('./views/pages/logs/LogList'))
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const ChangePassword = React.lazy(() => import('./views/pages/changepwd/ChangePassword'))
+const ResetPassword = React.lazy(() => import('./views/pages/resetpwd/ResetPassword'))
 
 const routes = [
   // { path: '/', exact: true, name: 'Home' },
@@ -18,6 +19,7 @@ const routes = [
   { path: '/login', name: 'Login', element: Login },
   { path: '/logs', name: 'Logs', element: LogList, protected: true },
   { path: '/change-password', name: 'ChangePassword', element: ChangePassword, protected: true },
+  { path: '/users/reset-password', name: 'ResetPassword', element: ResetPassword },
 ]
 
 export default routes

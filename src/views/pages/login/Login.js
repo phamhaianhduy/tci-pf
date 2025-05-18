@@ -34,10 +34,8 @@ const Login = () => {
 
   const handleForgotSubmit = async (values, { setErrors }) => {
     try {
-      await userStore.forgotPasswordUser(values.email, navigate)
-    } catch (error) {
-      setErrors({ email: error.response?.data?.message || 'Failed to reset password' })
-    }
+      await userStore.forgotPasswordUser(values.loginId, navigate)
+    } catch (error) {}
   }
 
   return (
