@@ -6,7 +6,6 @@ import logout from '../../utils/logout'
 const ValidateRoute = ({ children }) => {
   const token = localStorage.getItem('token')
   const location = useLocation()
-  const navigate = useNavigate()
 
   if (!token) {
     return <Navigate to="/login" replace />

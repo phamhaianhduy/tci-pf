@@ -59,7 +59,6 @@ const ChangePassword = () => {
 
     try {
       await userStore.updatePasswordUser(payload, navigate)
-      navigate('/users')
     } catch (error) {
       setFieldValue('oldPassword', '')
       setFieldValue('password', '')

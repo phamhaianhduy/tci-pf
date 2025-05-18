@@ -162,12 +162,16 @@ class UserStore {
 
   updatePasswordUser = async (data, navigate) => {
     try {
-      await api.put(`/users/change-password`, data)
+      const res = await api.put(`/users/change-password`, data)
+      const newAccessToken = res.data.token
+      localStorage.setItem('token', newAccessToken)
       navigate('/users')
     } catch (error) {
       throw error
     } finally {
-      runInAction(() => {})
+      runInAction(() => {
+        userStore.userDetailByMe.requiredChangePassword = false
+      })
     }
   }
 

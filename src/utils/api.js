@@ -38,7 +38,6 @@ api.interceptors.response.use(
       case 'LOGIN':
         break
       case 'LOGOUT':
-        toast.success(message)
         logout()
         break
       default:
@@ -58,6 +57,7 @@ api.interceptors.response.use(
       case 'USER_NOT_FOUND':
       case 'USER_DELETED':
       case 'USER_BLOCKED':
+      case 'PASSWORD_CHANGED':
         toast.warn(message)
         logout()
         break
