@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import api from '../utils/api'
 import encryptPassword from '../utils/encryptPassword'
 import { userStore } from './UserStore'
+import { redirect } from 'react-router-dom'
 
 const expiryMinutesToken = import.meta.env.VITE_EXPIRY_TOKEN
 
@@ -23,6 +24,8 @@ class AuthStore {
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('expiryToken', expiryToken)
       localStorage.setItem('refreshToken', res.data.refreshToken)
+
+      navigate('/users/me')
     } catch (error) {
       throw error
     } finally {
@@ -35,6 +38,7 @@ class AuthStore {
       const refreshToken = localStorage.getItem('refreshToken')
       await api.post(`/logout`, { refreshToken, userId })
       userStore.clearUserDetail()
+      redirect('/login')
     } catch (error) {}
   }
 }

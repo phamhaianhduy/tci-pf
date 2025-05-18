@@ -28,7 +28,7 @@ const CustomCFormFileInput = ({ label, initialImageUrl = null, onDelete = null, 
     helpers.setValue(null)
     setPreviewUrl(null)
     setShowPreview(false)
-    if (onDelete) onDelete(helpers.setValue)
+    if (onDelete) onDelete()
   }
 
   return (

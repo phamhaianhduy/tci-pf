@@ -91,9 +91,10 @@ class UserStore {
       runInAction(() => {})
     }
   }
-  createUser = async (data) => {
+  createUser = async (data, navigate) => {
     try {
       await api.post(`/users/create`, data)
+      navigate('/users')
     } catch (error) {
       throw error
     } finally {
@@ -101,9 +102,11 @@ class UserStore {
     }
   }
 
-  updateUser = async (data) => {
+  updateUser = async (data, navigate) => {
     try {
       await api.put(`/users/update`, data)
+      navigate('/users')
+      this.getUserByMe()
     } catch (error) {
       throw error
     } finally {
@@ -149,9 +152,10 @@ class UserStore {
     }
   }
 
-  updatePasswordUser = async (data) => {
+  updatePasswordUser = async (data, navigate) => {
     try {
       await api.put(`/users/change-password`, data)
+      navigate('/users')
     } catch (error) {
       throw error
     } finally {
@@ -159,9 +163,10 @@ class UserStore {
     }
   }
 
-  blockUser = async (userId) => {
+  blockUser = async (userId, navigate) => {
     try {
       await api.put(`/users/block`, { userId })
+      navigate('/users')
     } catch (error) {
       throw error
     } finally {

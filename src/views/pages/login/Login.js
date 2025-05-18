@@ -12,6 +12,7 @@ const Login = () => {
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState('login')
 
+  // For user logged in.
   if (userStore.userDetailByMe) {
     navigate('/users/me')
   }

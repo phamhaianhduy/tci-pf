@@ -37,24 +37,11 @@ api.interceptors.response.use(
     const message = response?.data?.message
 
     switch (code) {
-      case 'UPDATE_PASSWORD':
-        toast.success(message)
-        redirect('/users')
-        break
-      case 'UPDATE_USER':
-      case 'CREATE_USER':
-        toast.success(message)
-        redirect('/users')
-        break
       case 'LOGIN':
-        toast.success(message)
-        redirect('/users/me')
         break
       case 'LOGOUT':
         toast.success(message)
         logout()
-        break
-      case 'REFRESH_TOKEN':
         break
       default:
         toast.success(message)

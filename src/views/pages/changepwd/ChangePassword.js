@@ -16,8 +16,10 @@ import { observer } from 'mobx-react-lite'
 import encryptPassword from '../../../utils/encryptPassword'
 import { toast } from 'react-toastify'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
+import { useNavigate } from 'react-router-dom'
 
 const ChangePassword = () => {
+  const navigate = useNavigate()
   const changePasswordSchema = Yup.object().shape({
     oldPassword: Yup.string().required('Old password is required'),
     password: Yup.string()
@@ -57,8 +59,7 @@ const ChangePassword = () => {
     }
 
     try {
-      await userStore.updatePasswordUser(payload)
-      toast.success('Password updated successfully.')
+      await userStore.updatePasswordUser(payload, navigate)
     } catch (error) {
       setFieldValue('oldPassword', '')
       setFieldValue('password', '')

@@ -24,6 +24,7 @@ import { UserRoundPen, UserRoundPlus, UserRoundMinus } from 'lucide-react'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
 import Pagination from '../../../components/Pagination/Pagination'
 import ItemPerPage from '../../../components/ItemPerPage/ItemPerPage'
+import { useNavigate } from 'react-router-dom'
 
 const UserList = () => {
   const searchSchema = Yup.object().shape({
@@ -40,6 +41,8 @@ const UserList = () => {
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
   const [itemPerPage, setitemPerPage] = useState(5)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     userStore.getUsers(
@@ -86,11 +89,6 @@ const UserList = () => {
     }
   }
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value.toLowerCase()
-    setSearchString(value)
-  }
-
   const handleItemPerPageChange = (e) => {
     const value = e.target.value
     setitemPerPage(value)
@@ -117,14 +115,8 @@ const UserList = () => {
     await userStore.getUsers(sortColumn, sortOrder, searchKeyword, currentPage, fromDate, toDate)
   }
 
-  const itemRender = (_, type, originalElement) => {
-    if (type === 'prev') {
-      return <a>Previous</a>
-    }
-    if (type === 'next') {
-      return <a>Next</a>
-    }
-    return originalElement
+  const handleDetailUser = async (id) => {
+    navigate(`/users/${id}/edit`)
   }
 
   const userList = userStore.users
@@ -251,9 +243,9 @@ const UserList = () => {
                         </CTableDataCell>
                         <CTableDataCell>
                           <CButton
-                            href={`/users/${user.id}/edit`}
                             color="primary"
                             variant="outline"
+                            onClick={() => handleDetailUser(user.id)}
                           >
                             <UserRoundPen strokeWidth={1.5} />
                           </CButton>

@@ -12,12 +12,14 @@ import {
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { userStore } from '../../../stores/UserStore'
-import encryptPassword from '../../../utils/encryptPassword'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
 import CustomCFormSwitch from '../../../components/CustomCFormSwitch/CustomCFormSwitch'
 import CustomCFormFileInput from '../../../components/CustomCFormFileInput/CustomCFormFileInput'
+import { useNavigate } from 'react-router-dom'
 
 const UserCreate = () => {
+  const navigate = useNavigate()
+
   const userSchema = Yup.object().shape({
     employeeId: Yup.string()
       .required('Employee ID is required')
@@ -56,13 +58,6 @@ const UserCreate = () => {
     contactEmail: '',
   }
 
-  // Handle delete image.
-  const handleDeleteImage = (setFieldValue) => {
-    setFieldValue('avatar', null)
-    userData.avatarUrl = null
-    setIsDeleteAvatar(true)
-  }
-
   const handleSubmit = async (values, { setErrors, setSubmitting }) => {
     try {
       const formData = new FormData()
@@ -77,7 +72,7 @@ const UserCreate = () => {
         formData.append('contactEmail', values.contactEmail)
       }
 
-      await userStore.createUser(formData)
+      await userStore.createUser(formData, navigate)
     } catch (error) {
     } finally {
       setSubmitting(false)
@@ -105,7 +100,6 @@ const UserCreate = () => {
                       label="Upload Avatar"
                       accept="image/*"
                       initialImageUrl=""
-                      onDelete={handleDeleteImage}
                     />
                   </CCol>
                   <CCol md={8}>

@@ -1,10 +1,12 @@
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { userStore } from '../../stores/UserStore'
 import { observer } from 'mobx-react-lite'
+import logout from '../../utils/logout'
 
 const ValidateRoute = ({ children }) => {
   const token = localStorage.getItem('token')
   const location = useLocation()
+  const navigate = useNavigate()
 
   if (!token) {
     return <Navigate to="/login" replace />
@@ -18,6 +20,11 @@ const ValidateRoute = ({ children }) => {
     location.pathname !== '/change-password'
   ) {
     return <Navigate to="/change-password" replace />
+  }
+
+  // If user was blocked then logout.
+  if (userData && userData.isBlock) {
+    logout(navigate)
   }
 
   return children

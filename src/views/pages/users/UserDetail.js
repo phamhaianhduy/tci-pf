@@ -24,10 +24,13 @@ import { UserRoundPen, UserRoundPlus, UserRoundMinus } from 'lucide-react'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
 import CustomCFormSwitch from '../../../components/CustomCFormSwitch/CustomCFormSwitch'
 import CustomCFormFileInput from '../../../components/CustomCFormFileInput/CustomCFormFileInput'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import ChangePassword from '../../../components/ChangePassword/ChangePassword'
 
 const UserDetail = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const userSchema = Yup.object().shape({
     firstName: Yup.string().required('Firstname is required').max(255),
     lastName: Yup.string().max(255),
@@ -56,7 +59,6 @@ const UserDetail = () => {
   const [activeTab, setActiveTab] = useState('profile')
 
   let { userCode } = useParams()
-
   useEffect(() => {
     const getProfile = async () => {
       if (userCode) {
@@ -107,6 +109,9 @@ const UserDetail = () => {
     setIsDeleteAvatar(true)
   }
 
+  // Handle block btn.
+  const isShowBlockbtn = location.pathname == '/users/me' || userCode == userStore.userDetailByMe.id ? false : true
+
   // Submit form.
   const handleSubmit = async (values, { setSubmitting, setFieldValue }) => {
     try {
@@ -123,7 +128,7 @@ const UserDetail = () => {
 
       formData.append('contactEmail', values.contactEmail)
 
-      await userStore.updateUser(formData)
+      await userStore.updateUser(formData, navigate)
     } catch (error) {
     } finally {
       setSubmitting(false)
@@ -138,7 +143,7 @@ const UserDetail = () => {
     }
 
     try {
-      await userStore.blockUser(userCode)
+      await userStore.blockUser(userCode, navigate)
     } catch (error) {}
   }
   return (
@@ -187,7 +192,7 @@ const UserDetail = () => {
                                   label="Upload Avatar"
                                   accept="image/*"
                                   initialImageUrl={userData?.avatarUrl}
-                                  onDelete={handleDeleteImage}
+                                  onDelete={() => handleDeleteImage(setFieldValue)}
                                 />
                               </CCol>
 
@@ -270,10 +275,18 @@ const UserDetail = () => {
                                     >
                                       Update
                                     </CButton>
-                                    &nbsp;
-                                    <CButton color="danger" variant="outline" onClick={handleBlock}>
-                                      {userData.isBlock ? 'Unblock' : 'Block'}
-                                    </CButton>
+                                    {isShowBlockbtn && (
+                                      <>
+                                        &nbsp;
+                                        <CButton
+                                          color="danger"
+                                          variant="outline"
+                                          onClick={handleBlock}
+                                        >
+                                          {userData.isBlock ? 'Unblock' : 'Block'}
+                                        </CButton>
+                                      </>
+                                    )}
                                   </CCol>
                                 </CRow>
                               </CCol>
