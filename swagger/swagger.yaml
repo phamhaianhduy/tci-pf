@@ -33,17 +33,20 @@ paths:
             schema:
               type: object
               properties:
-                userName:
+                employeeId:
                   type: string
-                  example: duypha5
-                fullName:
+                  example: duypha
+                firstName:
                   type: string
-                  example: Pham Van Hai
+                  example: Pham Van
+                lastName:
+                  type: string
+                  example: Hai
                 password:
                   type: string
                   description: RSA-encrypted password string
                   example: ENCRYPTED_STRING_HERE
-                email:
+                loginId:
                   type: string
                   format: email
                   example: ph.anhduy11025@gmail.com
@@ -75,21 +78,21 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: integer
-                        example: 410
-                      userName:
                         type: string
-                        example: duypha5
-                      userCode:
+                        example: PHAD0YG3T8C8YVZHR6INK1K8KC
+                      employeeId:
                         type: string
-                        example: PHADHBIKT9F
-                      fullName:
+                        example: duypha
+                      firstName:
                         type: string
-                        example: Pham Van Hai
+                        example: Pham Van
+                      lastName:
+                        type: string
+                        example: Hai
                       password:
                         type: string
                         example: $2b$05$EJiulXSOzUVUUOC23DZgnu5n2GALF4SvtqH/l5F5gjN793sX8ZlTC
-                      email:
+                      loginId:
                         type: string
                         format: email
                         example: ph.anhduy11025@gmail.com
@@ -99,7 +102,7 @@ paths:
                         example: '1'
                       contactEmail:
                         type: string
-                        example: 343434
+                        example: hello@gmail.com
                       avatarUrl:
                         type: string
                         nullable: true
@@ -116,6 +119,15 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-05-11T07:54:16.147Z"
+                      requiredChangePassword:
+                        type: boolean
+                        example: 1
+                      isBlock:
+                        type: boolean
+                        example: false
+                      failedLoginAttemptsCount:
+                        type: number
+                        example: 0
         '400':
           description: Bad request
           content:
@@ -133,21 +145,26 @@ paths:
                   value:
                     message: Password is required / Password is unencrypted
                     code: PASSWORD
-                validateFullname:
-                  summary: Validate fullname
+                validateFirstname:
+                  summary: Validate firstName
                   value:
-                    message: Fullname is required / Fullname is exceed maxlengh.
-                    code: FULLNAME
-                validateUsername:
-                  summary: Validate username
+                    message: firstName is required / firstName is exceed maxlengh.
+                    code: FIRSTNAME
+                validateLastname:
+                  summary: Validate lastName
                   value:
-                    message: Username is required / Username is exceed maxlengh.
-                    code: USERNAME
-                validateEmail:
-                  summary: Validate email
+                    message: lastName is exceed maxlengh.
+                    code: LASTNAME
+                validateEmployeeId:
+                  summary: Validate employeeId
                   value:
-                    message: Email is required / Email is invalid
-                    code: EMAIL
+                    message: employeeId is required / employeeId is exceed maxlengh.
+                    code: EMPLOYEEID
+                validateLoginId:
+                  summary: Validate loginId
+                  value:
+                    message: loginId is required / loginId is invalid
+                    code: LOGIN_ID
                 validateIsRealEmail:
                   summary: Validate isRealEmail
                   value:
@@ -203,10 +220,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Username or email is existing
+                    example: EmployeeId or loginId is existing
                   code:
                     type: string
-                    example: USERNAME_OR_EMAIL
+                    example: EmployeeId
 
         '500':
           description: Internal server error
@@ -236,15 +253,12 @@ paths:
             schema:
               type: object
               properties:
-                fullName:
+                firstName:
                   type: string
-                  example: Pham Hai Anh Duy
-                email:
+                  example: Pham Hai Anh
+                lastName:
                   type: string
-                  example: duy.pha@trans-tech.vn
-                password:
-                  type: string
-                  example: b0z85O/KyueZmSMbZjqdRsww8rcISTLgSJSLTtg/7HOTEq8DhCzE+ZfghIUb1cjsxDB96YmoyNRI3QnqEDeBUN3mQ+j6YKS9SkQOPBTJTtcWRNbDnWVPDi1XDz7l3yUA6SATg8l8W6LkidL8T9wr6JjUF2UckX3d0hMW7qR/9jRnz2gitSwB9jpwFY9JAX6RvEGLs36qSogERH98fesZfvxtmVph5jgowX9t4ItWOxxYR8sWRW5mAAqJN6zUPQT3C5I2KEvmfA6Ckt3pL2gTQpsDh732YeiD5673JrbGW+AMT4uUL6rHwR1Ohnm6qV7S7cULfp40VGWEsdPaVCmtuw==
+                  example: Duy
                 isRealEmail:
                   type: boolean
                   example: false
@@ -254,10 +268,7 @@ paths:
                 avatar:
                   type: string
               required:
-                - fullName
-                - email
-                - password
-                - contactEmail
+                - firstName
       responses:
         '200':
           description: Updated
@@ -273,17 +284,14 @@ paths:
                     type: object
                     properties:
                         id:
-                          type: number
-                          example: 1
-                        userName:
                           type: string
-                          example: duypha
-                        fullName:
+                          example: PHAD0YG3T8C8YVZHR6INK1K8KC
+                        firstName:
                           type: string
-                          example: Pham Hai Anh Duy
-                        email:
+                          example: Pham Hai Anh
+                        lastName:
                           type: string
-                          example: duy.pha@trans-tech.vn
+                          example: Duy
                         avatarUrl:
                           type: string
                           example: duypha
@@ -305,21 +313,11 @@ paths:
                   code:
                     type: string
               examples:
-                validatePassword:
-                  summary: Validate password
+                validateFirstname:
+                  summary: Validate firstName
                   value:
-                    message: Password is required / Password is unencrypted
-                    code: PASSWORD
-                validateFullname:
-                  summary: Validate fullname
-                  value:
-                    message: Fullname is required / Fullname is exceed maxlengh.
-                    code: FULLNAME
-                validateEmail:
-                  summary: Validate email
-                  value:
-                    message: Email is required / Email is invalid
-                    code: EMAIL
+                    message: firstName is required / firstName is exceed maxlengh.
+                    code: FIRSTNAME
                 validateIsRealEmail:
                   summary: Validate isRealEmail
                   value:
@@ -388,10 +386,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Username or email is existing
+                    example: EmployeeId or loginId is existing
                   code:
                     type: string
-                    example: USERNAME_OR_EMAIL
+                    example: EmployeeId
 
         '500':
           description: Internal server error
@@ -427,15 +425,18 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
-                        example: 1
-                      userName:
+                        type: string
+                        example: PHAD0YG3T8C8YVZHR6INK1K8KC
+                      employeeId:
                         type: string
                         example: duypha
-                      fullName:
+                      firstName:
                         type: string
-                        example: Pham Hai Anh Duy
-                      email:
+                        example: Pham Hai Anh
+                      lastName:
+                        type: string
+                        example: Duy
+                      loginId:
                         type: string
                         example: duy.pha@trans-tech.vn
                       lastPasswordChange:
@@ -450,6 +451,13 @@ paths:
                       avatarUrl:
                         type: string
                         example: https://duypha.s3.ap-southeast-1.amazonaws.com/avatars/1746159883458_cart.png
+                      requiredChangePassword:
+                        type: boolean
+                        example: false
+                      isBlock :
+                        type: boolean
+                        example: false
+
         '401':
           description: Unauthorized
           content:
@@ -525,15 +533,18 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
-                        example: 1
-                      userName:
+                        type: string
+                        example: PHAD0YG3T8C8YVZHR6INK1K8KC
+                      employeeId:
                         type: string
                         example: duypha
-                      fullName:
+                      firstName:
                         type: string
-                        example: Pham Hai Anh Duy
-                      email:
+                        example: Pham Hai Anh
+                      lastName:
+                        type: string
+                        example: Duy
+                      loginId:
                         type: string
                         example: duy.pha@trans-tech.vn
                       lastPasswordChange:
@@ -548,6 +559,12 @@ paths:
                       avatarUrl:
                         type: string
                         example: https://duypha.s3.ap-southeast-1.amazonaws.com/avatars/1746159883458_cart.png
+                      requiredChangePassword:
+                        type: boolean
+                        example: false
+                      isBlock :
+                        type: boolean
+                        example: false
                   mustChangePassword:
                     type: boolean
                     example: false
@@ -741,25 +758,25 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: number
-                        userCode:
                           type: string
-                        fullName:
+                        firstName:
                           type: string
-                        email:
+                        lastName:
+                          type: string
+                        loginId:
                           type: string
                         updatedAt:
                           type: string
                     example:
-                      - id: 1
-                        userCode: PHAD1A2B3C4
-                        fullName: Pham Hai Anh Duy
-                        email: ph.anhduy1102@gmail.com
+                      - id: PHAD0YG3T8C8YVZHR6INK1K8KC
+                        firstName: Pham Hai Anh Duy
+                        lastName: Duy
+                        loginId: ph.anhduy1102@gmail.com
                         updatedAt: 2025-05-02T04:10:40.000Z
-                      - id: 2
-                        userCode: PHAD5F6G7H8
-                        fullName: Nguyen Van B
-                        email: b.nguyen@example.com
+                      - id: PHAD0YG3T8C8YVZHR6INK1K8KS
+                        firstName: Pham Hai Anh Duy
+                        lastName: Duy
+                        loginId: ph.anhduy1102@gmail.com
                         updatedAt: 2025-05-01T10:20:30.000Z
                   currentPage:
                     type: number
@@ -882,11 +899,11 @@ paths:
             schema:
               type: object
               properties:
-                email:
+                loginId:
                   type: string
                   example: ph.anhduy1102@gmail.com
               required:
-                - email
+                - loginId
 
       responses:
         '200':
@@ -915,11 +932,11 @@ paths:
                     type: string
 
               examples:
-                validateEmail:
-                  summary: Validate email
+                validateLoginId:
+                  summary: Validate loginId
                   value:
-                    message: Email is invalid
-                    code: EMAIL
+                    message: loginId is invalid
+                    code: LOGIN_ID
         '404':
           description: Not found
           content:
@@ -1181,14 +1198,14 @@ paths:
             schema:
               type: object
               properties:
-                userName:
+                EmployeeId:
                   type: string
                   example: duypha
                 password:
                   type: string
                   example: FsGxvhP0UHwA1nvTQP8W+xiAR39Qb19ojoLSwgDyog7sTNDu7Blp2b4KijJjyomzP7JolsbBe1dgr3/6jIKZ8vttQw5SdBpLbqSUm76JoNExhdETF5Xu086mXHtX2FrRPW3w/S+dK9Poy4kppd6xHEK1UaaC4jE9jPmXRhm2LjLPi1IqMggIt4GbW4qsYlZZFe4ER78hL64rDchdcm0EP96+tNAX0g4T3+4Oi3e6Ybn7a07HaP3mDPiSpipSA/P86wZubqTzf2dEYRe5cARpPoInEgZxB40XyNgzA710ggFdFDWA075uWOg1Ir5gJGpmRs8ru2MK6PXbKdscCU4E0w==
               required:
-                - userName
+                - EmployeeId
                 - password
       responses:
         '200':
@@ -1229,15 +1246,15 @@ paths:
 
               examples:
                 loginFailed:
-                  summary: Username is not exist
+                  summary: EmployeeId is not exist
                   value:
-                    message: Username is not exist
-                    code: USERNAME_IS_NOT_EXIST
-                validateUsername:
-                  summary: Username is required
+                    message: EmployeeId is not exist
+                    code: EmployeeId_IS_NOT_EXIST
+                validateEmployeeId:
+                  summary: EmployeeId is required
                   value:
-                    message: Username is required
-                    code: USERNAME
+                    message: EmployeeId is required
+                    code: EmployeeId
 
                 validatePassword:
                   summary: Validate password
@@ -1515,9 +1532,11 @@ paths:
                         user:
                           type: object
                           properties:
-                            fullName:
+                            firstName:
                               type: string
-                            email:
+                            lastName:
+                              type: string
+                            loginId:
                               type: string                            
                     example:
                       - id: 17
@@ -1525,16 +1544,18 @@ paths:
                         description: Change expired password
                         timestamp: 2025-05-03T07:16:57.000Z
                         user: 
-                          fullName: Pham Hai Anh Duy
-                          email: ph.anhduy1102@gmail.com
+                          firstName: Pham Hai Anh
+                          lastName: Duy
+                          loginId: ph.anhduy1102@gmail.com
 
                       - id: 15
                         action: DELETE USER
                         description: Delete the user tuitest
                         timestamp: 2025-05-03T04:35:58.000Z
                         user: 
-                          fullName: Pham Hai Anh Duy
-                          email: ph.anhduy1102@gmail.com
+                          firstName: Pham Hai Anh
+                          lastName: Duy
+                          loginId: ph.anhduy1102@gmail.com
                   currentPage:
                     type: number
                     example: 1
