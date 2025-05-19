@@ -84,7 +84,7 @@ const UserCreate = () => {
     <CContainer className="mt-4">
       <CCard>
         <CCardHeader>
-          <strong>Create New User</strong>
+          <strong>Create New Admin</strong>
         </CCardHeader>
         <CCardBody>
           <Formik

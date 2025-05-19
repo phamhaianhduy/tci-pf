@@ -188,7 +188,7 @@ const UserList = () => {
         </Formik>
         <CCard className="mb-4 mt-4">
           <CCardHeader>
-            <strong>User List</strong>
+            <strong>Admin List</strong>
             <CButton
               className="float-end"
               type="button"

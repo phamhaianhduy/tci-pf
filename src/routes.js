@@ -11,9 +11,9 @@ const ResetPassword = React.lazy(() => import('./views/pages/resetpwd/ResetPassw
 
 const routes = [
   // { path: '/', exact: true, name: 'Home' },
-  { path: '/users', name: 'Users', element: UserList, protected: true },
+  { path: '/users', name: 'Admins', element: UserList, protected: true },
   { path: '/users/me', name: 'Me', element: UserDetail, protected: true },
-  { path: '/users/:userCode/edit', name: 'User Detail', element: UserDetail, protected: true },
+  { path: '/users/:userCode/edit', name: 'Admin Detail', element: UserDetail, protected: true },
   { path: '/users/create', name: 'Create', element: UserCreate, protected: true },
   { path: '/login', name: 'Login', element: Login },
   { path: '/logs', name: 'Logs', element: LogList, protected: true },
