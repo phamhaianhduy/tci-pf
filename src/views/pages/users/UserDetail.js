@@ -17,15 +17,14 @@ import {
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { userStore } from '../../../stores/UserStore'
-import dayjs from 'dayjs'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { UserRoundPen, UserRoundPlus, UserRoundMinus } from 'lucide-react'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
 import CustomCFormSwitch from '../../../components/CustomCFormSwitch/CustomCFormSwitch'
 import CustomCFormFileInput from '../../../components/CustomCFormFileInput/CustomCFormFileInput'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import ChangePassword from '../../../components/ChangePassword/ChangePassword'
+import CustomRequiredInput from '../../../components/CustomRequiredInput/CustomRequiredInput'
 
 const UserDetail = () => {
   const location = useLocation()
@@ -111,7 +110,7 @@ const UserDetail = () => {
   // Handle block btn.
   const isShowBlockbtn =
     location.pathname == '/users/me' ||
-    (userStore.userDetailByMe && userCode == userStore.userDetailByMe.id)
+      (userStore.userDetailByMe && userCode == userStore.userDetailByMe.id)
       ? false
       : true
 
@@ -149,11 +148,11 @@ const UserDetail = () => {
 
     try {
       await userStore.blockUser(userCode, navigate)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   return (
-    <CNav variant="tabs" role="tablist">
+    <CNav variant="pills" role="tablist">
       <CNavItem>
         <CNavLink
           active={activeTab === 'profile'}
@@ -206,7 +205,7 @@ const UserDetail = () => {
                                 <CRow>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="employeeId" className="fw-bold">
-                                      Employee ID
+                                      Employee ID<CustomRequiredInput/>
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="employeeId"
@@ -217,7 +216,7 @@ const UserDetail = () => {
                                   </CCol>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="loginId" className="fw-bold">
-                                      Login ID
+                                      Login ID<CustomRequiredInput/>
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="loginId"
@@ -228,7 +227,7 @@ const UserDetail = () => {
                                   </CCol>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="firstName" className="fw-bold">
-                                      First name
+                                      First name<CustomRequiredInput/>
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="firstName"

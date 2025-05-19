@@ -1,4 +1,4 @@
-import { CCard, CCardBody, CCol, CRow, CFormLabel, CButton, CContainer } from '@coreui/react'
+import { CCard, CCardBody, CCol, CRow, CFormLabel, CButton, CContainer, CCardHeader } from '@coreui/react'
 import { Formik, Form, useField } from 'formik'
 import * as Yup from 'yup'
 import { userStore } from '../../stores/UserStore'
@@ -66,6 +66,9 @@ const ChangePassword = () => {
       {({ isSubmitting }) => (
         <Form>
           <CCard className="mb-4 mt-4">
+            <CCardHeader>
+              <strong>Change Password</strong>
+            </CCardHeader>
             <CCardBody>
               <CContainer>
                 <CRow>

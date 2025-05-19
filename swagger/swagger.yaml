@@ -29,7 +29,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
@@ -42,24 +42,24 @@ paths:
                 lastName:
                   type: string
                   example: Hai
-                password:
-                  type: string
-                  description: RSA-encrypted password string
-                  example: ENCRYPTED_STRING_HERE
                 loginId:
                   type: string
                   format: email
                   example: ph.anhduy11025@gmail.com
                 isRealEmail:
-                  type: string
-                  enum: ['0', '1']
-                  example: '1'
+                  type: boolean
+                  example: false
                 contactEmail:
                   type: string
-                  example: 343434
+                  format: email
+                  example: ph.anhduy11026@gmail.com
                 avatar:
                   type: string
                   format: binary
+              required:
+                - employeeId
+                - firstName
+                - loginId
       responses:
         '201':
           description: Created user successfully.
@@ -164,7 +164,7 @@ paths:
                   summary: Validate loginId
                   value:
                     message: loginId is required / loginId is invalid
-                    code: LOGIN_ID
+                    code: LOGINID
                 validateIsRealEmail:
                   summary: Validate isRealEmail
                   value:
@@ -220,10 +220,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: EmployeeId or loginId is existing
+                    example: Login ID or Employee ID is existing
                   code:
                     type: string
-                    example: EmployeeId
+                    example: LOGIN_ID_OR_EMPLOYEE_ID
 
         '500':
           description: Internal server error
@@ -234,7 +234,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error    
+                    example: Internal server error
                   code:
                     type: string
                     example: INTERNAL_SERVER_ERROR
@@ -377,19 +377,6 @@ paths:
                   code:
                     type: string
                     example: USER_NOT_FOUND
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: EmployeeId or loginId is existing
-                  code:
-                    type: string
-                    example: EmployeeId
 
         '500':
           description: Internal server error
@@ -400,7 +387,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error    
+                    example: Internal server error
                   code:
                     type: string
                     example: INTERNAL_SERVER_ERROR
@@ -508,7 +495,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error    
+                    example: Internal server error
                   code:
                     type: string
                     example: INTERNAL_SERVER_ERROR
@@ -618,7 +605,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error    
+                    example: Internal server error
                   code:
                     type: string
                     example: INTERNAL_SERVER_ERROR
@@ -640,7 +627,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Delete user successfully.   
+                    example: Delete user successfully.
                   code:
                     type: string
                     example: DELETE_USER
@@ -694,7 +681,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error    
+                    example: Internal server error
                   code:
                     type: string
                     example: INTERNAL_SERVER_ERROR
@@ -936,7 +923,7 @@ paths:
                   summary: Validate loginId
                   value:
                     message: loginId is invalid
-                    code: LOGIN_ID
+                    code: LOGINID
         '404':
           description: Not found
           content:
@@ -1198,9 +1185,9 @@ paths:
             schema:
               type: object
               properties:
-                EmployeeId:
+                loginId:
                   type: string
-                  example: duypha
+                  example: duypha@gmail.com
                 password:
                   type: string
                   example: FsGxvhP0UHwA1nvTQP8W+xiAR39Qb19ojoLSwgDyog7sTNDu7Blp2b4KijJjyomzP7JolsbBe1dgr3/6jIKZ8vttQw5SdBpLbqSUm76JoNExhdETF5Xu086mXHtX2FrRPW3w/S+dK9Poy4kppd6xHEK1UaaC4jE9jPmXRhm2LjLPi1IqMggIt4GbW4qsYlZZFe4ER78hL64rDchdcm0EP96+tNAX0g4T3+4Oi3e6Ybn7a07HaP3mDPiSpipSA/P86wZubqTzf2dEYRe5cARpPoInEgZxB40XyNgzA710ggFdFDWA075uWOg1Ir5gJGpmRs8ru2MK6PXbKdscCU4E0w==
@@ -1215,23 +1202,18 @@ paths:
               schema:
                 type: object
                 properties:
-                  listUsers:
-                    type: array
-                    items: 
-                      type: object
-                      properties:
-                        code:
-                          type: string
-                          example: LOGIN                      
-                        message:
-                          type: string
-                          example: Login successfully
-                        token:
-                          type: string
-                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2MjY0NjQ1fQ.bfHigSWgar_cS32tBBqYttrbUIwzszLb0HSr47ITjWw
-                        refreshToken:
-                          type: string
-                          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2ODY4NTQ1fQ.rpLFhyZAQE-2Dqy-oQx-XPeJ7s5MH8vDrj_Hd8YbBHg
+                  code:
+                    type: string
+                    example: LOGIN
+                  message:
+                    type: string
+                    example: Login successfully
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsInVzZXJOYW1lIjoiZHV5cGhhIiwiZnVsbE5hbWUiOiJQaGFtIEhhaSBBbmggRHV5IiwiZW1haWwiOiJwaC5hbmhkdXkxMTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2MjY0NjQ1fQ.bfHigSWgar_cS32tBBqYttrbUIwzszLb0HSr47ITjWw
+                  refreshToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlckNvZGUiOiJQSEFEMUEyQjNDNCIsImlhdCI6MTc0NjI2Mzc0NSwiZXhwIjoxNzQ2ODY4NTQ1fQ.rpLFhyZAQE-2Dqy-oQx-XPeJ7s5MH8vDrj_Hd8YbBHg
         '401':
           description: Login failed
           content:
@@ -1245,22 +1227,21 @@ paths:
                     type: string
 
               examples:
-                loginFailed:
-                  summary: EmployeeId is not exist
+                loginIdIsNotExist:
+                  summary: Login ID is not exist
                   value:
-                    message: EmployeeId is not exist
-                    code: EmployeeId_IS_NOT_EXIST
-                validateEmployeeId:
-                  summary: EmployeeId is required
-                  value:
-                    message: EmployeeId is required
-                    code: EmployeeId
-
+                    message: loginId is not exist
+                    code: LOGINID_IS_NOT_EXIST
                 validatePassword:
                   summary: Validate password
                   value:
-                    message: Password is unencrypted / Password greater than or equal 8 character length.
+                    message: Password is required / Password is unencrypted / Password greater than or equal 8 character length.
                     code: PASSWORD
+                loginFailed:
+                  summary: Incorrect Login ID or Password
+                  value:
+                    message: Login ID or Password is incorrect
+                    code: LOGINID_OR_PASSWORD_IS_INCORRECT
         '500':
           description: Internal server error
           content:
@@ -1270,7 +1251,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Internal server error    
+                    example: Internal server error
                   code:
                     type: string
                     example: INTERNAL_SERVER_ERROR
@@ -1291,36 +1272,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  listUsers:
-                    type: array
-                    items: 
-                      type: object
-                      properties:
-                        message:
-                          type: string
-                          example: Logout successfully
-                        code:
-                          type: string
-                          example: LOGOUT
-        '400':
-          description: Logout failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
                   message:
                     type: string
-                    example: Failed validation
-                  error:
-                      type: object
-                      properties: 
-                        code:
-                          type: string
-                          example: refreshToken
-                        message:
-                          type: string
-                          example: Refresh token is required
+                    example: Logout successfully
+                  code:
+                    type: string
+                    example: LOGOUT
 
         '404':
           description: Not found
@@ -1520,20 +1477,14 @@ paths:
                         user:
                           type: object
                           properties:
-                            firstName:
-                              type: string
-                            lastName:
-                              type: string
                             loginId:
-                              type: string                            
+                              type: string
                     example:
                       - id: 17
                         action: UPDATE USER
                         description: Change expired password
                         timestamp: 2025-05-03T07:16:57.000Z
                         user: 
-                          firstName: Pham Hai Anh
-                          lastName: Duy
                           loginId: ph.anhduy1102@gmail.com
 
                       - id: 15
@@ -1541,8 +1492,6 @@ paths:
                         description: Delete the user tuitest
                         timestamp: 2025-05-03T04:35:58.000Z
                         user: 
-                          firstName: Pham Hai Anh
-                          lastName: Duy
                           loginId: ph.anhduy1102@gmail.com
                   currentPage:
                     type: number

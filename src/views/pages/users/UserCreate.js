@@ -15,6 +15,7 @@ import { userStore } from '../../../stores/UserStore'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
 import CustomCFormSwitch from '../../../components/CustomCFormSwitch/CustomCFormSwitch'
 import CustomCFormFileInput from '../../../components/CustomCFormFileInput/CustomCFormFileInput'
+import CustomRequiredInput from '../../../components/CustomRequiredInput/CustomRequiredInput'
 import { useNavigate } from 'react-router-dom'
 
 const UserCreate = () => {
@@ -94,7 +95,7 @@ const UserCreate = () => {
             {({ values, setFieldValue, isSubmitting }) => (
               <Form>
                 <CRow>
-                  <CCol md={4}>
+                  <CCol md={3}>
                     <CustomCFormFileInput
                       name="avatar"
                       label="Upload Avatar"
@@ -102,26 +103,26 @@ const UserCreate = () => {
                       initialImageUrl=""
                     />
                   </CCol>
-                  <CCol md={8}>
+                  <CCol md={9}>
                     <CRow>
-                      <CCol md={6}>
-                        <CFormLabel>Employee ID</CFormLabel>
+                      <CCol md={4}>
+                        <CFormLabel className="fw-bold">Employee ID<CustomRequiredInput /></CFormLabel>
                         <CustomCFormInput name="employeeId" type="text" maxLength="20" />
                       </CCol>
-                      <CCol md={6} className="mb-4">
-                        <CFormLabel>Login ID</CFormLabel>
+                      <CCol md={4} className="mb-4">
+                        <CFormLabel className="fw-bold">Login ID<CustomRequiredInput /></CFormLabel>
                         <CustomCFormInput name="loginId" type="email" maxLength="255" />
                       </CCol>
-                      <CCol md={6} className="mb-4">
-                        <CFormLabel>First name</CFormLabel>
+                      <CCol md={4} className="mb-4">
+                        <CFormLabel className="fw-bold">First name<CustomRequiredInput /></CFormLabel>
                         <CustomCFormInput name="firstName" type="text" maxLength="255" />
                       </CCol>
-                      <CCol md={6} className="mb-4">
-                        <CFormLabel>Last name</CFormLabel>
+                      <CCol md={4} className="mb-4">
+                        <CFormLabel className="fw-bold">Last name</CFormLabel>
                         <CustomCFormInput name="lastName" type="text" maxLength="255" />
                       </CCol>
-                      <CCol md={6}>
-                        <CFormLabel htmlFor="email">Real email</CFormLabel>
+                      <CCol md={2}>
+                        <CFormLabel htmlFor="email" className="fw-bold">Real email</CFormLabel>
                         <CustomCFormSwitch
                           id="realEmailSwitch"
                           label="Real Email"
@@ -129,8 +130,8 @@ const UserCreate = () => {
                         />
                       </CCol>
                       {!values.isRealEmail && (
-                        <CCol md={12} className="mb-4">
-                          <CFormLabel>Contact Email</CFormLabel>
+                        <CCol md={6} className="mb-4">
+                          <CFormLabel className="fw-bold">Contact Email</CFormLabel>
                           <CustomCFormInput name="contactEmail" type="text" />
                         </CCol>
                       )}
@@ -141,7 +142,7 @@ const UserCreate = () => {
                           disabled={isSubmitting}
                           variant="outline"
                         >
-                          Create User
+                          Create
                         </CButton>
                       </CCol>
                     </CRow>

@@ -11,15 +11,14 @@ const ResetPassword = React.lazy(() => import('./views/pages/resetpwd/ResetPassw
 
 const routes = [
   // { path: '/', exact: true, name: 'Home' },
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard, protected: true },
   { path: '/users', name: 'Users', element: UserList, protected: true },
-  { path: '/users/me', name: 'UserByMe', element: UserDetail, protected: true },
-  { path: '/users/:userCode/edit', name: 'UserByUserCode', element: UserDetail, protected: true },
-  { path: '/users/create', name: 'UserByUserCode', element: UserCreate, protected: true },
+  { path: '/users/me', name: 'Me', element: UserDetail, protected: true },
+  { path: '/users/:userCode/edit', name: 'User Detail', element: UserDetail, protected: true },
+  { path: '/users/create', name: 'Create', element: UserCreate, protected: true },
   { path: '/login', name: 'Login', element: Login },
   { path: '/logs', name: 'Logs', element: LogList, protected: true },
-  { path: '/change-password', name: 'ChangePassword', element: ChangePassword, protected: true },
-  { path: '/users/reset-password', name: 'ResetPassword', element: ResetPassword },
+  { path: '/change-password', name: 'Change Password', element: ChangePassword, protected: true },
+  { path: '/users/reset-password', name: 'Reset Password', element: ResetPassword },
 ]
 
 export default routes
