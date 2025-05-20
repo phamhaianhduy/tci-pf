@@ -17,6 +17,7 @@ import CustomCFormSwitch from '../../../components/CustomCFormSwitch/CustomCForm
 import CustomCFormFileInput from '../../../components/CustomCFormFileInput/CustomCFormFileInput'
 import CustomRequiredInput from '../../../components/CustomRequiredInput/CustomRequiredInput'
 import { useNavigate } from 'react-router-dom'
+import { emailRegex } from '../../../utils/emailRegex'
 
 const UserCreate = () => {
   const navigate = useNavigate()
@@ -30,13 +31,22 @@ const UserCreate = () => {
       .max(255, 'Firstname is max exceed length'),
     lastName: Yup.string().max(255, 'Lastname is max exceed length'),
     loginId: Yup.string()
-      .email('Email is invalid')
       .required('Email is required')
-      .max(111, 'Login ID is max exceed length'),
+      .max(111, 'Login ID is max exceed length')
+      .test('is-valid-email', 'Login ID is email', (value) => {
+        if (!value) return false
+        return emailRegex.test(value)
+      }),
     isRealEmail: Yup.boolean(),
     contactEmail: Yup.string().when('isRealEmail', {
       is: false,
-      then: (schema) => schema.email('Email is invalid').required('Contact email is required'),
+      then: (schema) =>
+        schema
+          .required('Contact email is required')
+          .test('is-valid-email', 'Contact Email is email', (value) => {
+            if (!value) return false
+            return emailRegex.test(value)
+          }),
       otherwise: (schema) => schema.notRequired(),
     }),
     avatar: Yup.mixed()
@@ -106,15 +116,24 @@ const UserCreate = () => {
                   <CCol md={9}>
                     <CRow>
                       <CCol md={4}>
-                        <CFormLabel className="fw-bold">Employee ID<CustomRequiredInput /></CFormLabel>
+                        <CFormLabel className="fw-bold">
+                          Employee ID
+                          <CustomRequiredInput />
+                        </CFormLabel>
                         <CustomCFormInput name="employeeId" type="text" maxLength="20" />
                       </CCol>
                       <CCol md={4} className="mb-4">
-                        <CFormLabel className="fw-bold">Login ID<CustomRequiredInput /></CFormLabel>
+                        <CFormLabel className="fw-bold">
+                          Login ID
+                          <CustomRequiredInput />
+                        </CFormLabel>
                         <CustomCFormInput name="loginId" type="email" maxLength="255" />
                       </CCol>
                       <CCol md={4} className="mb-4">
-                        <CFormLabel className="fw-bold">First name<CustomRequiredInput /></CFormLabel>
+                        <CFormLabel className="fw-bold">
+                          First name
+                          <CustomRequiredInput />
+                        </CFormLabel>
                         <CustomCFormInput name="firstName" type="text" maxLength="255" />
                       </CCol>
                       <CCol md={4} className="mb-4">
@@ -122,7 +141,9 @@ const UserCreate = () => {
                         <CustomCFormInput name="lastName" type="text" maxLength="255" />
                       </CCol>
                       <CCol md={2}>
-                        <CFormLabel htmlFor="email" className="fw-bold">Real email</CFormLabel>
+                        <CFormLabel htmlFor="email" className="fw-bold">
+                          Real email
+                        </CFormLabel>
                         <CustomCFormSwitch
                           id="realEmailSwitch"
                           label="Real Email"

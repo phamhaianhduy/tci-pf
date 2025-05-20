@@ -103,7 +103,7 @@ class UserStore {
   createUser = async (data, navigate) => {
     try {
       await api.post(`/users/create`, data)
-      navigate('/users')
+      navigate('/admins')
     } catch (error) {
       throw error
     } finally {
@@ -114,7 +114,7 @@ class UserStore {
   updateUser = async (data, navigate) => {
     try {
       await api.put(`/users/update`, data)
-      navigate('/users')
+      navigate('/admins')
       this.getUserByMe()
     } catch (error) {
       throw error
@@ -165,11 +165,12 @@ class UserStore {
       const res = await api.put(`/users/change-password`, data)
       const newAccessToken = res.data.token
       localStorage.setItem('token', newAccessToken)
-      navigate('/users')
+      navigate('/admins')
     } catch (error) {
       throw error
     } finally {
       runInAction(() => {
+        userStore.userDetailByMe.mustChangePassword = false
         userStore.userDetailByMe.requiredChangePassword = false
       })
     }
@@ -178,7 +179,7 @@ class UserStore {
   blockUser = async (userId, navigate) => {
     try {
       await api.put(`/users/block`, { userId })
-      navigate('/users')
+      navigate('/admins')
     } catch (error) {
       throw error
     } finally {

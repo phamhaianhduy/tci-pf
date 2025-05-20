@@ -25,6 +25,7 @@ import CustomCFormFileInput from '../../../components/CustomCFormFileInput/Custo
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import ChangePassword from '../../../components/ChangePassword/ChangePassword'
 import CustomRequiredInput from '../../../components/CustomRequiredInput/CustomRequiredInput'
+import { emailRegex } from '../../../utils/emailRegex'
 
 const UserDetail = () => {
   const location = useLocation()
@@ -50,7 +51,13 @@ const UserDetail = () => {
     isRealEmail: Yup.boolean(),
     contactEmail: Yup.string().when('isRealEmail', {
       is: false,
-      then: (schema) => schema.email('Email is invalid').required('Contact email is required'),
+      then: (schema) =>
+        schema
+          .required('Contact email is required')
+          .test('is-valid-email', 'Contact Email is email', (value) => {
+            if (!value) return false
+            return emailRegex.test(value)
+          }),
       otherwise: (schema) => schema.notRequired(),
     }),
   })
@@ -109,8 +116,8 @@ const UserDetail = () => {
 
   // Handle block btn.
   const isShowBlockbtn =
-    location.pathname == '/users/me' ||
-      (userStore.userDetailByMe && userCode == userStore.userDetailByMe.id)
+    location.pathname == '/admins/me' ||
+    (userStore.userDetailByMe && userCode == userStore.userDetailByMe.id)
       ? false
       : true
 
@@ -148,7 +155,7 @@ const UserDetail = () => {
 
     try {
       await userStore.blockUser(userCode, navigate)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   return (
@@ -205,7 +212,8 @@ const UserDetail = () => {
                                 <CRow>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="employeeId" className="fw-bold">
-                                      Employee ID<CustomRequiredInput/>
+                                      Employee ID
+                                      <CustomRequiredInput />
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="employeeId"
@@ -216,7 +224,8 @@ const UserDetail = () => {
                                   </CCol>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="loginId" className="fw-bold">
-                                      Login ID<CustomRequiredInput/>
+                                      Login ID
+                                      <CustomRequiredInput />
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="loginId"
@@ -227,7 +236,8 @@ const UserDetail = () => {
                                   </CCol>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="firstName" className="fw-bold">
-                                      First name<CustomRequiredInput/>
+                                      First name
+                                      <CustomRequiredInput />
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="firstName"

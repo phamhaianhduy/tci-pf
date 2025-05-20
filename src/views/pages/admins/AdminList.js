@@ -124,7 +124,7 @@ const UserList = () => {
   }
 
   const handleDetailUser = async (id) => {
-    navigate(`/users/${id}/edit`)
+    navigate(`/admins/${id}/edit`)
   }
 
   const userList = userStore.users
@@ -192,7 +192,7 @@ const UserList = () => {
             <CButton
               className="float-end"
               type="button"
-              href="/users/create"
+              href="/admins/create"
               color="success"
               variant="outline"
             >

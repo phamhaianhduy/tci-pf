@@ -7,6 +7,7 @@ import { authStore } from '../../../stores/AuthStore'
 import { userStore } from '../../../stores/UserStore'
 import { observer } from 'mobx-react-lite'
 import CustomCFormInput from '../../../components/CustomCFormInput/CustomCFormInput'
+import { emailRegex } from '../../../utils/emailRegex'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -14,16 +15,26 @@ const Login = () => {
 
   // For user logged in.
   if (userStore.userDetailByMe) {
-    navigate('/users/me')
+    navigate('/admins/me')
   }
 
   const loginSchema = Yup.object().shape({
-    loginId: Yup.string().required('Login ID is required').email('Email invalid'),
+    loginId: Yup.string()
+      .required('Login ID is required')
+      .test('is-valid-email', 'Login ID is email', (value) => {
+        if (!value) return false
+        return emailRegex.test(value)
+      }),
     password: Yup.string().required('Password is required').min(6),
   })
 
   const forgotSchema = Yup.object().shape({
-    loginId: Yup.string().email('Invalid email').required('Email is required'),
+    loginId: Yup.string()
+      .required('Email is required')
+      .test('is-valid-email', 'Login ID is email', (value) => {
+        if (!value) return false
+        return emailRegex.test(value)
+      }),
   })
 
   const handleLoginSubmit = async (values) => {

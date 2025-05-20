@@ -32,9 +32,6 @@ const ChangePassword = () => {
   useEffect(() => {
     const getProfile = async () => {
       await userStore.getUserByMe()
-      if (userStore.userDetailByMe?.mustChangePassword) {
-        toast.error('You must change your password because it is expired.')
-      }
     }
     getProfile()
     return () => userStore.clearUserDetail()

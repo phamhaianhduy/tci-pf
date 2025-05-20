@@ -56,7 +56,6 @@ api.interceptors.response.use(
       case 'EXPIRED_TOKEN':
       case 'USER_NOT_FOUND':
       case 'USER_DELETED':
-      case 'USER_BLOCKED':
       case 'PASSWORD_CHANGED':
         toast.warn(message)
         logout()
@@ -64,6 +63,10 @@ api.interceptors.response.use(
       case 'INTERNAL_SERVER_ERROR':
       case 'USER_BLOCKED':
         toast.error(message)
+        const token = localStorage.getItem('token')
+        if (token) {
+          logout()
+        }
         break
       default:
         toast.warn(message)

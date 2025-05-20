@@ -21,7 +21,7 @@ tags:
     description: Log management
 
 paths:
-  /users/create:
+  /admins/create:
     post:
       tags:
         - User
@@ -241,7 +241,7 @@ paths:
                   error:
                     type: object
 
-  /users/update:
+  /admin/update:
     put:
       tags:
         - User
@@ -253,6 +253,9 @@ paths:
             schema:
               type: object
               properties:
+                id:
+                  type: string
+                  example: KDVH3H4PNVLANZQNIF1P3I9OEI
                 firstName:
                   type: string
                   example: Pham Hai Anh
@@ -313,6 +316,11 @@ paths:
                   code:
                     type: string
               examples:
+                validateId:
+                  summary: Validate Id
+                  value:
+                    message: User id is required.
+                    code: USER_ID_IS_REQUIRED
                 validateFirstname:
                   summary: Validate firstName
                   value:
@@ -394,7 +402,7 @@ paths:
                   error:
                     type: object
 
-  /users/:userCode:
+  /admin/:userCode:
     get:
       tags:
         - User
@@ -502,11 +510,11 @@ paths:
                   error:
                     type: object
   
-  /users/me:
+  /admins/me:
     get:
       tags:
-        - User
-      summary: Get user by me
+        - Admin
+      summary: Get admin by me
 
       responses:
         '200':
@@ -612,7 +620,7 @@ paths:
                   error:
                     type: object
 
-  /users/delete/:userId:
+  /admin/delete/:userId:
     delete:
       tags:
         - User
@@ -688,7 +696,7 @@ paths:
                   error:
                     type: object
 
-  /users/list:
+  /admin/list:
     get:
       tags:
         - User
@@ -874,7 +882,7 @@ paths:
                   error:
                     type: object
 
-  /users/forgot-password:
+  /admin/forgot-password:
     put:
       tags:
         - User
@@ -920,9 +928,14 @@ paths:
 
               examples:
                 validateLoginId:
-                  summary: Validate loginId
+                  summary: Validate type loginId
                   value:
-                    message: loginId is invalid
+                    message: Login ID is email
+                    code: LOGINID
+                validateLoginIdIsRequired:
+                  summary: Validate required loginId
+                  value:
+                    message: Login ID is required
                     code: LOGINID
         '404':
           description: Not found
@@ -953,7 +966,7 @@ paths:
                   error:
                     type: object
 
-  /users/reset-password:
+  /admin/reset-password:
     put:
       tags:
         - User
@@ -1053,11 +1066,11 @@ paths:
                   error:
                     type: object
 
-  /users/change-password:
+  /admin/change-password:
     put:
       tags:
         - User
-      summary: Update expired password
+      summary: Update password
       requestBody:
         required: true
         content:
@@ -1065,14 +1078,14 @@ paths:
             schema:
               type: object
               properties:
-                id:
+                oldPassword:
                   type: string
-                  example: 1
+                  example: aDXHvUioWLJrEAOYAezLCSFv148VzKKl3ydZ0FpiaO6ItYtiyumlpvdjIqqg1oJsFgP5W5iK9L0oeyX55VlEN6j/CPTNCE4YyjGgqlj5dBvbq84HYtYep0Sxi380qJBJntYFCwH0ET3zOpfFVASlNzOIIKlWNVQ4dOmhVknJWBF5YiiyV8pSFFCOq8zG44Z1KlSESpZ4jZT4re6thVH9yRW0ZIPzGFVkAo6XaEEA4oLZH4U5goUZchZk/pqg73f+blxHsjFpWotOrKjAQIqOTTTCnzB5nOM5DRekjF5fgZsAvXz+U+Dnm3ZNueRTCKPTYXF1dUxlrdwvSM4wMc2xxQ==
                 password:
                   type: string
-                  example: Abcd@1234
+                  example: aDXHvUioWLJrEAOYAezLCSFv148VzKKl3ydZ0FpiaO6ItYtiyumlpvdjIqqg1oJsFgP5W5iK9L0oeyX55VlEN6j/CPTNCE4YyjGgqlj5dBvbq84HYtYep0Sxi380qJBJntYFCwH0ET3zOpfFVASlNzOIIKlWNVQ4dOmhVknJWBF5YiiyV8pSFFCOq8zG44Z1KlSESpZ4jZT4re6thVH9yRW0ZIPzGFVkAo6XaEEA4oLZH4U5goUZchZk/pqg73f+blxHsjFpWotOrKjAQIqOTTTCnzB5nOM5DRekjF5fgZsAvXz+U+Dnm3ZNueRTCKPTYXF1dUxlrdwvSM4wMc2xxQ==
               required:
-                - id
+                - oldPassword
                 - password
 
       responses:
@@ -1089,6 +1102,9 @@ paths:
                   code:
                     type: string
                     example: UPDATE_PASSWORD
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IktEVkgzSDRQTlZMQU5aUU5JRjFQM0k5T0VJIiwibGFzdFBhc3N3b3JkQ2hhbmdlIjoxNzQ3NzUzMjY2MDAwLCJpYXQiOjE3NDc3NTM5NjgsImV4cCI6MTc0Nzc1NDU2OH0.6zfUwyLNm3IphWcXLnUEcyqOuY-Ynfo8cn9dX6-gpHA
         '400':
           description: Bad request
           content:
@@ -1109,12 +1125,12 @@ paths:
                 validatePassword:
                   summary: Validate password
                   value:
-                    message: Password is required / Password is unencrypted
-                    code: PASSWORD
+                    message: Password is required / Password is unencrypted / Password must not match any of your recent passwords.
+                    code: PASSWORD / PASSWORD_REUSE
                 validateOldPassword:
                   summary: Validate old password
                   value:
-                    message: Old password is required / Old password is unencrypted
+                    message: Old password is required / Old Password is unencrypted
                     code: OLDPASSWORD
         '401':
           description: Unauthorized
