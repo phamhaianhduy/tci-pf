@@ -1,9 +1,9 @@
 import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
-const AdminList = React.lazy(() => import('./views/pages/Admins/AdminList'))
-const AdminDetail = React.lazy(() => import('./views/pages/Admins/AdminDetail'))
-const AdminCreate = React.lazy(() => import('./views/pages/Admins/AdminCreate'))
+const AdminList = React.lazy(() => import('./views/pages/admins/AdminList'))
+const AdminDetail = React.lazy(() => import('./views/pages/admins/AdminDetail'))
+const AdminCreate = React.lazy(() => import('./views/pages/admins/AdminCreate'))
 const LogList = React.lazy(() => import('./views/pages/logs/LogList'))
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const ChangePassword = React.lazy(() => import('./views/pages/changepwd/ChangePassword'))
