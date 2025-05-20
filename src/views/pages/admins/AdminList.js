@@ -26,7 +26,7 @@ import Pagination from '../../../components/Pagination/Pagination'
 import ItemPerPage from '../../../components/ItemPerPage/ItemPerPage'
 import { useNavigate } from 'react-router-dom'
 
-const UserList = () => {
+const AdminList = () => {
   const searchSchema = Yup.object().shape({
     searchString: Yup.string(),
     fromDate: Yup.date().typeError('Invalid date'),
@@ -291,4 +291,4 @@ const UserList = () => {
   )
 }
 
-export default observer(UserList)
+export default observer(AdminList)

@@ -19,7 +19,7 @@ import CustomRequiredInput from '../../../components/CustomRequiredInput/CustomR
 import { useNavigate } from 'react-router-dom'
 import { emailRegex } from '../../../utils/emailRegex'
 
-const UserCreate = () => {
+const AdminCreate = () => {
   const navigate = useNavigate()
 
   const userSchema = Yup.object().shape({
@@ -178,4 +178,4 @@ const UserCreate = () => {
   )
 }
 
-export default UserCreate
+export default AdminCreate

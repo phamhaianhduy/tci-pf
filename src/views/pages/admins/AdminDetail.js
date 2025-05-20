@@ -27,7 +27,7 @@ import ChangePassword from '../../../components/ChangePassword/ChangePassword'
 import CustomRequiredInput from '../../../components/CustomRequiredInput/CustomRequiredInput'
 import { emailRegex } from '../../../utils/emailRegex'
 
-const UserDetail = () => {
+const AdminDetail = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -330,4 +330,4 @@ const UserDetail = () => {
   )
 }
 
-export default observer(UserDetail)
+export default observer(AdminDetail)
