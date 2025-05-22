@@ -32,8 +32,8 @@ const AdminDetail = () => {
   const navigate = useNavigate()
 
   const userSchema = Yup.object().shape({
-    firstName: Yup.string().required('Firstname is required').max(255),
-    lastName: Yup.string().max(255),
+    firstName: Yup.string().required('First name is required').max(255, 'First name is max exceed length'),
+    lastName: Yup.string().max(255, 'Last name is max exceed length'),
     avatar: Yup.mixed()
       .nullable(true)
       .test('fileSize', 'Size limit 5MB', (image) => {

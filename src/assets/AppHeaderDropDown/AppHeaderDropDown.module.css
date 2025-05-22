@@ -1,0 +1,10 @@
+.custom-avatar {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+:global(.avatar .avatar-img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

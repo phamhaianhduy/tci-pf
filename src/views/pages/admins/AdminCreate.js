@@ -27,11 +27,11 @@ const AdminCreate = () => {
       .required('Employee ID is required')
       .max(20, 'Employee ID is max exceed length'),
     firstName: Yup.string()
-      .required('Firstname is required')
-      .max(255, 'Firstname is max exceed length'),
-    lastName: Yup.string().max(255, 'Lastname is max exceed length'),
+      .required('First name is required')
+      .max(255, 'First name is max exceed length'),
+    lastName: Yup.string().max(255, 'Last name is max exceed length'),
     loginId: Yup.string()
-      .required('Email is required')
+      .required('Login ID is required')
       .max(111, 'Login ID is max exceed length')
       .test('is-valid-email', 'Login ID is email', (value) => {
         if (!value) return false
@@ -42,7 +42,7 @@ const AdminCreate = () => {
       is: false,
       then: (schema) =>
         schema
-          .required('Contact email is required')
+          .required('Contact Email is required')
           .test('is-valid-email', 'Contact Email is email', (value) => {
             if (!value) return false
             return emailRegex.test(value)

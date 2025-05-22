@@ -152,8 +152,8 @@ const AdminList = () => {
                       type="text"
                       value={values.searchString}
                       onChange={(e) => {
-                        setFieldValue('searchString', e.target.value.toLowerCase())
-                        setSearchString(e.target.value.toLowerCase())
+                        setFieldValue('searchString', e.target.value)
+                        setSearchString(e.target.value)
                       }}
                       className="mb-4"
                     />
@@ -162,7 +162,7 @@ const AdminList = () => {
                     <CustomCFormInput name="fromDate" type="date" className="mb-4" />
                   </CCol>
                   <CCol md={4}>
-                    <CustomCFormInput name="toDate" type="date" className="mb-4" />
+                    <CustomCFormInput name="toDate" type="date" className="mb-4" placeholder />
                   </CCol>
                   <CCol md={12}>
                     <CButton
@@ -200,13 +200,14 @@ const AdminList = () => {
             </CButton>
           </CCardHeader>
           <CCardBody>
-            <CTable striped>
+            <CTable striped style={{ tableLayout: 'fixed' }}>
               <CTableHead color="dark">
                 <CTableRow>
                   <CTableHeaderCell
                     scope="col"
                     onClick={() => handleSort('firstName')}
                     role="button"
+                    style={{ width: '20%' }}
                   >
                     Fist name {renderSortIcon('firstName')}
                   </CTableHeaderCell>
@@ -214,16 +215,18 @@ const AdminList = () => {
                     scope="col"
                     onClick={() => handleSort('lastName')}
                     role="button"
+                    style={{ width: '15%' }}
                   >
                     Last name {renderSortIcon('lastName')}
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" onClick={() => handleSort('loginId')} role="button">
+                  <CTableHeaderCell scope="col" onClick={() => handleSort('loginId')} role="button" style={{ width: '20%' }}>
                     Login ID {renderSortIcon('loginId')}
                   </CTableHeaderCell>
                   <CTableHeaderCell
                     scope="col"
                     onClick={() => handleSort('employeeId')}
                     role="button"
+                    style={{ width: '15%' }}
                   >
                     Employee ID {renderSortIcon('employeeId')}
                   </CTableHeaderCell>
@@ -231,6 +234,7 @@ const AdminList = () => {
                     scope="col"
                     onClick={() => handleSort('updatedAt')}
                     role="button"
+                    style={{ width: '15%' }}
                   >
                     Updated At {renderSortIcon('updatedAt')}
                   </CTableHeaderCell>
@@ -270,6 +274,11 @@ const AdminList = () => {
                       </CTableRow>
                     )
                   })}
+                {userList.length === 0 && (
+                  <CTableRow>
+                    <CTableDataCell colSpan={6} className='text-center'>No data.</CTableDataCell>
+                  </CTableRow>
+                )}
               </CTableBody>
             </CTable>
           </CCardBody>

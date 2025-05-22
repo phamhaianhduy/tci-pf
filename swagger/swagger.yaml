@@ -1189,6 +1189,86 @@ paths:
                   error:
                     type: object
 
+  /admin/block:
+    put:
+      tags:
+        - User
+      summary: Block/Unblock admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: PHADXGNZ9JAS1Z3ZGFTC14B1IH
+              required:
+                - userId
+
+      responses:
+        '200':
+          description: Block/Unblock user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update admin successfully.
+                  code:
+                    type: string
+                    example: BLOCK_ADMIN / UNBLOCK_ADMIN
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+
+              examples:
+                validateUserId:
+                  summary: Validate type userId
+                  value:
+                    message: User id is required / User id is exceed maxlengh
+                    code: USERID
+
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found  
+                  code:
+                    type: string
+                    example: USER_NOT_FOUND
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
+                  error:
+                    type: object
+
   /login:
     post:
       tags:

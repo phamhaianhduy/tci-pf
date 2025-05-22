@@ -10,6 +10,7 @@ import classes from './assets/loading/loading.module.css'
 import { observer } from 'mobx-react-lite'
 import { userStore } from './stores/UserStore'
 import IdleSessionHandler from './components/IdleSessionHandler/IdleSessionHandler'
+import redirect from './utils/redirect'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -45,6 +46,31 @@ const App = () => {
 
     setColorMode(storedTheme)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // const navigate = useNavigate()
+//   useEffect(() => {
+//     const handlePopState = (event) => {
+//       // const token = localStorage.getItem('token');
+//       //       console.log('Clicked back btn')
+//       // if (token) {
+//       //   redirect('/admins/me')
+//       // }
+//       redirect('/admins/me')
+//     }
+
+//     window.addEventListener('popstate', handlePopState);
+
+//     return () => {
+      
+//       window.removeEventListener('popstate', handlePopState);
+
+//     }
+//   }, [])
+
+      const handlePopState = (event) => {
+      redirect('/admins/me')
+    }
+  window.addEventListener('popstate', handlePopState);
 
   return (
     <BrowserRouter>

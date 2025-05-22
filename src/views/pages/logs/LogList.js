@@ -125,8 +125,8 @@ const LogList = () => {
                       type="text"
                       value={values.searchString}
                       onChange={(e) => {
-                        setFieldValue('searchString', e.target.value.toLowerCase())
-                        setSearchString(e.target.value.toLowerCase())
+                        setFieldValue('searchString', e.target.value)
+                        setSearchString(e.target.value)
                       }}
                       className="mb-4"
                     />
@@ -164,14 +164,14 @@ const LogList = () => {
             <strong>Log List</strong>
           </CCardHeader>
           <CCardBody>
-            <CTable striped responsive>
+            <CTable striped responsive style={{ tableLayout: 'fixed' }}>
               <CTableHead color="dark">
                 <CTableRow>
                   <CTableHeaderCell
                     scope="col"
                     onClick={() => handleSort('loginId')}
                     role="button"
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', width: '30%' }}
                   >
                     Login ID {renderSortIcon('loginId')}
                   </CTableHeaderCell>
@@ -179,7 +179,7 @@ const LogList = () => {
                     scope="col"
                     onClick={() => handleSort('action')}
                     role="button"
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', width: '15%' }}
                   >
                     Action {renderSortIcon('action')}
                   </CTableHeaderCell>
@@ -188,7 +188,7 @@ const LogList = () => {
                     scope="col"
                     onClick={() => handleSort('timestamp')}
                     role="button"
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', width: '20%' }}
                   >
                     Timestamp {renderSortIcon('timestamp')}
                   </CTableHeaderCell>
@@ -210,7 +210,7 @@ const LogList = () => {
                 ) : (
                   <CTableRow>
                     <CTableDataCell colSpan={4} style={{ textAlign: 'center' }}>
-                      No logs found.
+                      No data.
                     </CTableDataCell>
                   </CTableRow>
                 )}

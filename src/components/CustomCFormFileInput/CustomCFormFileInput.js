@@ -53,10 +53,11 @@ const CustomCFormFileInput = ({ label, initialImageUrl = null, onDelete = null, 
               src={previewUrl}
               alt="preview"
               style={{
-                width: '100%',
-                height: 'auto',
+                width: '150px',
+                height: '150px',
                 objectFit: 'cover',
                 borderRadius: '8px',
+                objectPosition: 'center'
               }}
             />
             <button

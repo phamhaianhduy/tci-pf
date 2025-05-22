@@ -36,6 +36,7 @@ api.interceptors.response.use(
 
     switch (code) {
       case 'LOGIN':
+        toast.success(message)
         break
       case 'LOGOUT':
         logout()

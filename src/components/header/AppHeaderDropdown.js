@@ -13,6 +13,7 @@ import { userStore } from '../../stores/UserStore'
 import { authStore } from '../../stores/AuthStore'
 import { observer } from 'mobx-react-lite'
 import defaultAvatar from '../../assets/images/avatars/avatar.png'
+import classes from '../../assets/AppHeaderDropDown/AppHeaderDropDown.module.css'
 
 const AppHeaderDropdown = () => {
   const userData = userStore.userDetailByMe
@@ -23,6 +24,10 @@ const AppHeaderDropdown = () => {
   const avatar = userData.avatarUrl || defaultAvatar
 
   const handleLogout = async (e) => {
+    const confirmation = window.confirm("Are you sure logout?");
+    if (!confirmation) {
+      return
+    }
     e.preventDefault()
     await authStore.logout()
   }
@@ -30,7 +35,7 @@ const AppHeaderDropdown = () => {
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-        <CAvatar src={avatar} size="md" />
+        <CAvatar src={avatar} size="sm" className={classes['custom-avatar']}/>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Xin chào!</CDropdownHeader>
