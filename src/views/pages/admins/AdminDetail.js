@@ -116,7 +116,7 @@ const AdminDetail = () => {
 
   // Handle block btn.
   const isShowBlockbtn =
-    location.pathname == '/admins/me' ||
+    location.pathname == '/profile-settings' ||
     (userStore.userDetailByMe && userCode == userStore.userDetailByMe.id)
       ? false
       : true
@@ -218,7 +218,7 @@ const AdminDetail = () => {
                                     <CustomCFormInput
                                       name="employeeId"
                                       type="text"
-                                      className="mb-4"
+                                      className="mb-2"
                                       disabled
                                     />
                                   </CCol>
@@ -230,7 +230,7 @@ const AdminDetail = () => {
                                     <CustomCFormInput
                                       name="loginId"
                                       type="text"
-                                      className="mb-4"
+                                      className="mb-2"
                                       disabled
                                     />
                                   </CCol>
@@ -242,7 +242,7 @@ const AdminDetail = () => {
                                     <CustomCFormInput
                                       name="firstName"
                                       type="text"
-                                      className="mb-4"
+                                      className="mb-2"
                                     />
                                   </CCol>
                                   <CCol md={4}>
@@ -252,7 +252,7 @@ const AdminDetail = () => {
                                     <CustomCFormInput
                                       name="lastName"
                                       type="text"
-                                      className="mb-4"
+                                      className="mb-2"
                                     />
                                   </CCol>
                                   <CCol md={2}>
@@ -273,7 +273,7 @@ const AdminDetail = () => {
                                         <CustomCFormInput
                                           name="contactEmail"
                                           type="text"
-                                          className="mb-4"
+                                          className="mb-2"
                                         />
                                       </>
                                     )}

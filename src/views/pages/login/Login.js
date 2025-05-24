@@ -15,7 +15,7 @@ const Login = () => {
 
   // For user logged in.
   if (userStore.userDetailByMe) {
-    navigate('/admins/me')
+    navigate('/profile-settings')
   }
 
   const loginSchema = Yup.object().shape({
@@ -49,6 +49,12 @@ const Login = () => {
     } catch (error) {}
   }
 
+  const handleActiveSection = (section, { setFieldValue }) => {
+    setActiveSection(section)
+    setFieldValue('loginId', null)
+    setFieldValue('password', null)
+  }
+
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -63,7 +69,7 @@ const Login = () => {
                       validationSchema={loginSchema}
                       onSubmit={handleLoginSubmit}
                     >
-                      {({ isSubmitting }) => (
+                      {({ isSubmitting, setFieldValue }) => (
                         <Form>
                           <h1>Login</h1>
                           <p className="text-body-secondary">Sign In to your account</p>
@@ -100,7 +106,7 @@ const Login = () => {
                                 color="link"
                                 className="px-0"
                                 type="button"
-                                onClick={() => setActiveSection('forgot')}
+                                onClick={() => handleActiveSection('forgot', { setFieldValue })}
                               >
                                 Forgot password?
                               </CButton>
@@ -115,7 +121,7 @@ const Login = () => {
                       validationSchema={forgotSchema}
                       onSubmit={handleForgotSubmit}
                     >
-                      {({ isSubmitting }) => (
+                      {({ isSubmitting, setFieldValue }) => (
                         <Form>
                           <h1>Forgot Password</h1>
                           <p className="text-body-secondary">
@@ -144,7 +150,7 @@ const Login = () => {
                                 type="button"
                                 color="link"
                                 className="px-0"
-                                onClick={() => setActiveSection('login')}
+                                onClick={() => handleActiveSection('login', { setFieldValue })}
                               >
                                 Back to login
                               </CButton>

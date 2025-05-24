@@ -33,7 +33,7 @@ const AppContent = () => {
               )
             )
           })}
-          <Route path="/" element={<Navigate to="admins/me" replace />} />
+          <Route path="/" element={<Navigate to="profile-settings" replace />} />
         </Routes>
       </Suspense>
     </CContainer>

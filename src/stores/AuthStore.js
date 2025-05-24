@@ -25,7 +25,7 @@ class AuthStore {
       localStorage.setItem('expiryToken', expiryToken)
       localStorage.setItem('refreshToken', res.data.refreshToken)
 
-      navigate('/admins/me')
+      navigate('/profile-settings')
     } catch (error) {
       throw error
     } finally {

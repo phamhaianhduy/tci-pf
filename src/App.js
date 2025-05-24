@@ -68,7 +68,7 @@ const App = () => {
 //   }, [])
 
       const handlePopState = (event) => {
-      redirect('/admins/me')
+      redirect('/profile-settings')
     }
   window.addEventListener('popstate', handlePopState);
 
