@@ -25,7 +25,7 @@ paths:
     post:
       tags:
         - Admin
-      summary: Create user
+      summary: Create admin
       requestBody:
         required: true
         content:
@@ -245,7 +245,7 @@ paths:
     put:
       tags:
         - Admin
-      summary: Update user
+      summary: Update admin
       requestBody:
         required: true
         content:
@@ -406,7 +406,7 @@ paths:
     get:
       tags:
         - Admin
-      summary: Get user by userCode
+      summary: Get admin by userCode
 
       responses:
         '200':
@@ -624,7 +624,7 @@ paths:
     delete:
       tags:
         - Admin
-      summary: Delete user
+      summary: Delete admin
       responses:
         '200':
           description: Deleted
@@ -700,7 +700,7 @@ paths:
     get:
       tags:
         - Admin
-      summary: Get the list user
+      summary: Get the list admin
       parameters:
         - name: fromDate
           in: query
