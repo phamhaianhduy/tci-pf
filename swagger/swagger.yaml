@@ -24,7 +24,7 @@ paths:
   /admins/create:
     post:
       tags:
-        - User
+        - Admin
       summary: Create user
       requestBody:
         required: true
@@ -244,7 +244,7 @@ paths:
   /admin/update:
     put:
       tags:
-        - User
+        - Admin
       summary: Update user
       requestBody:
         required: true
@@ -405,7 +405,7 @@ paths:
   /admin/:userCode:
     get:
       tags:
-        - User
+        - Admin
       summary: Get user by userCode
 
       responses:
@@ -623,7 +623,7 @@ paths:
   /admin/delete/:userId:
     delete:
       tags:
-        - User
+        - Admin
       summary: Delete user
       responses:
         '200':
@@ -699,7 +699,7 @@ paths:
   /admin/list:
     get:
       tags:
-        - User
+        - Admin
       summary: Get the list user
       parameters:
         - name: fromDate
@@ -885,7 +885,7 @@ paths:
   /admin/forgot-password:
     put:
       tags:
-        - User
+        - Admin
       summary: Forgot password
       requestBody:
         required: true
@@ -969,7 +969,7 @@ paths:
   /admin/reset-password:
     put:
       tags:
-        - User
+        - Admin
       summary: Reset password
       requestBody:
         required: true
@@ -1069,7 +1069,7 @@ paths:
   /admin/change-password:
     put:
       tags:
-        - User
+        - Admin
       summary: Update password
       requestBody:
         required: true
@@ -1192,7 +1192,7 @@ paths:
   /admin/block:
     put:
       tags:
-        - User
+        - Admin
       summary: Block/Unblock admin
       requestBody:
         required: true
