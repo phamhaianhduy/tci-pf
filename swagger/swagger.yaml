@@ -14,8 +14,8 @@ tags:
   - name: Auth
     description: Authenticate management
 
-  - name: User
-    description: User management
+  - name: Admin
+    description: Admin management
 
   - name: Log
     description: Log management
