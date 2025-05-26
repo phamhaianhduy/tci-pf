@@ -13,6 +13,7 @@ import {
   CTableRow,
   CContainer,
   CButton,
+  CFormLabel
 } from '@coreui/react'
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
@@ -118,9 +119,12 @@ const LogList = () => {
               <CContainer>
                 <CRow>
                   <CCol md={4}>
+                    <CFormLabel className="fw-bold">
+                      String
+                    </CFormLabel>
                     <CustomCFormInput
                       name="searchString"
-                      placeholder="Input search string"
+                      placeholder="Search by action, Login ID, description"
                       autoComplete="searchString"
                       type="text"
                       value={values.searchString}
@@ -132,9 +136,15 @@ const LogList = () => {
                     />
                   </CCol>
                   <CCol md={4}>
+                    <CFormLabel className="fw-bold">
+                      From (Updated At)
+                    </CFormLabel>
                     <CustomCFormInput name="fromDate" type="date" className="mb-4" />
                   </CCol>
                   <CCol md={4}>
+                    <CFormLabel className="fw-bold">
+                      To (Updated At)
+                    </CFormLabel>
                     <CustomCFormInput name="toDate" type="date" className="mb-4" />
                   </CCol>
                   <CCol md={12}>

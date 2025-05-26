@@ -1098,10 +1098,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Updated successfully
+                    example: Change password successfully
                   code:
                     type: string
-                    example: UPDATE_PASSWORD
+                    example: CHANGE_PASSWORD
                   token:
                     type: string
                     example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IktEVkgzSDRQTlZMQU5aUU5JRjFQM0k5T0VJIiwibGFzdFBhc3N3b3JkQ2hhbmdlIjoxNzQ3NzUzMjY2MDAwLCJpYXQiOjE3NDc3NTM5NjgsImV4cCI6MTc0Nzc1NDU2OH0.6zfUwyLNm3IphWcXLnUEcyqOuY-Ynfo8cn9dX6-gpHA

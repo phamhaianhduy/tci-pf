@@ -13,6 +13,7 @@ import {
   CTableRow,
   CContainer,
   CButton,
+  CFormLabel
 } from '@coreui/react'
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
@@ -145,9 +146,12 @@ const AdminList = () => {
               <CContainer>
                 <CRow>
                   <CCol md={4}>
+                    <CFormLabel className="fw-bold">
+                      String
+                    </CFormLabel>
                     <CustomCFormInput
                       name="searchString"
-                      placeholder="Input search string"
+                      placeholder="Search by First name, Last name"
                       autoComplete="searchString"
                       type="text"
                       value={values.searchString}
@@ -155,14 +159,21 @@ const AdminList = () => {
                         setFieldValue('searchString', e.target.value)
                         setSearchString(e.target.value)
                       }}
-                      className="mb-4"
+                      className="mb-4 mt-2"
                     />
+
                   </CCol>
                   <CCol md={4}>
-                    <CustomCFormInput name="fromDate" type="date" className="mb-4" />
+                    <CFormLabel className="fw-bold">
+                      From (Created Date)
+                    </CFormLabel>
+                    <CustomCFormInput name="fromDate" type="date" className="mb-4 mt-2" />
                   </CCol>
                   <CCol md={4}>
-                    <CustomCFormInput name="toDate" type="date" className="mb-4" placeholder />
+                    <CFormLabel className="fw-bold">
+                      To (Created Date)
+                    </CFormLabel>
+                    <CustomCFormInput name="toDate" type="date" className="mb-4 mt-2" placeholder />
                   </CCol>
                   <CCol md={12}>
                     <CButton

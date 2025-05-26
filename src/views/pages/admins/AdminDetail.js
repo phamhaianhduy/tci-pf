@@ -54,6 +54,7 @@ const AdminDetail = () => {
       then: (schema) =>
         schema
           .required('Contact email is required')
+          .notOneOf([Yup.ref('loginId'), null], 'The Contact Email must have different from Login ID')
           .test('is-valid-email', 'Contact Email is email', (value) => {
             if (!value) return false
             return emailRegex.test(value)
@@ -136,8 +137,7 @@ const AdminDetail = () => {
       formData.append('isDeletedAvatar', isDeleteAvatar)
 
       formData.append('isRealEmail', values.isRealEmail)
-
-      formData.append('contactEmail', values.contactEmail)
+      formData.append('contactEmail', values.isRealEmail ? '' : values.contactEmail)
 
       await userStore.updateUser(formData, navigate)
     } catch (error) {
@@ -212,8 +212,8 @@ const AdminDetail = () => {
                                 <CRow>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="employeeId" className="fw-bold">
-                                      Employee ID
                                       <CustomRequiredInput />
+                                      Employee ID
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="employeeId"
@@ -224,8 +224,8 @@ const AdminDetail = () => {
                                   </CCol>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="loginId" className="fw-bold">
-                                      Login ID
                                       <CustomRequiredInput />
+                                      Login ID
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="loginId"
@@ -236,8 +236,8 @@ const AdminDetail = () => {
                                   </CCol>
                                   <CCol md={4}>
                                     <CFormLabel htmlFor="firstName" className="fw-bold">
-                                      First name
                                       <CustomRequiredInput />
+                                      First name
                                     </CFormLabel>
                                     <CustomCFormInput
                                       name="firstName"
@@ -255,7 +255,7 @@ const AdminDetail = () => {
                                       className="mb-2"
                                     />
                                   </CCol>
-                                  <CCol md={2}>
+                                  <CCol md={4}>
                                     <CFormLabel htmlFor="email" className="fw-bold">
                                       Real email
                                     </CFormLabel>
@@ -264,10 +264,11 @@ const AdminDetail = () => {
                                       name="isRealEmail"
                                     />
                                   </CCol>
-                                  <CCol md={6}>
+                                  <CCol md={4}>
                                     {!values.isRealEmail && (
                                       <>
                                         <CFormLabel htmlFor="contactEmail" className="fw-bold">
+                                          <CustomRequiredInput />
                                           Contact Email
                                         </CFormLabel>
                                         <CustomCFormInput
